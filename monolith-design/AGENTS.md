@@ -194,8 +194,8 @@ Border Subtle:    #1f1f1f
 Text Primary:     #f5f5f0
 Text Secondary:   #737373
 Text Tertiary:    #525252
-Accent (Acid Lime): #ccff00
-Secondary Accent: #00f0ff
+Accent (White):     #ffffff
+Secondary Accent: #737373
 Tertiary Accent:  #ff6b6b
 ```
 

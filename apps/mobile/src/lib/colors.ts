@@ -15,19 +15,19 @@ export const colors = {
     inverse: '#0a0a0a',
   },
   accent: {
-    DEFAULT: '#ccff00',
-    hover: '#b8e600',
-    dim: 'rgba(204, 255, 0, 0.15)',
+    DEFAULT: '#ffffff',
+    hover: '#e0e0e0',
+    dim: 'rgba(255, 255, 255, 0.15)',
   },
-  secondaryAccent: '#00f0ff',
+  secondaryAccent: '#737373',
   tertiaryAccent: '#ff6b6b',
   grid: [
     '#141414',
-    '#2a3311',
-    '#4d6600',
-    '#7a9900',
-    '#a3cc00',
-    '#ccff00',
+    '#2a2a2a',
+    '#4a4a4a',
+    '#6a6a6a',
+    '#8a8a8a',
+    '#ffffff',
   ],
 } as const;
 

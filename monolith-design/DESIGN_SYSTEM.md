@@ -2,7 +2,7 @@
 
 ## Philosophy
 
-Monolith is **brutalist developer minimalism**. Every pixel serves a purpose. The aesthetic is austere, precise, and utilitarian — with a single electric accent (acid lime) that represents energy, progress, and completion. The design should feel like a high-end developer tool, not a consumer app.
+Monolith is **brutalist developer minimalism**. Every pixel serves a purpose. The aesthetic is austere, precise, and utilitarian — with a monochromatic palette where white represents energy, progress, and completion against a near-black canvas. The design should feel like a high-end developer tool, not a consumer app.
 
 **Core Principles:**
 - Information density is controlled, not sparse
@@ -37,10 +37,10 @@ Monolith is **brutalist developer minimalism**. Every pixel serves a purpose. Th
 
 | Token | Hex | Usage |
 |---|---|---|
-| `accent` | `#ccff00` | Primary accent — acid lime. Progress, completion, CTAs, active rings |
-| `accent-hover` | `#b8e600` | Hover state for accent elements |
-| `accent-dim` | `rgba(204, 255, 0, 0.15)` | Subtle accent backgrounds, glows |
-| `secondary-accent` | `#00f0ff` | Rest, recovery, rest days, cooldown states |
+| `accent` | `#ffffff` | Primary accent — white. Progress, completion, CTAs, active rings |
+| `accent-hover` | `#e0e0e0` | Hover state for accent elements |
+| `accent-dim` | `rgba(255, 255, 255, 0.15)` | Subtle accent backgrounds, glows |
+| `secondary-accent` | `#737373` | Rest, recovery, rest days, cooldown states |
 | `tertiary-accent` | `#ff6b6b` | Optional Pro accent. Warnings, important alerts |
 
 ### Graph Intensity Scale (Contribution Grid)
@@ -50,11 +50,11 @@ The grid cells use a 5-level intensity scale based on focused time relative to t
 | Level | Hex | Criteria |
 |---|---|---|
 | `grid-0` | `#141414` | No activity (matches surface) |
-| `grid-1` | `#2a3311` | > 0 but < 25% of goal |
-| `grid-2` | `#4d6600` | 25% - 49% of goal |
-| `grid-3` | `#7a9900` | 50% - 74% of goal |
-| `grid-4` | `#a3cc00` | 75% - 99% of goal |
-| `grid-5` | `#ccff00` | 100%+ of goal (acid lime) |
+| `grid-1` | `#2a2a2a` | > 0 but < 25% of goal |
+| `grid-2` | `#4a4a4a` | 25% - 49% of goal |
+| `grid-3` | `#6a6a6a` | 50% - 74% of goal |
+| `grid-4` | `#8a8a8a` | 75% - 99% of goal |
+| `grid-5` | `#ffffff` | 100%+ of goal (white) |
 
 **For identity-specific grids**, each identity can optionally tint the scale with its assigned color at 80% saturation while keeping the same luminosity progression.
 
@@ -62,7 +62,7 @@ The grid cells use a 5-level intensity scale based on focused time relative to t
 
 | Token | Hex | Usage |
 |---|---|---|
-| `success` | `#ccff00` | Same as accent. Success states are progress. |
+| `success` | `#ffffff` | Same as accent. Success states are progress. |
 | `error` | `#ff4444` | Minimal use. Only for destructive actions. |
 | `warning` | `#ffaa00` | Sparingly. Overdue tasks only. |
 
@@ -290,7 +290,7 @@ States:
 
 ## Dark Mode
 
-Monolith is **dark-only**. There is no light mode. The contrast between `#0a0a0a` and `#ccff00` is the brand identity.
+Monolith is **dark-only**. There is no light mode. The contrast between `#0a0a0a` and `#ffffff` is the brand identity.
 
 ---
 
@@ -308,9 +308,9 @@ Monolith is **dark-only**. There is no light mode. The contrast between `#0a0a0a
 
 | Asset | Notes |
 |---|---|
-| Logo | Simple geometric monolith shape (vertical rectangle), acid lime on dark |
+| Logo | Simple geometric monolith shape (vertical rectangle), white on dark |
 | App Icon | Monolith shape with subtle grid texture |
-| Splash Screen | Pure `#0a0a0a` background, acid lime logo centered, JetBrains Mono "MONOLITH" below |
+| Splash Screen | Pure `#0a0a0a` background, white logo centered, JetBrains Mono "MONOLITH" below |
 | Widget Previews | Rendered in real-time from widget code |
 
 ---
@@ -339,19 +339,19 @@ module.exports = {
           inverse: '#0a0a0a',
         },
         accent: {
-          DEFAULT: '#ccff00',
-          hover: '#b8e600',
-          dim: 'rgba(204, 255, 0, 0.15)',
+          DEFAULT: '#ffffff',
+          hover: '#e0e0e0',
+          dim: 'rgba(255, 255, 255, 0.15)',
         },
-        'secondary-accent': '#00f0ff',
+        'secondary-accent': '#737373',
         'tertiary-accent': '#ff6b6b',
         grid: {
           0: '#141414',
-          1: '#2a3311',
-          2: '#4d6600',
-          3: '#7a9900',
-          4: '#a3cc00',
-          5: '#ccff00',
+          1: '#2a2a2a',
+          2: '#4a4a4a',
+          3: '#6a6a6a',
+          4: '#8a8a8a',
+          5: '#ffffff',
         },
       },
       fontFamily: {

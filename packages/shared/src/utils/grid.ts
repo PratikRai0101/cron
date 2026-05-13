@@ -12,11 +12,11 @@ export function getGridIntensity(minutes: number, dailyGoal: number): GridIntens
 
 export const GRID_COLORS = [
   '#141414',
-  '#2a3311',
-  '#4d6600',
-  '#7a9900',
-  '#a3cc00',
-  '#ccff00',
+  '#2a2a2a',
+  '#4a4a4a',
+  '#6a6a6a',
+  '#8a8a8a',
+  '#ffffff',
 ] as const;
 
 export function getGridColor(intensity: GridIntensity): string {

@@ -24,10 +24,10 @@
 ### Accent
 | Token | Hex | Usage |
 |---|---|---|
-| `primary` | `#ccff00` | Primary accent — acid lime. Progress, completion, CTAs, active rings |
-| `primary-hover` | `#b8e600` | Hover state for accent elements |
-| `primary-dim` | `rgba(204, 255, 0, 0.15)` | Subtle accent backgrounds, glows |
-| `secondary` | `#00f0ff` | Rest, recovery, rest days, cooldown states |
+| `primary` | `#ffffff` | Primary accent — white. Progress, completion, CTAs, active rings |
+| `primary-hover` | `#e0e0e0` | Hover state for accent elements |
+| `primary-dim` | `rgba(255, 255, 255, 0.15)` | Subtle accent backgrounds, glows |
+| `secondary` | `#737373` | Rest, recovery, rest days, cooldown states |
 | `tertiary` | `#ff6b6b` | Optional Pro accent. Warnings, important alerts |
 
 ### Graph Intensity Scale (Contribution Grid)
@@ -38,12 +38,12 @@
 | `intensity-2` | `#4d6600` | 25% - 49% of daily goal |
 | `intensity-3` | `#7a9900` | 50% - 74% of daily goal |
 | `intensity-4` | `#a3cc00` | 75% - 99% of daily goal |
-| `intensity-5` | `#ccff00` | 100%+ of daily goal |
+| `intensity-5` | `#ffffff` | 100%+ of daily goal |
 
 ### Semantic
 | Token | Hex | Usage |
 |---|---|---|
-| `success` | `#ccff00` | Same as primary. Success states are progress. |
+| `success` | `#ffffff` | Same as primary. Success states are progress. |
 | `error` | `#ff4444` | Minimal use. Only for destructive actions. |
 | `warning` | `#ffaa00` | Sparingly. Overdue tasks only. |
 | `border` | `#262626` | Dividers, borders, grid lines |
@@ -237,7 +237,7 @@ Respect `prefers-reduced-motion`. All motion becomes instant (0ms) when enabled.
 ## 7. Voice & Tone
 
 - Precise, utilitarian, almost austere
-- The only "fun" element is the acid lime accent
+- The only "fun" element is the white accent
 - No exclamation marks. No emojis. No marketing fluff.
 - Headlines are statements, not questions
 - Error messages explain what happened, never blame the user
@@ -255,17 +255,17 @@ Respect `prefers-reduced-motion`. All motion becomes instant (0ms) when enabled.
 ## 8. Brand
 
 ### Logo
-Simple geometric monolith shape (vertical rectangle), acid lime on dark.
+Simple geometric monolith shape (vertical rectangle), white on dark.
 
 ### App Icon
 Monolith shape with subtle grid texture.
 
 ### Splash Screen
-Pure `#0a0a0a` background, acid lime logo centered, JetBrains Mono "MONOLITH" below.
+Pure `#0a0a0a` background, white logo centered, JetBrains Mono "MONOLITH" below.
 
 ### Core Identity
 - Dark-only. No light mode.
-- The contrast between `#0a0a0a` and `#ccff00` is the brand.
+- The contrast between `#0a0a0a` and `#ffffff` is the brand.
 - Developer-tool aesthetic, not consumer-app aesthetic.
 
 ---

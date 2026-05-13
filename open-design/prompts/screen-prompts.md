@@ -21,15 +21,15 @@ This is the app's hero screen. The contribution grid dominates.
 
 LAYOUT (top to bottom):
 1. Header: "MONOLITH" in JetBrains Mono 11px uppercase, centered. Right: settings gear icon.
-2. Identity Filter Pills: horizontal scroll. Pills for "All", "Code", "Write", "Design", "Exercise". Active pill has acid lime border at 50% opacity and acid lime text. Inactive pills have grey border at 30% opacity.
-3. Contribution Grid: 7 rows × ~20 weeks visible. 12px cells, 3px gap, 2px radius. 6 intensity levels from dark grey to acid lime. Month labels (J, F, M, A, M...) above in 9px JetBrains Mono. Today has 1px acid lime border.
-4. Today's Momentum Ring: 120px diameter, 7 segments for Mon-Sun. Track `#1a1a1a`, filled segments `#ccff00`, rest days `#00f0ff` outline. Center: "TODAY" label + "45m" in mono-lg + "/ 60m" in mono-sm.
-5. Task List: "TODAY — May 13" section header. 3 task rows with checkbox (20px, 2px border, acid lime fill when checked), task title, identity pill, duration. Swipe affordances hinted.
-6. Floating Action Button: 56px circle, acid lime, plus icon, bottom-right.
+2. Identity Filter Pills: horizontal scroll. Pills for "All", "Code", "Write", "Design", "Exercise". Active pill has white border at 50% opacity and white text. Inactive pills have grey border at 30% opacity.
+3. Contribution Grid: 7 rows × ~20 weeks visible. 12px cells, 3px gap, 2px radius. 6 intensity levels from dark grey to white. Month labels (J, F, M, A, M...) above in 9px JetBrains Mono. Today has 1px white border.
+4. Today's Momentum Ring: 120px diameter, 7 segments for Mon-Sun. Track `#1a1a1a`, filled segments `#ffffff`, rest days `#737373` outline. Center: "TODAY" label + "45m" in mono-lg + "/ 60m" in mono-sm.
+5. Task List: "TODAY — May 13" section header. 3 task rows with checkbox (20px, 2px border, white fill when checked), task title, identity pill, duration. Swipe affordances hinted.
+6. Floating Action Button: 56px circle, white, plus icon, bottom-right.
 
-EMPTY STATE: If no data, show "Start your first focus session" with acid lime "Focus" button.
+EMPTY STATE: If no data, show "Start your first focus session" with white "Focus" button.
 
-COLORS: bg `#0a0a0a`, surface `#141414`, accent `#ccff00`, secondary accent `#00f0ff`, text `#f5f5f0`.
+COLORS: bg `#0a0a0a`, surface `#141414`, accent `#ffffff`, secondary accent `#737373`, text `#f5f5f0`.
 
 OUTPUT: Single HTML artifact in iPhone 15 Pro frame. Dark mode only. No external images.
 ```
@@ -45,10 +45,10 @@ This is the core action screen. Zero chrome. The user should feel they've entere
 
 LAYOUT:
 - Full screen, bg `#0a0a0a`
-- Top (60px from top): Identity pill "Code" — radius-full, border acid lime at 30% opacity, acid lime text, caption size. Centered.
-- Center (vertically & horizontally): Timer "00:45:32" in JetBrains Mono, 48px, weight 700, acid lime `#ccff00`. Tabular figures.
+- Top (60px from top): Identity pill "Code" — radius-full, border white at 30% opacity, white text, caption size. Centered.
+- Center (vertically & horizontally): Timer "00:45:32" in JetBrains Mono, 48px, weight 700, white `#ffffff`. Tabular figures.
 - Below timer: Task name "Review pull requests" in body-sm, text `#737373`.
-- Bottom (120px from bottom): Controls row — Pause button (44px circle, border `#262626`), Stop button (64px circle, bg acid lime, dark icon), Cancel button (44px circle, border `#262626`). Gap 32px between buttons.
+- Bottom (120px from bottom): Controls row — Pause button (44px circle, border `#262626`), Stop button (64px circle, bg white, dark icon), Cancel button (44px circle, border `#262626`). Gap 32px between buttons.
 - Bottom hint: "Swipe up to cancel" in caption, `#525252`. Fades out after 3s.
 
 STATES:
@@ -81,10 +81,10 @@ LAYOUT:
 
 Form fields (vertical stack, 16px gap):
 1. "What did you work on?" — Input, bg `#141414`, border `#262626`, radius 4px, placeholder `#525252`. Auto-focus.
-2. "Identity" label (caption, uppercase, `#737373`). Horizontal scroll of identity pills: "Code" (acid lime), "Write" (cyan), "Exercise" (coral). Single select. Active has bg at 15% opacity.
+2. "Identity" label (caption, uppercase, `#737373`). Horizontal scroll of identity pills: "Code" (white), "Write" (light grey), "Exercise" (medium grey). Single select. Active has bg at 15% opacity.
 3. "Duration" label. Number input + "min" | "hr" segmented control. JetBrains Mono for number. Max 12 hours.
 4. "Date" label. Default "Today". Tap changes.
-5. "Save" button: full width, bg `#ccff00`, text `#0a0a0a`, h3 weight, radius 4px, 14px padding.
+5. "Save" button: full width, bg `#ffffff`, text `#0a0a0a`, h3 weight, radius 4px, 14px padding.
 
 VALIDATION:
 - Title required, max 100 chars
@@ -107,14 +107,14 @@ The reflection screen. Users come here to see their competence growth. Data-heav
 LAYOUT:
 1. Header: Back button left, "Profile" h1 centered.
 2. User Card:
-   - Avatar: 64px circle, bg `#141414`, border 2px `#262626`, initials "PR" in JetBrains Mono 20px acid lime.
+   - Avatar: 64px circle, bg `#141414`, border 2px `#262626`, initials "PR" in JetBrains Mono 20px white.
    - Display name: h3, text `#f5f5f0`
    - Username: body-sm, text `#525252`
-   - Level badge: "LVL 12" in mono-sm, bg acid lime at 15% opacity, acid lime text, radius 2px. Title "Architect" in caption.
+   - Level badge: "LVL 12" in mono-sm, bg white at 15% opacity, white text, radius 2px. Title "Architect" in caption.
 3. Current Momentum Ring: Compact 48px version showing week progress. Tap expands.
 4. Skill Velocity:
-   - Header: "Skill Velocity" h3 + "+12%" mono-md + up arrow in acid lime.
-   - Sparkline: 8 data points, line stroke acid lime, fill acid lime at 10% below. No Y-axis labels.
+   - Header: "Skill Velocity" h3 + "+12%" mono-md + up arrow in white.
+   - Sparkline: 8 data points, line stroke white, fill white at 10% below. No Y-axis labels.
 5. Personal Records (horizontal scroll cards):
    - "Longest Session" → "3h 12m" mono-md + "Aug 14" caption
    - "Most Productive Day" → "8h 45m" + "Jun 3"
@@ -122,10 +122,10 @@ LAYOUT:
    - Card: bg `#141414`, border `#1f1f1f`, radius 4px, 16px padding, min-width 140px.
 6. Identity Breakdown:
    - Header: "Where Your Time Goes" h3
-   - Horizontal bar chart: Code 42% (acid lime), Write 28% (cyan), Design 18% (purple), Exercise 12% (coral)
+   - Horizontal bar chart: Code 42% (white), Write 28% (light grey), Design 18% (purple), Exercise 12% (medium grey)
    - Label left, bar proportional, value right in mono-sm.
 
-EMPTY STATE: "No data yet. Complete a few focus sessions to see your stats." + "Start Focusing" acid lime button.
+EMPTY STATE: "No data yet. Complete a few focus sessions to see your stats." + "Start Focusing" white button.
 
 OUTPUT: Single HTML artifact in iPhone 15 Pro frame. Scrollable content.
 ```
@@ -140,7 +140,7 @@ Design the Identity Manager screen.
 Users manage their life areas/identities here. Each identity gets a card with its own mini-grid and stats.
 
 LAYOUT:
-1. Header: Back button, "Identities" h1, "Add" button right (acid lime plus).
+1. Header: Back button, "Identities" h1, "Add" button right (white plus).
 2. Identity Cards (vertical scroll):
    Each card (160px height, bg `#141414`, border `#1f1f1f`, radius 4px, 16px margin-bottom):
    
@@ -149,8 +149,8 @@ LAYOUT:
    - Bottom: "Consistency: 73%" mono-sm + trend arrow. "30d avg: 45m/day" caption `#525252`.
 
 IDENTITIES TO SHOW:
-- Code (acid lime) — 124h total — 73% consistency
-- Write (cyan) — 86h total — 58% consistency  
+- Code (white) — 124h total — 73% consistency
+- Write (light grey) — 86h total — 58% consistency  
 - Design (purple) — 52h total — 45% consistency
 
 EMPTY STATE: "You have no identities yet. Start with one area you want to track." + "Create Identity" button.
@@ -183,10 +183,10 @@ Goals (caption header "GOALS"):
 
 Notifications (caption header "NOTIFICATIONS"):
 - Toggle rows: "Focus Reminders", "Daily Summary", "Crew Updates"
-- Switch: track `#262626`, thumb acid lime when on
+- Switch: track `#262626`, thumb white when on
 
 Appearance (caption header "APPEARANCE"):
-- "Accent Color" → preview circle (acid lime) → options: Lime, Cyan, Coral
+- "Accent Color" → preview circle (white) → options: Lime, Cyan, Coral
 - "Theme": "Dark" (static, no light mode)
 
 Data (caption header "DATA"):
@@ -225,26 +225,26 @@ SECTIONS:
 
 1. Hero:
    - "Your Year in Focus" (h1, centered)
-   - "2025" (display size, JetBrains Mono 48px, acid lime)
+   - "2025" (display size, JetBrains Mono 48px, white)
 
 2. Total Hours:
    - "Total Focus Hours" (caption, uppercase, `#737373`)
-   - "312" (display, 48px, acid lime)
+   - "312" (display, 48px, white)
    - "That's 7.8 work weeks of pure focus." (body, `#737373`)
 
 3. Top Identity:
    - "This year, you were primarily a" (body, `#737373`)
-   - "Creator" (h1, acid lime)
+   - "Creator" (h1, white)
    - "42% of your focused time" (body-sm, `#525252`)
 
 4. Strongest Month:
    - "Your strongest month was" (body, `#737373`)
    - "March" (h1, `#f5f5f0`)
-   - "48 hours of focused work" (mono-md, acid lime)
+   - "48 hours of focused work" (mono-md, white)
 
 5. Skill Velocity:
    - "You got better at focusing" (body, `#737373`)
-   - "+18%" (display, 48px, acid lime)
+   - "+18%" (display, 48px, white)
    - "Average session length growth" (caption)
    - Sparkline animates on scroll into view
 
@@ -256,7 +256,7 @@ SECTIONS:
 
 7. Identity Breakdown:
    - "Where Your Time Went" h3
-   - Bars: Creator 42% (acid lime), Code 28% (cyan), Write 18% (purple), Exercise 12% (coral)
+   - Bars: Creator 42% (white), Code 28% (light grey), Write 18% (purple), Exercise 12% (medium grey)
    - Bars animate width on scroll (300ms ease-out)
 
 8. Full Grid:
@@ -266,7 +266,7 @@ SECTIONS:
 9. Share CTA:
    - "Share your year" h3
    - Checklist toggles (all default on): Total Hours, Top Identity
-   - "Generate Card" button (acid lime, full width)
+   - "Generate Card" button (white, full width)
    - "Your data, your choice." caption
 
 ANIMATIONS:
@@ -292,25 +292,25 @@ ALL WIDGETS:
 ### Small Widget (1×1)
 - Centered ring: 48px diameter, 6px stroke
   - Track: `#1a1a1a`
-  - Fill: `#ccff00`, proportion 75%
-- Below: "45m" mono-sm acid lime
+  - Fill: `#ffffff`, proportion 75%
+- Below: "45m" mono-sm white
 - Below: "/ 60m" caption `#525252`
 - Deep link: opens app to Grid
 
 ### Medium Widget (2×2)
 - Left half (50%): 7-day mini grid
   - 7 cells vertically, 10px each, 2px gap
-  - Intensity scale from dark grey to acid lime
-  - Today: acid lime border
+  - Intensity scale from dark grey to white
+  - Today: white border
 - Right half:
   - "Today" caption uppercase `#525252`
   - 2 tasks: checkbox + truncated title
   - "+ 1 more" caption `#525252`
 
 ### Large Widget (4×2)
-- Top: "May 2025" caption + "All" pill (acid lime border)
+- Top: "May 2025" caption + "All" pill (white border)
 - Main: Month grid (7 cols × 5-6 rows, 16px cells, 4px gap)
-- Today: acid lime border
+- Today: white border
 - Bottom: "Today: 45m / 60m" mono-sm
 
 OUTPUT: Single HTML artifact showing all three widget sizes side by side on a dark iOS home screen wallpaper. No iPhone frame needed — just the widgets.
@@ -325,22 +325,22 @@ Design the Onboarding flow for Monolith.
 
 Screen 1: Welcome
 - Full-screen dark `#0a0a0a`
-- Monolith logo: simple vertical rectangle, acid lime, centered
+- Monolith logo: simple vertical rectangle, white, centered
 - "Track what matters." (h1, centered)
 - "A competence tracker for people who do deep work." (body, `#737373`, centered, max-width 280px)
-- "Get Started" button (acid lime, full width, max-width 280px, radius 4px)
+- "Get Started" button (white, full width, max-width 280px, radius 4px)
 
 Screen 2: Set Daily Goal
 - "How many focused minutes do you aim for each day?" (h2)
 - Slider: 15min to 240min, default 60min
-- Giant number "60" in JetBrains Mono display size, acid lime
+- Giant number "60" in JetBrains Mono display size, white
 - "min" caption below
 - Context: "This fills your daily ring. You can change this anytime." body-sm `#525252`
 - "Continue" button
 
 Screen 3: Pick Identities
 - "What areas of your life do you want to track?" (h2)
-- Pre-set identity pills: Code (acid lime), Write (cyan), Design (purple), Learn, Exercise, Create
+- Pre-set identity pills: Code (white), Write (light grey), Design (purple), Learn, Exercise, Create
 - Multi-select. Selected pills have bg at 15% opacity.
 - "Select 2-3" hint in caption
 - "Continue" button
@@ -354,7 +354,7 @@ Screen 4: Widget Setup
 Screen 5: Done
 - "You're ready." (h1)
 - Empty grid cell shown with today's date
-- "Start your first session" acid lime button
+- "Start your first session" white button
 
 OUTPUT: Single HTML artifact showing all 5 onboarding screens as a horizontal scroll/swipe flow. iPhone 15 Pro frame.
 ```
@@ -377,11 +377,11 @@ LAYOUT:
    - "Tap to copy" caption `#525252`
 
 3. Active Challenge:
-   - bg `#1a1a1a`, border acid lime at 10%, radius 4px
+   - bg `#1a1a1a`, border white at 10%, radius 4px
    - "Weekly Focus Goal" h3
    - "50 hours collectively" body-sm `#737373`
    - "3 days left" caption `#525252`
-   - Progress bar: track `#1a1a1a` 8px, fill acid lime 8px, 72%
+   - Progress bar: track `#1a1a1a` 8px, fill white 8px, 72%
    - "36h logged • 4 members contributed" caption
 
 4. Member Pulse:
@@ -396,7 +396,7 @@ LAYOUT:
 
 6. Challenge History:
    - "Past Challenges" caption uppercase
-   - "Week of May 1" → "Completed ✓" (acid lime check)
+   - "Week of May 1" → "Completed ✓" (white check)
    - "Week of Apr 24" → "62% reached" (muted)
 
 PRIVACY INDICATORS:
@@ -412,7 +412,7 @@ OUTPUT: Single HTML artifact in iPhone 15 Pro frame.
 
 1. **Start with Grid or Focus Mode** — these establish the core visual language.
 2. **Use Kimi K2.6** for all prompts — it follows the token spec precisely.
-3. **If a color is wrong**, say exactly: "Change the accent from teal to acid lime #ccff00"
+3. **If a color is wrong**, say exactly: "Change the accent from teal to white #ffffff"
 4. **If typography is wrong**, say: "Use JetBrains Mono for all numbers, Plus Jakarta Sans for UI text"
 5. **Iterate 2-3 times** per screen before moving to the next one.
 6. **Export as HTML** after each screen is approved. Save to `apps/mobile/reference-screens/`.
@@ -430,8 +430,8 @@ OUTPUT: Single HTML artifact in iPhone 15 Pro frame.
 | Primary Text | `#f5f5f0` |
 | Secondary Text | `#737373` |
 | Tertiary Text | `#525252` |
-| Accent (Acid Lime) | `#ccff00` |
-| Secondary Accent (Cyan) | `#00f0ff` |
+| Accent (Acid Lime) | `#ffffff` |
+| Secondary Accent (Cyan) | `#737373` |
 | Border | `#262626` |
 | Border Subtle | `#1f1f1f` |
 | Error | `#ff4444` |

@@ -6,8 +6,8 @@ Design a single screen for Monolith, a minimalist competence tracker with brutal
 
 ### Visual Direction
 - **Theme**: Dark brutalist minimalism (`#0a0a0a` background)
-- **Accent**: Acid lime `#ccff00` (progress, completion, CTAs)
-- **Secondary accent**: Cyan `#00f0ff` (rest, recovery)
+- **Accent**: White `#ffffff` (progress, completion, CTAs)
+- **Secondary accent**: Grey `#737373` (rest, recovery)
 - **Typography**: JetBrains Mono for data/numbers, Plus Jakarta Sans for UI
 - **Shape**: Near-zero border-radius (0-2px for most elements, 9999px only for pills)
 - **Motion**: Snappy 150ms, functional only, no decorative animations
@@ -23,14 +23,14 @@ Single HTML artifact inside an iPhone 15 Pro frame. Dark mode only. CSS inline o
 The contribution grid is the hero element:
 - 7 rows (Sun-Sat) × variable columns (weeks)
 - Cell size: 12px, gap: 3px
-- 6 intensity levels from `#141414` (no activity) to `#ccff00` (100%+ goal)
-- Today highlighted with 1px `#ccff00` border
+- 6 intensity levels from `#141414` (no activity) to `#ffffff` (100%+ goal)
+- Today highlighted with 1px `#ffffff` border
 
 ### Component Library
 Use these exact primitives:
 
 **Button**
-- primary: bg `#ccff00`, text `#0a0a0a`, radius 4px, px-5 py-3
+- primary: bg `#ffffff`, text `#0a0a0a`, radius 4px, px-5 py-3
 - secondary: bg `#141414`, text `#f5f5f0`, border 1px `#262626`
 - ghost: transparent bg, text `#737373`
 
@@ -40,7 +40,7 @@ Use these exact primitives:
 
 **Input**
 - bg `#141414`, border 1px `#262626`, radius 4px
-- focus: border `#ccff00`
+- focus: border `#ffffff`
 
 **Pill / Badge**
 - radius-full (9999px), uppercase, 11px
@@ -48,7 +48,7 @@ Use these exact primitives:
 
 **Ring (Progress)**
 - SVG circle, 8px stroke, sharp ends (butt cap)
-- Track: `#1a1a1a`, Fill: `#ccff00`
+- Track: `#1a1a1a`, Fill: `#ffffff`
 
 ### Motion
 - Screen transitions: slide from right, 150ms
@@ -59,7 +59,7 @@ Use these exact primitives:
 ### Screen Types
 The user will specify which screen to design. Common screens:
 - **Grid (Home)**: Contribution grid hero, identity filter pills, momentum ring, task list, FAB
-- **Focus Mode**: Full-screen timer, zero chrome, giant acid lime digits, minimal controls
+- **Focus Mode**: Full-screen timer, zero chrome, giant white digits, minimal controls
 - **Log Task**: Bottom sheet form, identity selector, duration input
 - **Profile**: Level badge, momentum ring, skill velocity sparkline, identity breakdown
 - **Identity Manager**: Identity cards with mini-grids, consistency scores
@@ -74,11 +74,11 @@ Render inside a pixel-accurate iPhone 15 Pro frame:
 - Frame color: dark grey metallic
 
 ### Example Prompt
-"Design the Focus Mode screen for Monolith. Full-screen dark background (`#0a0a0a`). Top: identity pill 'Code'. Center: giant timer '00:45:32' in JetBrains Mono 48px acid lime. Bottom: pause button (44px circle), stop button (64px circle, acid lime), cancel button. Minimal. No chrome."
+"Design the Focus Mode screen for Monolith. Full-screen dark background (`#0a0a0a`). Top: identity pill 'Code'. Center: giant timer '00:45:32' in JetBrains Mono 48px white. Bottom: pause button (44px circle), stop button (64px circle, white), cancel button. Minimal. No chrome."
 
 ### Checklist
 - [ ] Background is `#0a0a0a`
-- [ ] Accent is `#ccff00` only (cyan `#00f0ff` for rest/recovery only)
+- [ ] Accent is `#ffffff` only (grey `#737373` for rest/recovery only)
 - [ ] JetBrains Mono for all numbers and data
 - [ ] Plus Jakarta Sans for UI text
 - [ ] Border radius ≤ 4px (except pills)

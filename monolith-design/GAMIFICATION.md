@@ -38,11 +38,11 @@ Unlike GitHub's binary "did you commit?" grid, Monolith cells reflect **how much
 | Intensity | Color | Criteria (% of daily goal) |
 |---|---|---|
 | 0 | `#141414` (surface) | 0 minutes |
-| 1 | `#2a3311` | > 0, < 25% |
-| 2 | `#4d6600` | 25% - 49% |
-| 3 | `#7a9900` | 50% - 74% |
-| 4 | `#a3cc00` | 75% - 99% |
-| 5 | `#ccff00` (acid lime) | 100%+ |
+| 1 | `#2a2a2a` | > 0, < 25% |
+| 2 | `#4a4a4a` | 25% - 49% |
+| 3 | `#6a6a6a` | 50% - 74% |
+| 4 | `#8a8a8a` | 75% - 99% |
+| 5 | `#ffffff` (white) | 100%+ |
 
 ### Why This Works
 - Users see **partial progress** as valuable (not all-or-nothing)
@@ -114,7 +114,7 @@ Instead of a streak counter, Monolith uses a **weekly momentum ring**:
 
 ### Rest Day Mechanics
 - Users can mark a day as "Rest Day" in advance
-- Rest days show as a cyan (`#00f0ff`) outline, not empty
+- Rest days show as a grey (`#737373`) outline, not empty
 - Rest days do NOT break momentum. They are part of sustainable progress.
 - App encourages 1-2 rest days per week in onboarding
 
