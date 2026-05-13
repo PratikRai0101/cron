@@ -1,0 +1,14 @@
+{
+  "name": "@monolith/shared",
+  "version": "0.1.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf node_modules dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}

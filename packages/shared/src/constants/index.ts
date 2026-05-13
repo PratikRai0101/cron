@@ -1,0 +1,14 @@
+export const APP_NAME = 'Monolith';
+export const DEFAULT_DAILY_GOAL_MINUTES = 60;
+export const MAX_SESSION_DURATION_HOURS = 12;
+export const MAX_SESSION_DURATION_SECONDS = MAX_SESSION_DURATION_HOURS * 3600;
+export const WIDGET_UPDATE_INTERVAL_MINUTES = 15;
+export const OFFLINE_QUEUE_KEY = '@monolith_offline_queue';
+export const FREE_IDENTITY_LIMIT = 1;
+export const FREE_HISTORY_DAYS = 30;
+export const CREW_MIN_MEMBERS = 3;
+export const CREW_MAX_MEMBERS = 8;
+export const MOMENTUM_RING_DAYS = 7;
+export const MOMENTUM_DEFAULT_TARGET = 5;
+export const LEVEL_MINUTES = 600;
+export const GRID_INTENSITY_LEVELS = 6;
