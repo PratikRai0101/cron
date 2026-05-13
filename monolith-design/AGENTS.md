@@ -1,239 +1,284 @@
 # AGENTS.md — Monolith
 
-## Project Overview
-
-**Monolith** is a minimalist, gamified cross-platform productivity tracker. It visualizes focused work through an effort-based contribution grid (GitHub/LeetCode-style) with a brutalist "Monolith" aesthetic. The product philosophy is competence-tracking, not engagement-farming. Users are rewarded for meaningful progress, not app usage.
-
-- **Mobile**: React Native + Expo (EAS Build for native widgets)
-- **Desktop**: Tauri (Rust) wrapping the React web build
-- **Backend**: Supabase (Postgres, Auth, Realtime, Row-Level Security)
-- **State**: Zustand (client-side) + Supabase (source of truth)
-- **Billing**: RevenueCat (cross-platform subscriptions)
+> ⚠️ **LIVING DOCUMENT** — Update this file after every session. Any coding agent picking up this project MUST read this first.
 
 ---
 
-## Architecture Patterns
+## Project At a Glance
+
+**Monolith** is a minimalist, gamified cross-platform competence tracker. It visualizes focused work through an effort-based contribution grid (GitHub/LeetCode-style) with a brutalist "Monolith" aesthetic.
+
+**Product Philosophy:** Competence-tracking, not engagement-farming. Users are rewarded for meaningful progress, not app usage.
+
+**Current Phase:** Design & planning complete. Moving into active development (screen implementation).
+
+---
+
+## What's Been Done ✅
+
+### Documentation (Complete)
+- [x] `DESIGN_SYSTEM.md` — Full visual system (colors, typography, spacing, components, motion)
+- [x] `PRD.md` — Product requirements, screen specs, data model, edge cases
+- [x] `GAMIFICATION.md` — Progression system, momentum rings, anti-burnout mechanics
+- [x] `SAAS_PLAN.md` — Freemium pricing tiers, RevenueCat integration, unit economics
+- [x] `SOCIAL_FEATURES.md` — Crews, Wrapped, ambient social proof
+- [x] `CLAUDE_DESIGN_PROMPT.md` — Reusable screen/component design prompts
+- [x] `PROJECT_STRUCTURE.md` — Turborepo monorepo layout
+- [x] `SCREENS_AND_WIDGETS.html` — Interactive HTML prototype of all screens
+
+### Project Scaffold (Complete)
+- [x] Turborepo root configuration (`package.json`, `turbo.json`, `.gitignore`)
+- [x] Mobile app configuration (Expo, NativeWind, Metro, Babel, TypeScript)
+- [x] Mobile app source structure (navigation, stores, types, lib, utils)
+- [x] Shared package (date utilities, grid calculations, XP/level formulas)
+- [x] Supabase initial migration (all tables, RLS policies, indexes, triggers)
+- [x] Git repo initialized and pushed to GitHub (`PratikRai0101/cron`)
+
+### Open Design Integration (Complete)
+- [x] Custom `monolith` design system for Open Design
+- [x] Custom `monolith-mobile` skill for Open Design
+- [x] 10 ready-to-use screen prompts
+
+### Reference Screens (In Progress)
+- [x] `01-grid-home.html` — Grid/Home screen reference
+- [ ] `02-focus-mode.html` — Focus Mode reference
+- [ ] `03-log-task.html` — Log Task bottom sheet reference
+- [ ] `04-profile.html` — Profile/Stats reference
+- [ ] `05-identity-manager.html` — Identity Manager reference
+- [ ] `06-settings.html` — Settings reference
+- [ ] `07-wrapped.html` — Wrapped annual report reference
+- [ ] `08-widgets.html` — Widget mocks reference
+- [ ] `09-onboarding.html` — Onboarding flow reference
+- [ ] `10-crew-dashboard.html` — Crew Dashboard reference
+
+---
+
+## What's In Progress 🔄
+
+### Priority 1: Core Screens (React Native Implementation)
+Implement these screens in `apps/mobile/src/` using NativeWind:
+
+1. **Grid Screen** (`app/(tabs)/grid.tsx`)
+   - Contribution grid component (7 rows × variable columns)
+   - Identity filter pills
+   - Momentum ring (SVG, 7 segments)
+   - Task list with swipe actions
+   - FAB for new task
+   - Insight cards below grid
+
+2. **Focus Mode** (`app/modals/focus-mode.tsx`)
+   - Full-screen timer (counts up)
+   - Identity pill selector
+   - Pause/Resume/Stop/Cancel controls
+   - Background timer continuation
+   - Auto-transition to log summary on stop
+
+3. **Log Task Sheet** (`app/modals/log-task.tsx`)
+   - Bottom sheet form
+   - Task title input
+   - Identity selector (single select)
+   - Duration input (min/hr)
+   - Date picker (default today)
+
+4. **Profile Screen** (`app/(tabs)/profile.tsx`)
+   - User card with level badge
+   - Momentum ring (compact)
+   - Skill velocity sparkline
+   - Personal records cards
+   - Identity breakdown bar chart
+   - Subscription card (if Free)
+
+### Priority 2: State Management & Data Layer
+- [ ] Task store (`stores/taskStore.ts`) — CRUD operations, offline queue
+- [ ] Identity store (`stores/identityStore.ts`) — identities, filters, mastery
+- [ ] Focus session sync to Supabase
+- [ ] Daily logs aggregation
+- [ ] Offline-first sync implementation
+
+### Priority 3: Backend Integration
+- [ ] Supabase auth setup (email + OAuth)
+- [ ] Realtime subscriptions for grid data
+- [ ] Edge functions for Wrapped report generation
+- [ ] RevenueCat integration for subscriptions
+
+### Priority 4: Widgets (v1)
+- [ ] iOS widget extension (Swift, WidgetKit)
+- [ ] Android widget (Kotlin, AppWidgetProvider)
+- [ ] Shared storage bridge (AppGroups / SharedPreferences)
+- [ ] Background fetch for widget updates
+
+### Priority 5: Desktop App
+- [ ] Tauri configuration
+- [ ] System tray integration
+- [ ] Global shortcuts (Cmd+Shift+M for quick log)
+
+---
+
+## Architecture
+
+### Tech Stack
+| Layer | Technology |
+|---|---|
+| Mobile | React Native + Expo (EAS Build) |
+| Desktop | Tauri (Rust) |
+| Backend | Supabase (Postgres, Auth, Realtime, RLS) |
+| State | Zustand |
+| Billing | RevenueCat |
+| Monorepo | Turborepo |
+| Styling | NativeWind (Tailwind for React Native) |
+
+### Directory Structure
+```
+monolith/
+├── apps/
+│   ├── mobile/              # React Native + Expo
+│   │   ├── src/
+│   │   │   ├── app/         # Expo Router screens
+│   │   │   │   ├── (tabs)/  # Bottom tabs: grid, focus, identity, profile
+│   │   │   │   ├── modals/  # Modal screens: log-task, focus-mode, settings
+│   │   │   │   └── onboarding/
+│   │   │   ├── components/  # UI components by domain
+│   │   │   ├── hooks/       # Custom React hooks
+│   │   │   ├── stores/      # Zustand stores (one per domain)
+│   │   │   ├── lib/         # Utilities, configs, clients
+│   │   │   ├── utils/       # Pure utility functions
+│   │   │   ├── types/       # TypeScript types
+│   │   │   └── widgets/     # Widget bridge logic
+│   │   ├── assets/
+│   │   ├── reference-screens/  # HTML reference mocks
+│   │   └── [config files]
+│   └── desktop/             # Tauri desktop app
+├── packages/
+│   └── shared/              # Shared types & utilities
+├── supabase/
+│   └── migrations/          # Database schema
+├── open-design/             # Open Design configuration
+│   ├── design-systems/monolith/
+│   ├── skills/monolith-mobile/
+│   └── prompts/
+├── widgets/                 # Native widget source (iOS/Android)
+└── monolith-design/         # Planning documents
+```
 
 ### Navigation
-Use **React Navigation v6+** with a bottom-tab navigator for the main app:
-- `Grid` (Home)
-- `Focus`
-- `Identity`
-- `Profile`
+- Bottom tabs: `Grid`, `Focus`, `Identity`, `Profile`
+- Modal stack: `LogTask`, `FocusMode`, `Settings`, `CrewDashboard`, `WrappedPreview`
+- Onboarding stack: `Welcome`, `SetGoal`, `PickIdentities`, `WidgetSetup`, `Done`
 
-Modal screens (full-screen or bottom-sheet):
-- `LogTask`
-- `FocusMode`
-- `CrewDashboard`
-- `WrappedPreview`
-- `Settings`
-- `Onboarding`
+### State Stores (Zustand)
+| Store | Responsibility |
+|---|---|
+| `appStore` | Theme, settings, onboarding status, offline state |
+| `taskStore` | Tasks, completions, today's queue, offline queue |
+| `focusStore` | Active session, timer state, elapsed time |
+| `identityStore` | Identities, filters, mastery stats |
+| `userStore` | Profile, subscription tier, level/XP |
+| `crewStore` | Crew memberships, challenges, progress |
 
-### State Management
-**Zustand** for all client state. One store per domain:
-- `useAppStore` — theme, settings, onboarding status
-- `useTaskStore` — tasks, completions, today's queue
-- `useFocusStore` — active session, timer state
-- `useIdentityStore` — identities, filters, mastery stats
-- `useCrewStore` — crew memberships, challenges, progress
-- `useUserStore` — user profile, subscription tier, level/XP
+### Database Schema (Supabase)
+Key tables: `profiles`, `identities`, `tasks`, `focus_sessions`, `daily_logs`, `crews`, `crew_memberships`, `crew_challenges`, `wrapped_reports`
 
-**Supabase** is the source of truth. Zustand stores sync via:
-- `supabase.from('table').subscribe()` for real-time updates
-- Optimistic updates in Zustand, rollback on Supabase error
-- Queue offline mutations in `AsyncStorage`, flush on reconnect
-
-### Offline-First Sync Strategy
-```
-User Action → Zustand (optimistic) → AsyncStorage Queue → Supabase
-                                          ↑_____________↓ (on reconnect)
-```
-- Every mutation writes to an `offline_queue` table in AsyncStorage
-- On app launch and network recovery, flush the queue in order
-- Show a subtle "Syncing..." indicator in Profile header only if queue > 0
+All tables have RLS enabled. See `supabase/migrations/001_initial_schema.sql` for full schema.
 
 ---
 
-## Supabase Integration
+## Design System Quick Reference
 
-### Auth
-- Use **Supabase Auth** with email/password and OAuth (Google, Apple)
-- Store session in `expo-secure-store` (iOS keychain / Android Keystore)
-- Refresh token automatically via `supabase.auth.onAuthStateChange()`
-
-### Database Schema (Core Tables)
-```sql
--- Users (managed by Supabase Auth, extended via public.profiles)
-profiles: id, username, display_name, avatar_url, daily_goal_minutes,
-          subscription_tier, accent_color, created_at
-
--- Identities
-identities: id, user_id, name, color, icon, sort_order, is_archived
-
--- Tasks
-tasks: id, user_id, title, identity_id, estimated_minutes, is_recurring,
-       recurrence_rule, created_at, completed_at, archived_at
-
--- Focus Sessions
-focus_sessions: id, user_id, task_id, identity_id, started_at, ended_at,
-                duration_seconds, was_completed
-
--- Daily Logs (aggregated from sessions for fast grid queries)
-daily_logs: id, user_id, date, total_minutes, identity_breakdown (jsonb)
-
--- Crews
-crews: id, name, code, created_by, challenge_config (jsonb), created_at
-
--- Crew Memberships
-crew_memberships: id, crew_id, user_id, privacy_level, joined_at
--- privacy_level: 'ring_only' | 'identity_breakdown' | 'ghost'
-
--- Crew Challenges
-crew_challenges: id, crew_id, title, target_hours, target_completions,
-                 identity_filter, starts_at, ends_at
-
--- Wrapped Reports
-wrapped_reports: id, user_id, year, report_data (jsonb), share_card_url,
-                 generated_at
+### Colors
+```
+Background:       #0a0a0a
+Surface:          #141414
+Surface Elevated: #1a1a1a
+Border:           #262626
+Border Subtle:    #1f1f1f
+Text Primary:     #f5f5f0
+Text Secondary:   #737373
+Text Tertiary:    #525252
+Accent (Acid Lime): #ccff00
+Secondary Accent: #00f0ff
+Tertiary Accent:  #ff6b6b
 ```
 
-### Row-Level Security (RLS)
-Every table must have RLS enabled. Default policies:
-- `profiles`: Users can read/update only their own row
-- `identities`, `tasks`, `focus_sessions`, `daily_logs`: User owns data
-- `crews`: Members can read crew row. Creator can update.
-- `crew_memberships`: Members can read their crew's memberships (respecting privacy_level)
-- `crew_challenges`: Members can read. Creator can write.
-- `wrapped_reports`: User owns data.
+### Typography
+- **Data/Numbers**: JetBrains Mono (tab-nums)
+- **UI/Headings**: Plus Jakarta Sans
+- **Display size**: 48px / 700 / -0.02em (Focus timer)
+- **H1**: 28px / 700 / -0.01em
+- **Body**: 15px / 400 / 1.5
+- **Caption**: 11px / 500 / uppercase / 0.02em
 
-### Realtime Subscriptions
-Subscribe to tables the user actively views:
-- Grid screen: `daily_logs` for the current user
-- Crew screen: `crew_challenges` and aggregate progress for user's crews
-- Profile: `profiles` (for tier/subscription changes)
+### Shape
+- Default radius: 4px (cards, buttons, inputs)
+- Grid cells: 2px radius
+- Pills/Avatars: 9999px
+- **No radius > 8px except pills**
 
----
+### Motion
+- Default duration: 150ms
+- Easing: cubic-bezier(0.4, 0, 0.2, 1)
+- **No bouncy springs. No decorative animations.**
+- Reduced motion: instant (0ms)
 
-## Widget Development (Native)
-
-### Constraints
-- Native iOS widgets use **WidgetKit** (SwiftUI)
-- Native Android widgets use **AppWidgetProvider** (Kotlin + RemoteViews)
-- Both require **EAS Build** with custom **Config Plugins**; they do NOT work in Expo Go
-- Widgets are read-only in v1, interactive in v2
-
-### Data Bridge
-Widgets cannot access the app's JS runtime. They read from:
-1. **Shared Storage**: Write widget data to `AppGroups` (iOS) and `SharedPreferences` (Android) via native modules
-2. **Background Fetch**: Use `expo-background-fetch` to periodically sync widget data from Supabase
-3. **Deep Links**: Tapping a widget opens the app via deep link (`monolith://focus`, `monolith://grid?date=2024-05-13`)
-
-### v1 Read-Only Widgets
-- **Small**: Ring progress % + hours today
-- **Medium**: 7-day mini-grid + top 2 tasks
-- **Large**: Month grid + identity filter indicator
-
-### v2 Interactive Widgets
-- iOS: Use **WidgetKit Button intents** (iOS 17+) to trigger actions without opening app
-- Android: Use **PendingIntents** on RemoteViews buttons
-- Actions: Check off task, start quick focus session
-
-### Development Flow
-1. Develop app logic in Expo Go (ignore widgets)
-2. When ready for widgets, switch to `expo run:ios` / `expo run:android` (development builds)
-3. Use EAS Build for production widgets
+### Core Rules
+1. Dark mode ONLY. No light mode.
+2. Acid lime is the ONLY accent. Everything else is disciplined.
+3. No gradients. No shadows as primary elevation.
+4. No engagement theater (no confetti, no streak anxiety, no daily login bonuses).
+5. Grid cell fill is INSTANT. No animation.
+6. Respect `prefers-reduced-motion`.
 
 ---
 
-## Desktop (Tauri)
+## Feature Gates
 
-### Build Process
-1. `expo export:web` → generates static web build
-2. Tauri wraps the web build in a native window
-3. Tauri provides: system tray icon, global shortcuts (e.g., `Cmd+Shift+M` for quick log), native menus
+| Feature | Free | Pro |
+|---|---|---|
+| Identities | 1 | Unlimited |
+| History | 30 days | Unlimited |
+| Grid Filtering | View all | Filter by identity |
+| Analytics | Current week only | Full trends |
+| Widgets | Small read-only | All + interactive |
+| Export | — | CSV/JSON |
+| Sync | Local-only | Cloud sync |
+| Crews | Join only | Create + manage |
+| Wrapped | Current year | All + rolling |
 
-### Sync
-Desktop app uses the same Supabase client as mobile. No separate backend.
-
-### Storage
-Use Tauri's `fs` + `path` APIs for local data persistence if offline, sync to Supabase when online.
-
----
-
-## Coding Conventions
-
-### File Naming
-- Components: `PascalCase.tsx` (e.g., `ContributionGrid.tsx`)
-- Screens: `PascalCaseScreen.tsx` (e.g., `GridScreen.tsx`)
-- Hooks: `useCamelCase.ts` (e.g., `useFocusTimer.ts`)
-- Stores: `camelCaseStore.ts` (e.g., `taskStore.ts`)
-- Utils: `camelCase.ts` (e.g., `dateUtils.ts`)
-
-### Styling
-- Use **NativeWind** (Tailwind for React Native) for all styling
-- All colors come from `DESIGN_SYSTEM.md` tokens, mapped in `tailwind.config.js`
-- No inline styles except for dynamic values (e.g., grid cell intensity)
-
-### Component Structure
-```tsx
-// Screen component
-export default function GridScreen() {
-  // Hooks at top
-  const { tasks } = useTaskStore();
-  
-  // Render
-  return (
-    <View className="flex-1 bg-background">
-      <ContributionGrid />
-      <TaskList tasks={tasks} />
-    </View>
-  );
-}
-```
-
-### Performance Rules
-- FlatList for all scrollable lists
-- Memoize grid cell rendering with `React.memo`
-- Debounce focus session writes to Supabase (every 10s during active session, flush on end)
-- Avoid re-rendering the entire grid on every timer tick
+**Pricing**: Pro = $4.99/mo or $39.99/year
 
 ---
 
-## Feature Flags & Gates
+## Environment Variables
 
-Use `subscription_tier` from `profiles` to gate features:
-- `free`: Local-only (no Supabase sync), 1 identity, 30-day history, read-only small widget
-- `pro`: Full sync, unlimited identities, unlimited history, all widgets + interactive, export, custom accents
-- `team`: Crew creation, advanced crew analytics (future)
-
-Check tier in components:
-```tsx
-const { tier } = useUserStore();
-if (tier === 'free' && identities.length >= 1) {
-  showUpgradePrompt();
-}
-```
-
----
-
-## Environment Setup
-
-Required environment variables (in `.env` and EAS secrets):
 ```
 EXPO_PUBLIC_SUPABASE_URL=
 EXPO_PUBLIC_SUPABASE_ANON_KEY=
-REVENUECAT_API_KEY_IOS=
-REVENUECAT_API_KEY_ANDROID=
+EXPO_PUBLIC_REVENUECAT_API_KEY_IOS=
+EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID=
+EXPO_PUBLIC_POSTHOG_KEY=      # Optional telemetry
 ```
 
 ---
 
-## Testing Strategy
+## How to Run
 
-- **Unit**: Test pure utility functions (date math, XP calculations) with Jest
-- **Component**: Test screen rendering with React Native Testing Library
-- **Integration**: Test Zustand store logic + Supabase mock
-- **E2E**: Detox for critical flows (onboarding → focus → grid updates)
+```bash
+# Start Supabase locally
+npm run supabase:start
+
+# Start mobile app (Expo)
+npm run mobile
+# or
+cd apps/mobile && npx expo start
+
+# Start desktop app (Tauri)
+npm run desktop
+
+# Type check
+npm run type-check
+
+# Lint
+npm run lint
+```
 
 ---
 
@@ -242,33 +287,56 @@ REVENUECAT_API_KEY_ANDROID=
 When generating code for this project:
 
 1. **Always reference `DESIGN_SYSTEM.md`** for colors, typography, spacing, and motion values.
-2. **Follow the Monolith philosophy**: The UI should feel precise, utilitarian, and almost austere. Acid lime is the only "fun" element. Everything else is disciplined.
-3. **Never add engagement theater**: No confetti on task completion. No "Good morning!" popups. No daily login bonuses. The reward is the grid filling up.
+2. **Follow the Monolith philosophy**: The UI should feel precise, utilitarian, and almost austere. Acid lime is the only "fun" element.
+3. **Never add engagement theater**: No confetti, no "Good morning!" popups, no daily login bonuses. The reward is the grid filling up.
 4. **Prioritize offline-first**: Assume the user has no network. Make it work locally, sync when possible.
 5. **Respect privacy**: Social features are opt-in, anonymized by default, and never judgmental.
 6. **Keep it minimal**: If a feature can be removed without breaking the core loop, question its existence.
+7. **Use NativeWind**: All styling via Tailwind classes. No inline styles except dynamic values.
+8. **TypeScript strict mode**: All components typed. Props interfaces required.
+9. **Accessibility**: Labels on all interactive elements. Minimum 44px touch targets.
+10. **Test what you build**: Run the app, verify the screen renders correctly.
 
 ---
 
-## Useful Commands
+## Git Workflow
 
-```bash
-# Start Expo development server
-npx expo start
+- **Main branch**: Production-ready
+- **Commits**: Conventional commits (`feat:`, `fix:`, `docs:`, `refactor:`)
+- **Micro-commits**: Commit frequently, push after each logical chunk
+- **Remote**: `origin` = `git@github.com:PratikRai0101/cron.git`
 
-# Run on iOS simulator
-npx expo run:ios
+---
 
-# Run on Android emulator
-npx expo run:android
+## Useful Files for Quick Reference
 
-# Build native widgets (EAS)
-eas build --platform ios
-eas build --platform android
+| File | What's In It |
+|---|---|
+| `monolith-design/DESIGN_SYSTEM.md` | Complete visual system |
+| `monolith-design/PRD.md` | All screen specs and data model |
+| `monolith-design/CLAUDE_DESIGN_PROMPT.md` | Reusable prompts per screen |
+| `apps/mobile/reference-screens/` | HTML pixel-perfect mocks |
+| `apps/mobile/src/types/models.ts` | TypeScript interfaces |
+| `apps/mobile/src/lib/constants.ts` | App constants |
+| `apps/mobile/src/lib/colors.ts` | Typed color tokens |
+| `supabase/migrations/001_initial_schema.sql` | Database schema |
+| `open-design/prompts/screen-prompts.md` | Open Design prompts |
 
-# Export web build for Tauri
-npx expo export:web
+---
 
-# Run Tauri dev
-cd apps/desktop && cargo tauri dev
-```
+## Last Updated
+
+**Date**: 2025-05-13
+**Session**: Set up Open Design integration, generated Grid/Home reference screen
+**Next Session**: Generate remaining reference screens OR start React Native implementation
+
+---
+
+## Notes for Future Agents
+
+- The project uses **Turborepo** with npm workspaces. Run `npm install` from root.
+- Supabase is managed via CLI. Migrations are in `supabase/migrations/`.
+- Open Design daemon runs separately. See `open-design/` for config.
+- The `reference-screens/` HTML files are pixel-perfect targets. Match them exactly when implementing in React Native.
+- If you need to generate a new screen design, use the prompts in `open-design/prompts/screen-prompts.md` with the Open Design daemon.
+- When in doubt, check the interactive prototype: `monolith-design/SCREENS_AND_WIDGETS.html`
