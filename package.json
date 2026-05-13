@@ -1,0 +1,32 @@
+{
+  "name": "monolith",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Monolith — Minimalist competence tracker with gamified productivity",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "test": "turbo run test",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "mobile": "turbo run dev --filter=mobile",
+    "desktop": "turbo run dev --filter=desktop",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:db:push": "supabase db push",
+    "supabase:types": "supabase gen types typescript --local > packages/shared/src/types/supabase.ts"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "typescript": "^5.4.0"
+  },
+  "packageManager": "npm@10.2.4",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
