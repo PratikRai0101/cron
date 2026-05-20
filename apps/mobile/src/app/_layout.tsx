@@ -48,7 +48,7 @@ export default function RootLayout() {
 
   return (
     <View className="flex-1 bg-background">
-      <Stack screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
+      <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="modals" options={{ presentation: 'modal' }} />
         <Stack.Screen name="onboarding" />
