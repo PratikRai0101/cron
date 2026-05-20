@@ -1,0 +1,1 @@
+export { IdentityPill } from './IdentityPill';
