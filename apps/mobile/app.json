@@ -19,7 +19,10 @@
       "bundleIdentifier": "app.monolith",
       "buildNumber": "0.1.0",
       "infoPlist": {
-        "UIBackgroundModes": ["fetch", "processing"]
+        "UIBackgroundModes": [
+          "fetch",
+          "processing"
+        ]
       }
     },
     "android": {
@@ -37,7 +40,9 @@
     "plugins": [
       "expo-secure-store",
       "expo-background-fetch",
-      "expo-task-manager"
+      "expo-task-manager",
+      "expo-font",
+      "expo-router"
     ],
     "experiments": {
       "typedRoutes": true
