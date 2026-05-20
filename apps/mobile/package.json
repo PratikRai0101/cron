@@ -16,6 +16,9 @@
     "@expo-google-fonts/jetbrains-mono": "^0.2.3",
     "@expo-google-fonts/plus-jakarta-sans": "^0.2.3",
     "@monolith/shared": "*",
+    "@react-navigation/bottom-tabs": "^7.16.1",
+    "@react-navigation/native": "^7.2.4",
+    "@react-navigation/native-stack": "^7.15.1",
     "@supabase/supabase-js": "^2.39.0",
     "expo": "~54.0.0",
     "expo-background-fetch": "~14.0.9",
@@ -33,12 +36,12 @@
     "react-native-gesture-handler": "~2.28.0",
     "react-native-purchases": "^7.0.0",
     "react-native-reanimated": "~4.1.1",
-    "react-native-worklets": "~0.5.1",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
     "react-native-svg": "15.12.1",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "^0.21.0",
+    "react-native-worklets": "~0.5.1",
     "zustand": "^4.5.0"
   },
   "devDependencies": {
