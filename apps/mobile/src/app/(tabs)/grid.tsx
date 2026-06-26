@@ -30,6 +30,23 @@ export default function GridScreen() {
 
   const identities = [{ id: 'all', name: 'All', color: '#ffffff' }, ...demoIdentities];
 
+  // Compute identity share for grid filtering
+  const totalIdentityMinutes = demoIdentities.reduce((sum, i) => sum + i.totalMinutes, 0);
+  const selectedIdentityData = selectedIdentity
+    ? demoIdentities.find((i) => i.id === selectedIdentity)
+    : null;
+  const identityShare = selectedIdentityData
+    ? selectedIdentityData.totalMinutes / totalIdentityMinutes
+    : 1;
+
+  // Filter grid data proportionally when an identity is selected
+  const filteredGridData = selectedIdentityData
+    ? gridData.map((d) => ({ ...d, minutes: Math.round(d.minutes * identityShare) }))
+    : gridData;
+
+  const filteredTodayMinutes = Math.round(getTodayMinutes(gridData) * identityShare);
+  const filteredTodayProgress = Math.min(filteredTodayMinutes / DAILY_GOAL, 1);
+
   const filteredTasks = selectedIdentity
     ? tasks.filter((t) => {
         const identity = demoIdentities.find((i) => i.id === selectedIdentity);
@@ -78,7 +95,7 @@ export default function GridScreen() {
         {/* Contribution Grid */}
         <View className="px-5 py-2">
           <ContributionGrid
-            data={gridData}
+            data={filteredGridData}
             dailyGoal={DAILY_GOAL}
             weeksToShow={20}
           />
@@ -86,11 +103,11 @@ export default function GridScreen() {
 
         {/* Today's Ring */}
         <View className="px-5 py-6 items-center">
-          <RingProgress progress={todayProgress} size={140} strokeWidth={8}>
+          <RingProgress progress={filteredTodayProgress} size={140} strokeWidth={8}>
             <View className="items-center">
               <Text className="text-caption text-text-tertiary uppercase font-sans">TODAY</Text>
               <Text className="text-mono-lg text-text-primary font-mono mt-1">
-                {formatMinutes(todayMinutes)}
+                {formatMinutes(filteredTodayMinutes)}
               </Text>
               <Text className="text-mono-sm text-text-tertiary font-mono">
                 / {DAILY_GOAL}m
