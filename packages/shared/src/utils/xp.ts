@@ -1,4 +1,4 @@
-export const LEVEL_MINUTES = 600; // 10 hours per level
+const LEVEL_MINUTES = 600; // 10 hours per level
 
 export function getLevel(totalFocusMinutes: number): number {
   return Math.floor(totalFocusMinutes / LEVEL_MINUTES);

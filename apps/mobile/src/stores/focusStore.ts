@@ -25,6 +25,7 @@ interface FocusState {
   stopFocus: () => { duration: number; identityId: string; taskId?: string } | null;
   cancelFocus: () => void;
   tick: () => void;
+  logSession: (session: CompletedSession) => void;
 }
 
 export const useFocusStore = create<FocusState>((set, get) => ({
