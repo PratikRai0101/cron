@@ -89,5 +89,8 @@ export const demoTasks: DemoTask[] = [
 
 export function getTodayMinutes(data: DemoDayData[]): number {
   const today = formatDate(new Date());
-  return data.find((d) => d.date === today)?.minutes || 0;
+  const entry = data.find((d) => d.date === today);
+  if (entry) return entry.minutes;
+  // Ensure today always has some demo activity
+  return 35;
 }
