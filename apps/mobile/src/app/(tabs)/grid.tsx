@@ -12,13 +12,10 @@ import { RingProgress } from '@/components/focus';
 import {
   generateDemoGridData,
   demoIdentities,
-  demoTasks as initialTasks,
   getTodayMinutes,
-  type DemoTask,
 } from '@/lib/demo-data';
-import { useFocusStore } from '@/stores';
-import { formatMinutes } from '@monolith/shared';
-import { formatDate } from '@monolith/shared';
+import { useFocusStore, useTaskStore } from '@/stores';
+import { formatMinutes, formatDate } from '@monolith/shared';
 import { router } from 'expo-router';
 
 const DAILY_GOAL = 60;
@@ -26,7 +23,8 @@ const DAILY_GOAL = 60;
 export default function GridScreen() {
   const [gridData] = useState(() => generateDemoGridData(140));
   const [selectedIdentity, setSelectedIdentity] = useState<string | null>(null);
-  const [tasks, setTasks] = useState<DemoTask[]>(initialTasks);
+  const tasks = useTaskStore((s) => s.tasks);
+  const toggleTask = useTaskStore((s) => s.toggleTask);
   const completedSessions = useFocusStore((s) => s.completedSessions);
 
   // Add completed session minutes to today's total
@@ -64,13 +62,11 @@ export default function GridScreen() {
     : tasks;
 
   const handleToggleTask = useCallback((taskId: string) => {
-    setTasks((prev) =>
-      prev.map((t) => (t.id === taskId ? { ...t, completed: !t.completed } : t))
-    );
-  }, []);
+    toggleTask(taskId);
+  }, [toggleTask]);
 
-  const handleStartFocus = useCallback(() => {
-    router.navigate('/(tabs)/focus');
+  const handleOpenLogTask = useCallback(() => {
+    router.navigate('/modals/log-task');
   }, []);
 
   return (
@@ -141,7 +137,6 @@ export default function GridScreen() {
               identityName={task.identityName}
               identityColor={task.identityColor}
               completed={task.completed}
-              loggedMinutes={task.loggedMinutes}
               estimatedMinutes={task.estimatedMinutes}
               onToggleComplete={() => handleToggleTask(task.id)}
             />
@@ -151,7 +146,7 @@ export default function GridScreen() {
 
       {/* Floating Action Button */}
       <Pressable
-        onPress={handleStartFocus}
+        onPress={handleOpenLogTask}
         className="absolute bottom-6 right-5 w-14 h-14 rounded-full bg-accent items-center justify-center active:scale-[0.97]"
         style={{ elevation: 4, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8 }}
       >
