@@ -1,5 +1,7 @@
 import { Redirect } from 'expo-router';
+import { useAppStore } from '@/stores';
 
 export default function Index() {
-  return <Redirect href="/(tabs)/grid" />;
+  const isOnboarded = useAppStore((s) => s.isOnboarded);
+  return <Redirect href={isOnboarded ? '/(tabs)/grid' : '/onboarding'} />;
 }

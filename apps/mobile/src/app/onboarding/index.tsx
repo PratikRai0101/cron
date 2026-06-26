@@ -9,10 +9,16 @@ export default function OnboardingScreen() {
         A competence tracker for people who do deep work.
       </Text>
       <Pressable
-        onPress={() => router.replace('/(tabs)/grid')}
+        onPress={() => router.replace('/onboarding/set-goal')}
         className="mt-10 bg-accent px-8 py-3 rounded-monolith active:scale-[0.97]"
       >
         <Text className="text-text-inverse font-sans font-semibold text-body">Get Started</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => router.replace('/(tabs)/grid')}
+        className="mt-4"
+      >
+        <Text className="text-caption text-text-tertiary font-sans">Skip</Text>
       </Pressable>
     </View>
   );

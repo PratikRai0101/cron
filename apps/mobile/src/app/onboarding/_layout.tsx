@@ -4,6 +4,9 @@ export default function OnboardingLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />
+      <Stack.Screen name="set-goal" />
+      <Stack.Screen name="pick-identities" />
+      <Stack.Screen name="done" />
     </Stack>
   );
 }
