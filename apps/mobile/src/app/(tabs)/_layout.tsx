@@ -6,7 +6,6 @@ function TabIcon({ name, focused }: { name: string; focused: boolean }) {
     <View className="items-center justify-center">
       <Text 
         className={`text-xs ${focused ? 'text-accent' : 'text-text-secondary'}`}
-        style={{ fontFamily: 'JetBrainsMono' }}
       >
         {name[0]}
       </Text>
