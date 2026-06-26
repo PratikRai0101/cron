@@ -66,23 +66,32 @@ export default function FocusTabScreen() {
   }, [cancelFocus]);
 
   const currentIdentity = demoIdentities.find((i) => i.id === currentIdentityId);
+  const [selectedIdentityId, setSelectedIdentityId] = useState(demoIdentities[0].id);
+  const selectedIdentity = demoIdentities.find((i) => i.id === selectedIdentityId) || demoIdentities[0];
+
+  const handleStartWithIdentity = useCallback(() => {
+    startFocus(selectedIdentityId);
+  }, [selectedIdentityId, startFocus]);
 
   // If no active session, show idle state with start prompt
   if (!isActive) {
     return (
       <View className="flex-1 bg-background items-center justify-center px-5">
-        {/* Identity Pill */}
+        {/* Identity Picker */}
         <View className="absolute top-16 items-center">
-          <View
-            className="rounded-full px-4 py-1.5 border"
-            style={{ borderColor: `${demoIdentities[0].color}4D` }}
-          >
-            <Text
-              className="text-caption uppercase font-sans"
-              style={{ color: demoIdentities[0].color }}
-            >
-              {demoIdentities[0].name}
-            </Text>
+          <Text className="text-caption text-text-secondary uppercase mb-3 font-sans">
+            Tracking
+          </Text>
+          <View className="flex-row gap-2">
+            {demoIdentities.map((identity) => (
+              <IdentityPill
+                key={identity.id}
+                name={identity.name}
+                color={identity.color}
+                active={selectedIdentityId === identity.id}
+                onPress={() => setSelectedIdentityId(identity.id)}
+              />
+            ))}
           </View>
         </View>
 
@@ -96,7 +105,7 @@ export default function FocusTabScreen() {
 
         {/* Start Button */}
         <Pressable
-          onPress={handleStart}
+          onPress={handleStartWithIdentity}
           className="mt-12 w-20 h-20 rounded-full bg-accent items-center justify-center active:scale-[0.97]"
         >
           <Text className="text-text-inverse text-2xl font-mono">▶</Text>
