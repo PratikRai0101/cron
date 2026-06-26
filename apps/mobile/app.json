@@ -5,6 +5,7 @@
     "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
+    "scheme": "monolith",
     "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -49,7 +50,7 @@
     },
     "extra": {
       "router": {
-        "origin": false
+        "origin": "/"
       },
       "eas": {
         "projectId": "your-eas-project-id"
