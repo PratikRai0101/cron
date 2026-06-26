@@ -1,12 +1,16 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import {
   View,
   Text,
   Pressable,
 } from 'react-native';
 import { useFocusStore } from '@/stores';
-import { Timer } from '@/components/focus';
+import { Timer, RingProgress } from '@/components/focus';
+import { IdentityPill } from '@/components/identity';
 import { demoIdentities } from '@/lib/demo-data';
+import { formatMinutes } from '@monolith/shared';
+
+const SESSION_GOAL_MINUTES = 60;
 
 export default function FocusTabScreen() {
   const {
@@ -119,14 +123,20 @@ export default function FocusTabScreen() {
         </View>
       </View>
 
-      {/* Timer */}
+      {/* Timer with Ring */}
       <Pressable onPress={handleStart}>
-        <Timer seconds={elapsedSeconds} size="large" paused={isPaused} />
+        <RingProgress
+          progress={Math.min(elapsedSeconds / (SESSION_GOAL_MINUTES * 60), 1)}
+          size={220}
+          strokeWidth={6}
+        >
+          <Timer seconds={elapsedSeconds} size="large" paused={isPaused} />
+        </RingProgress>
       </Pressable>
 
       {/* Task name placeholder */}
       <Text className="text-body-sm text-text-secondary mt-2 font-sans">
-        Deep work session
+        {formatMinutes(Math.floor(elapsedSeconds / 60))} / {SESSION_GOAL_MINUTES}m
       </Text>
 
       {/* Controls */}
