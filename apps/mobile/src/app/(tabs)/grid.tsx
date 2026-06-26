@@ -16,7 +16,9 @@ import {
   getTodayMinutes,
   type DemoTask,
 } from '@/lib/demo-data';
+import { useFocusStore } from '@/stores';
 import { formatMinutes } from '@monolith/shared';
+import { formatDate } from '@monolith/shared';
 import { router } from 'expo-router';
 
 const DAILY_GOAL = 60;
@@ -25,6 +27,15 @@ export default function GridScreen() {
   const [gridData] = useState(() => generateDemoGridData(140));
   const [selectedIdentity, setSelectedIdentity] = useState<string | null>(null);
   const [tasks, setTasks] = useState<DemoTask[]>(initialTasks);
+  const completedSessions = useFocusStore((s) => s.completedSessions);
+
+  // Add completed session minutes to today's total
+  const today = formatDate(new Date());
+  const sessionMinutesToday = completedSessions
+    .filter((s) => s.completedAt.startsWith(today))
+    .reduce((sum, s) => sum + Math.floor(s.duration / 60), 0);
+  const baseTodayMinutes = getTodayMinutes(gridData);
+  const totalTodayMinutes = baseTodayMinutes + sessionMinutesToday;
 
   const identities = [{ id: 'all', name: 'All', color: '#ffffff' }, ...demoIdentities];
 
@@ -42,7 +53,7 @@ export default function GridScreen() {
     ? gridData.map((d) => ({ ...d, minutes: Math.round(d.minutes * identityShare) }))
     : gridData;
 
-  const filteredTodayMinutes = Math.round(getTodayMinutes(gridData) * identityShare);
+  const filteredTodayMinutes = Math.round(totalTodayMinutes * identityShare);
   const filteredTodayProgress = Math.min(filteredTodayMinutes / DAILY_GOAL, 1);
 
   const filteredTasks = selectedIdentity
