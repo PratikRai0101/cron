@@ -48,7 +48,7 @@ export default function GridScreen() {
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View className="px-5 pt-6 pb-2 flex-row items-center justify-center">
-          <Text className="text-caption text-text-secondary uppercase font-mono tracking-widest">
+          <Text className="text-caption text-text-secondary uppercase font-mono">
             MONOLITH
           </Text>
         </View>
