@@ -6,15 +6,15 @@ import {
   Pressable,
 } from 'react-native';
 import { ContributionGrid } from '@/components/contribution-grid';
-import { MomentumRing } from '@/components/insights';
 import { TaskRow } from '@/components/tasks';
 import { IdentityPill } from '@/components/identity';
 import { RingProgress } from '@/components/focus';
 import {
   generateDemoGridData,
   demoIdentities,
-  demoTasks,
+  demoTasks as initialTasks,
   getTodayMinutes,
+  type DemoTask,
 } from '@/lib/demo-data';
 import { formatMinutes } from '@monolith/shared';
 import { router } from 'expo-router';
@@ -24,20 +24,24 @@ const DAILY_GOAL = 60;
 export default function GridScreen() {
   const [gridData] = useState(() => generateDemoGridData(140));
   const [selectedIdentity, setSelectedIdentity] = useState<string | null>(null);
+  const [tasks, setTasks] = useState<DemoTask[]>(initialTasks);
   const todayMinutes = getTodayMinutes(gridData);
   const todayProgress = Math.min(todayMinutes / DAILY_GOAL, 1);
 
-  const weekSegments = [
-    { filled: true, isRestDay: false, dayLabel: 'M' },
-    { filled: true, isRestDay: false, dayLabel: 'T' },
-    { filled: true, isRestDay: false, dayLabel: 'W' },
-    { filled: false, isRestDay: false, dayLabel: 'T' },
-    { filled: false, isRestDay: true, dayLabel: 'F' },
-    { filled: false, isRestDay: true, dayLabel: 'S' },
-    { filled: false, isRestDay: false, dayLabel: 'S' },
-  ];
-
   const identities = [{ id: 'all', name: 'All', color: '#ffffff' }, ...demoIdentities];
+
+  const filteredTasks = selectedIdentity
+    ? tasks.filter((t) => {
+        const identity = demoIdentities.find((i) => i.id === selectedIdentity);
+        return identity && t.identityName === identity.name;
+      })
+    : tasks;
+
+  const handleToggleTask = useCallback((taskId: string) => {
+    setTasks((prev) =>
+      prev.map((t) => (t.id === taskId ? { ...t, completed: !t.completed } : t))
+    );
+  }, []);
 
   const handleStartFocus = useCallback(() => {
     router.navigate('/(tabs)/focus');
@@ -104,7 +108,7 @@ export default function GridScreen() {
             </Text>
           </View>
 
-          {demoTasks.map((task) => (
+          {filteredTasks.map((task) => (
             <TaskRow
               key={task.id}
               title={task.title}
@@ -113,6 +117,7 @@ export default function GridScreen() {
               completed={task.completed}
               loggedMinutes={task.loggedMinutes}
               estimatedMinutes={task.estimatedMinutes}
+              onToggleComplete={() => handleToggleTask(task.id)}
             />
           ))}
         </View>
