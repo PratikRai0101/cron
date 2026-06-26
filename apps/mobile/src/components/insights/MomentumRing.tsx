@@ -12,6 +12,7 @@ interface MomentumRingProps {
   size?: number;
   strokeWidth?: number;
   centerContent?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export function MomentumRing({
@@ -19,6 +20,7 @@ export function MomentumRing({
   size = 120,
   strokeWidth = 8,
   centerContent,
+  children,
 }: MomentumRingProps) {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -50,9 +52,9 @@ export function MomentumRing({
           );
         })}
       </Svg>
-      {centerContent && (
+      {(centerContent || children) && (
         <View className="absolute items-center justify-center" style={{ width: size, height: size }}>
-          {centerContent}
+          {centerContent || children}
         </View>
       )}
     </View>
