@@ -3,11 +3,35 @@ import { demoIdentities } from '@/lib/demo-data';
 import { Card } from '@/components/ui';
 import { ContributionGrid } from '@/components/contribution-grid';
 import { formatMinutes } from '@monolith/shared';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { generateDemoGridData } from '@/lib/demo-data';
+import { useFocusStore } from '@/stores';
+
+// Deterministic grid seed per identity
+function seededGridData(identityId: string, days: number) {
+  let seed = 0;
+  for (let i = 0; i < identityId.length; i++) {
+    seed = ((seed << 5) - seed + identityId.charCodeAt(i)) | 0;
+  }
+  const data = generateDemoGridData(days);
+  return data.map((d, i) => ({
+    ...d,
+    minutes: Math.round(d.minutes * (0.5 + (((seed + i) % 100) / 200))),
+  }));
+}
 
 export default function IdentityScreen() {
   const [identities] = useState(demoIdentities);
+  const completedSessions = useFocusStore((s) => s.completedSessions);
+
+  // Pre-compute grids once per identity
+  const grids = useMemo(() => {
+    const map: Record<string, ReturnType<typeof seededGridData>> = {};
+    identities.forEach((id) => {
+      map[id.id] = seededGridData(id.id, 35);
+    });
+    return map;
+  }, [identities]);
 
   return (
     <View className="flex-1 bg-background">
@@ -21,8 +45,18 @@ export default function IdentityScreen() {
 
       <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false}>
         {identities.map((identity) => {
-          const gridData = generateDemoGridData(30);
-          const consistency = Math.floor(Math.random() * 40) + 40; // 40-80%
+          const gridData = grids[identity.id] || [];
+
+          // Compute session minutes for this identity
+          const sessionMinutes = completedSessions
+            .filter((s) => s.identityId === identity.id)
+            .reduce((sum, s) => sum + Math.floor(s.duration / 60), 0);
+
+          const totalMinutes = identity.totalMinutes + sessionMinutes;
+
+          // Deterministic consistency from identity id
+          const consistency = 40 + (identity.id.charCodeAt(0) * 7) % 40;
+          const avgMinutes = 20 + (identity.id.charCodeAt(0) * 3) % 60;
 
           return (
             <Card key={identity.id} className="mb-4 p-4">
@@ -43,7 +77,7 @@ export default function IdentityScreen() {
                   </View>
 
                   <Text className="text-mono-sm text-text-tertiary font-mono mt-0.5">
-                    {formatMinutes(identity.totalMinutes)} total
+                    {formatMinutes(totalMinutes)} total
                   </Text>
                 </View>
               </View>
@@ -65,7 +99,7 @@ export default function IdentityScreen() {
                   Consistency: {consistency}%
                 </Text>
                 <Text className="text-caption text-text-tertiary font-sans">
-                  30d avg: {Math.floor(Math.random() * 60 + 20)}m/day
+                  30d avg: {avgMinutes}m/day
                 </Text>
               </View>
             </Card>
