@@ -24,6 +24,7 @@ export default function FocusTabScreen() {
     stopFocus,
     cancelFocus,
     tick,
+    logSession,
   } = useFocusStore();
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -55,11 +56,19 @@ export default function FocusTabScreen() {
 
   const handleStop = useCallback(() => {
     const result = stopFocus();
-    if (result) {
-      // Would log session here
-      console.log('Session completed:', result);
+    if (result && result.duration >= 60) {
+      const identity = demoIdentities.find((i) => i.id === result.identityId);
+      logSession({
+        id: Date.now().toString(),
+        duration: result.duration,
+        identityId: result.identityId,
+        identityName: identity?.name || 'Focus',
+        identityColor: identity?.color || '#ffffff',
+        taskId: result.taskId,
+        completedAt: new Date().toISOString(),
+      });
     }
-  }, [stopFocus]);
+  }, [stopFocus, logSession]);
 
   const handleCancel = useCallback(() => {
     cancelFocus();

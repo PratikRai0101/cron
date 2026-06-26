@@ -1,5 +1,15 @@
 import { create } from 'zustand';
 
+export interface CompletedSession {
+  id: string;
+  duration: number;
+  identityId: string;
+  identityName: string;
+  identityColor: string;
+  taskId?: string;
+  completedAt: string;
+}
+
 interface FocusState {
   isActive: boolean;
   isPaused: boolean;
@@ -7,6 +17,7 @@ interface FocusState {
   currentIdentityId: string | null;
   currentTaskId: string | null;
   startTime: number | null;
+  completedSessions: CompletedSession[];
   
   startFocus: (identityId: string, taskId?: string) => void;
   pauseFocus: () => void;
@@ -23,6 +34,7 @@ export const useFocusStore = create<FocusState>((set, get) => ({
   currentIdentityId: null,
   currentTaskId: null,
   startTime: null,
+  completedSessions: [],
   
   startFocus: (identityId, taskId) => set({
     isActive: true,
@@ -74,4 +86,8 @@ export const useFocusStore = create<FocusState>((set, get) => ({
       set({ elapsedSeconds: state.elapsedSeconds + 1 });
     }
   },
+
+  logSession: (session: CompletedSession) => set((state) => ({
+    completedSessions: [...state.completedSessions, session],
+  })),
 }));
