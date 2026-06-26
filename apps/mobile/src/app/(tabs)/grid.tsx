@@ -25,8 +25,6 @@ export default function GridScreen() {
   const [gridData] = useState(() => generateDemoGridData(140));
   const [selectedIdentity, setSelectedIdentity] = useState<string | null>(null);
   const [tasks, setTasks] = useState<DemoTask[]>(initialTasks);
-  const todayMinutes = getTodayMinutes(gridData);
-  const todayProgress = Math.min(todayMinutes / DAILY_GOAL, 1);
 
   const identities = [{ id: 'all', name: 'All', color: '#ffffff' }, ...demoIdentities];
 
