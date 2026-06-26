@@ -3,8 +3,16 @@ import { Card } from '@/components/ui';
 import { MomentumRing } from '@/components/insights';
 import { demoIdentities } from '@/lib/demo-data';
 import { formatMinutes } from '@monolith/shared';
+import { useFocusStore } from '@/stores';
 
 export default function ProfileScreen() {
+  const completedSessions = useFocusStore((s) => s.completedSessions);
+
+  // Compute session minutes per identity
+  const sessionMinutesById = completedSessions.reduce<Record<string, number>>((acc, s) => {
+    acc[s.identityId] = (acc[s.identityId] || 0) + Math.floor(s.duration / 60);
+    return acc;
+  }, {});
   const user = {
     displayName: 'Pixel Ronin',
     username: '@pixelronin',
@@ -30,14 +38,14 @@ export default function ProfileScreen() {
     { label: 'Best Week', value: '32h 10m', date: 'Feb 1–7' },
   ];
 
-  const identityBreakdown = [
-    { name: 'Code', minutes: 7440, color: '#ffffff' },
-    { name: 'Write', minutes: 5160, color: '#a3a3a3' },
-    { name: 'Design', minutes: 3120, color: '#a855f7' },
-    { name: 'Exercise', minutes: 1860, color: '#737373' },
-  ];
+  const identityBreakdown = demoIdentities.map((id) => ({
+    name: id.name,
+    minutes: id.totalMinutes + (sessionMinutesById[id.id] || 0),
+    color: id.color,
+  }));
 
   const totalBreakdownMinutes = identityBreakdown.reduce((s, i) => s + i.minutes, 0);
+  const totalSessionMinutes = Object.values(sessionMinutesById).reduce((s, m) => s + m, 0);
 
   return (
     <View className="flex-1 bg-background">
