@@ -4,6 +4,7 @@ import { MomentumRing } from '@/components/insights';
 import { demoIdentities } from '@/lib/demo-data';
 import { formatMinutes } from '@monolith/shared';
 import { useFocusStore } from '@/stores';
+import { router } from 'expo-router';
 
 export default function ProfileScreen() {
   const completedSessions = useFocusStore((s) => s.completedSessions);
@@ -51,8 +52,14 @@ export default function ProfileScreen() {
     <View className="flex-1 bg-background">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <View className="px-5 pt-6 pb-2">
+        <View className="px-5 pt-6 pb-2 flex-row items-center justify-between">
           <Text className="text-h1 text-text-primary font-sans">Profile</Text>
+          <Pressable
+            onPress={() => router.navigate('/modals/settings')}
+            className="w-8 h-8 items-center justify-center active:opacity-70"
+          >
+            <Text className="text-text-secondary text-xl font-mono">⚙</Text>
+          </Pressable>
         </View>
 
         {/* User Card */}
