@@ -14,13 +14,12 @@ import {
   getTodayMinutes,
 } from '@/lib/demo-data';
 import { useIdentities } from '@/hooks/useIdentities';
-import { useFocusStore, useTaskStore } from '@/stores';
+import { useFocusStore, useTaskStore, useUserStore } from '@/stores';
 import { formatMinutes, formatDate } from '@monolith/shared';
 import { router } from 'expo-router';
 
-const DAILY_GOAL = 60;
-
 export default function GridScreen() {
+  const dailyGoal = useUserStore((s) => s.dailyGoalMinutes);
   const [gridData] = useState(() => generateDemoGridData(140));
   const [selectedIdentity, setSelectedIdentity] = useState<string | null>(null);
   const tasks = useTaskStore((s) => s.tasks);
@@ -55,7 +54,7 @@ export default function GridScreen() {
     : gridData;
 
   const filteredTodayMinutes = Math.round(totalTodayMinutes * identityShare);
-  const filteredTodayProgress = Math.min(filteredTodayMinutes / DAILY_GOAL, 1);
+  const filteredTodayProgress = Math.min(filteredTodayMinutes / dailyGoal, 1);
 
   const filteredTasks = selectedIdentity
     ? tasks.filter((t) => {
@@ -104,7 +103,7 @@ export default function GridScreen() {
         <View className="px-5 py-2">
           <ContributionGrid
             data={filteredGridData}
-            dailyGoal={DAILY_GOAL}
+            dailyGoal={dailyGoal}
             weeksToShow={20}
           />
         </View>
@@ -118,7 +117,7 @@ export default function GridScreen() {
                 {formatMinutes(filteredTodayMinutes)}
               </Text>
               <Text className="text-mono-sm text-text-tertiary font-mono">
-                / {DAILY_GOAL}m
+                / {dailyGoal}m
               </Text>
             </View>
           </RingProgress>
