@@ -25,6 +25,9 @@
     "turbo": "^2.0.0",
     "typescript": "^5.4.0"
   },
+  "dependencies": {
+    "react-native-worklets": "0.5.1"
+  },
   "packageManager": "npm@10.2.4",
   "engines": {
     "node": ">=20.0.0"
