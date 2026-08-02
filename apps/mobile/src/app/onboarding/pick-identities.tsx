@@ -32,7 +32,7 @@ export default function PickIdentitiesScreen() {
     seedFromPresets(
       ALL_IDENTITIES.filter((i) => ids.includes(i.id)).map(({ description: _description, ...rest }) => rest)
     );
-    router.replace('/onboarding/done');
+    router.replace('/onboarding/widget-setup');
   }, [seedFromPresets]);
 
   const handleNext = useCallback(() => {
