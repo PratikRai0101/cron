@@ -35,7 +35,7 @@ export default function GridScreen() {
   const baseTodayMinutes = getTodayMinutes(gridData);
   const totalTodayMinutes = baseTodayMinutes + sessionMinutesToday;
 
-  const identities = [{ id: 'all', name: 'All', color: '#ffffff' }, ...useIdentities()];
+  const identities = [{ id: 'all', name: 'All', color: '#ffffff', totalMinutes: 0 }, ...useIdentities()];
 
   // Compute identity share for grid filtering
   const totalIdentityMinutes = identities.reduce(
