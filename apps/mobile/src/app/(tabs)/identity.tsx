@@ -1,5 +1,6 @@
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 import { Card } from '@/components/ui';
 import { ContributionGrid } from '@/components/contribution-grid';
 import { formatMinutes } from '@monolith/shared';
@@ -40,7 +41,10 @@ export default function IdentityScreen() {
       {/* Header */}
       <View className="px-5 pb-2 flex-row items-center justify-between" style={{ paddingTop: insets.top + 8 }}>
         <Text className="text-h1 text-text-primary font-sans">Identities</Text>
-        <Pressable className="w-8 h-8 items-center justify-center">
+        <Pressable
+          onPress={() => router.navigate('/modals/add-identity')}
+          className="w-8 h-8 items-center justify-center active:opacity-70"
+        >
           <Text className="text-text-primary text-xl font-mono">+</Text>
         </Pressable>
       </View>
