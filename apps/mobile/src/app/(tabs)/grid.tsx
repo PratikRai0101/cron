@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -16,7 +16,7 @@ import {
   demoTasks,
 } from '@/lib/demo-data';
 import { useIdentities } from '@/hooks/useIdentities';
-import { useFocusStore, useTaskStore, useUserStore } from '@/stores';
+import { useFocusStore, useLogStore, useTaskStore, useUserStore } from '@/stores';
 import { formatMinutes, formatDate } from '@monolith/shared';
 import { router } from 'expo-router';
 
@@ -29,6 +29,25 @@ export default function GridScreen() {
   const addTask = useTaskStore((s) => s.addTask);
   const toggleTask = useTaskStore((s) => s.toggleTask);
   const completedSessions = useFocusStore((s) => s.completedSessions);
+  const retroLogs = useLogStore((s) => s.retroLogs);
+
+  // Merge retro logs into grid data for instant cell updates
+  const retroMinutesByDate = useMemo(() => {
+    const map: Record<string, number> = {};
+    retroLogs.forEach((l) => {
+      map[l.date] = (map[l.date] || 0) + l.minutes;
+    });
+    return map;
+  }, [retroLogs]);
+
+  const mergedGridData = useMemo(
+    () =>
+      gridData.map((d) => ({
+        ...d,
+        minutes: d.minutes + (retroMinutesByDate[d.date] || 0),
+      })),
+    [gridData, retroMinutesByDate]
+  );
 
   // Seed demo tasks on first render if store is empty
   useEffect(() => {
@@ -51,7 +70,14 @@ export default function GridScreen() {
     .filter((s) => s.completedAt.startsWith(today))
     .reduce((sum, s) => sum + Math.floor(s.duration / 60), 0);
   const baseTodayMinutes = getTodayMinutes(gridData);
-  const totalTodayMinutes = baseTodayMinutes + sessionMinutesToday;
+  const totalTodayMinutes =
+    baseTodayMinutes +
+    sessionMinutesToday +
+    (retroMinutesByDate[today] || 0);
+
+  const handleCellPress = useCallback((date: string) => {
+    router.navigate({ pathname: '/modals/retro-log', params: { date } });
+  }, []);
 
   const identities = [{ id: 'all', name: 'All', color: '#ffffff', totalMinutes: 0 }, ...useIdentities()];
 
@@ -69,8 +95,8 @@ export default function GridScreen() {
 
   // Filter grid data proportionally when an identity is selected
   const filteredGridData = selectedIdentityData
-    ? gridData.map((d) => ({ ...d, minutes: Math.round(d.minutes * identityShare) }))
-    : gridData;
+    ? mergedGridData.map((d) => ({ ...d, minutes: Math.round(d.minutes * identityShare) }))
+    : mergedGridData;
 
   const filteredTodayMinutes = Math.round(totalTodayMinutes * identityShare);
   const filteredTodayProgress = Math.min(filteredTodayMinutes / dailyGoal, 1);
@@ -124,6 +150,8 @@ export default function GridScreen() {
             data={filteredGridData}
             dailyGoal={dailyGoal}
             weeksToShow={20}
+            onCellPress={handleCellPress}
+            onCellLongPress={handleCellPress}
           />
         </View>
 
