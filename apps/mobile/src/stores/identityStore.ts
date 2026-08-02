@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { uid } from '@/lib/id';
 
 export interface IdentityItem {
   id: string;
@@ -32,7 +33,7 @@ export const useIdentityStore = create<IdentityState>()(
             ...state.identities,
             {
               ...identity,
-              id: Date.now().toString(),
+              id: uid('identity-'),
               isArchived: false,
               createdAt: new Date().toISOString(),
             },

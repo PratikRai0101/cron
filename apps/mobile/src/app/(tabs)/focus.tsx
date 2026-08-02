@@ -10,6 +10,7 @@ import { Timer, RingProgress } from '@/components/focus';
 import { IdentityPill } from '@/components/identity';
 import { useIdentities } from '@/hooks/useIdentities';
 import { formatMinutes } from '@monolith/shared';
+import { uid } from '@/lib/id';
 
 const SESSION_GOAL_MINUTES = 60;
 
@@ -61,7 +62,7 @@ export default function FocusTabScreen() {
     if (result && result.duration >= 60) {
       const identity = identities.find((i) => i.id === result.identityId);
       logSession({
-        id: Date.now().toString(),
+        id: uid('session-'),
         duration: result.duration,
         identityId: result.identityId,
         identityName: identity?.name || 'Focus',

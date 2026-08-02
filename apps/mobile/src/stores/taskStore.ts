@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { uid } from '@/lib/id';
 
 export interface TaskItem {
   id: string;
@@ -31,7 +32,7 @@ export const useTaskStore = create<TaskState>()(
           tasks: [
             {
               ...task,
-              id: Date.now().toString(),
+              id: uid('task-'),
               completed: false,
               createdAt: new Date().toISOString(),
             },
