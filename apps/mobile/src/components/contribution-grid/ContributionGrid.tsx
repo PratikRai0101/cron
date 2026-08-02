@@ -85,29 +85,29 @@ export function ContributionGrid({
   });
 
   return (
-    <View>
-      {/* Month labels */}
-      <View className="flex-row mb-1" style={{ paddingLeft: gap / 2 }}>
-        {weeks.map((_, weekIndex) => {
-          const label = monthLabelPositions.find((m) => m.index === weekIndex);
-          return (
-            <View
-              key={`month-${weekIndex}`}
-              style={{ width: cellSize + gap }}
-              className="items-center"
-            >
-              {label && (
-                <Text className="text-[9px] font-mono text-text-secondary">
-                  {label.label}
-                </Text>
-              )}
-            </View>
-          );
-        })}
-      </View>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <View>
+        {/* Month labels */}
+        <View className="flex-row mb-1" style={{ paddingLeft: gap / 2 }}>
+          {weeks.map((_, weekIndex) => {
+            const label = monthLabelPositions.find((m) => m.index === weekIndex);
+            return (
+              <View
+                key={`month-${weekIndex}`}
+                style={{ width: cellSize + gap }}
+                className="items-center"
+              >
+                {label && (
+                  <Text className="text-[9px] font-mono text-text-secondary">
+                    {label.label}
+                  </Text>
+                )}
+              </View>
+            );
+          })}
+        </View>
 
-      {/* Grid */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {/* Grid */}
         <View className="flex-row">
           {weeks.map((week, weekIndex) => (
             <View key={`week-${weekIndex}`} className="flex-col">
@@ -125,7 +125,7 @@ export function ContributionGrid({
             </View>
           ))}
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 }
