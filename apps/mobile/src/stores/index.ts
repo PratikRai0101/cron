@@ -3,3 +3,4 @@ export { useAppStore } from "./appStore";
 export { useFocusStore } from "./focusStore";
 export { useTaskStore } from "./taskStore";
 export { useIdentityStore } from "./identityStore";
+export { useLogStore } from "./logStore";
