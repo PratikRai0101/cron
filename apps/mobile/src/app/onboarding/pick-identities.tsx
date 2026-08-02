@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { router } from 'expo-router';
+import { useIdentityStore } from '@/stores';
 
 const ALL_IDENTITIES = [
   { id: '1', name: 'Code', color: '#ffffff', description: 'Programming, development, engineering' },
@@ -9,8 +10,11 @@ const ALL_IDENTITIES = [
   { id: '4', name: 'Exercise', color: '#737373', description: 'Fitness, sports, movement' },
 ];
 
+const FALLBACK_IDS = ['1', '2', '3'];
+
 export default function PickIdentitiesScreen() {
-  const [selected, setSelected] = useState<Set<string>>(new Set(['1', '2', '3', '4']));
+  const seedFromPresets = useIdentityStore((s) => s.seedFromPresets);
+  const [selected, setSelected] = useState<Set<string>>(new Set(FALLBACK_IDS));
 
   const toggle = useCallback((id: string) => {
     setSelected((prev) => {
@@ -24,9 +28,20 @@ export default function PickIdentitiesScreen() {
     });
   }, []);
 
-  const handleNext = useCallback(() => {
+  const commit = useCallback((ids: string[]) => {
+    seedFromPresets(
+      ALL_IDENTITIES.filter((i) => ids.includes(i.id)).map(({ description: _description, ...rest }) => rest)
+    );
     router.replace('/onboarding/done');
-  }, []);
+  }, [seedFromPresets]);
+
+  const handleNext = useCallback(() => {
+    commit([...selected]);
+  }, [commit, selected]);
+
+  const handleSkip = useCallback(() => {
+    commit(FALLBACK_IDS);
+  }, [commit]);
 
   return (
     <View className="flex-1 bg-background justify-center px-5">
@@ -96,7 +111,7 @@ export default function PickIdentitiesScreen() {
         <Text className="text-text-inverse font-sans font-semibold text-body">Continue</Text>
       </Pressable>
       <Pressable
-        onPress={() => router.replace('/onboarding/done')}
+        onPress={handleSkip}
         className="mt-4 self-center"
       >
         <Text className="text-caption text-text-tertiary font-sans">Skip</Text>
