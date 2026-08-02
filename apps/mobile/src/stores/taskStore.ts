@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface TaskItem {
   id: string;
@@ -19,34 +21,42 @@ interface TaskState {
   getTasksForIdentity: (identityId: string) => TaskItem[];
 }
 
-export const useTaskStore = create<TaskState>((set, get) => ({
-  tasks: [],
+export const useTaskStore = create<TaskState>()(
+  persist(
+    (set, get) => ({
+      tasks: [],
 
-  addTask: (task) =>
-    set((state) => ({
-      tasks: [
-        {
-          ...task,
-          id: Date.now().toString(),
-          completed: false,
-          createdAt: new Date().toISOString(),
-        },
-        ...state.tasks,
-      ],
-    })),
+      addTask: (task) =>
+        set((state) => ({
+          tasks: [
+            {
+              ...task,
+              id: Date.now().toString(),
+              completed: false,
+              createdAt: new Date().toISOString(),
+            },
+            ...state.tasks,
+          ],
+        })),
 
-  toggleTask: (id) =>
-    set((state) => ({
-      tasks: state.tasks.map((t) =>
-        t.id === id ? { ...t, completed: !t.completed } : t
-      ),
-    })),
+      toggleTask: (id) =>
+        set((state) => ({
+          tasks: state.tasks.map((t) =>
+            t.id === id ? { ...t, completed: !t.completed } : t
+          ),
+        })),
 
-  deleteTask: (id) =>
-    set((state) => ({
-      tasks: state.tasks.filter((t) => t.id !== id),
-    })),
+      deleteTask: (id) =>
+        set((state) => ({
+          tasks: state.tasks.filter((t) => t.id !== id),
+        })),
 
-  getTasksForIdentity: (identityId) =>
-    get().tasks.filter((t) => t.identityId === identityId),
-}));
+      getTasksForIdentity: (identityId) =>
+        get().tasks.filter((t) => t.identityId === identityId),
+    }),
+    {
+      name: 'monolith-tasks',
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+);

@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface CompletedSession {
   id: string;
@@ -34,8 +36,10 @@ function getElapsed(startTime: number | null, accumulatedSeconds: number): numbe
   return accumulatedSeconds + (Date.now() - startTime) / 1000;
 }
 
-export const useFocusStore = create<FocusState>((set, get) => ({
-  isActive: false,
+export const useFocusStore = create<FocusState>()(
+  persist(
+    (set, get) => ({
+      isActive: false,
   isPaused: false,
   elapsedSeconds: 0,
   currentIdentityId: null,
@@ -113,4 +117,19 @@ export const useFocusStore = create<FocusState>((set, get) => ({
   logSession: (session: CompletedSession) => set((state) => ({
     completedSessions: [...state.completedSessions, session],
   })),
-}));
+    }),
+    {
+      name: 'monolith-focus',
+      storage: createJSONStorage(() => AsyncStorage),
+      partialize: (state) => ({
+        completedSessions: state.completedSessions,
+        isActive: state.isActive,
+        isPaused: state.isPaused,
+        startTime: state.startTime,
+        accumulatedSeconds: state.accumulatedSeconds,
+        currentIdentityId: state.currentIdentityId,
+        currentTaskId: state.currentTaskId,
+      }),
+    }
+  )
+);
