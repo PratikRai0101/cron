@@ -17,6 +17,7 @@ interface FocusState {
   currentIdentityId: string | null;
   currentTaskId: string | null;
   startTime: number | null;
+  accumulatedSeconds: number;
   completedSessions: CompletedSession[];
   
   startFocus: (identityId: string, taskId?: string) => void;
@@ -28,6 +29,11 @@ interface FocusState {
   logSession: (session: CompletedSession) => void;
 }
 
+function getElapsed(startTime: number | null, accumulatedSeconds: number): number {
+  if (!startTime) return accumulatedSeconds;
+  return accumulatedSeconds + (Date.now() - startTime) / 1000;
+}
+
 export const useFocusStore = create<FocusState>((set, get) => ({
   isActive: false,
   isPaused: false,
@@ -35,27 +41,39 @@ export const useFocusStore = create<FocusState>((set, get) => ({
   currentIdentityId: null,
   currentTaskId: null,
   startTime: null,
+  accumulatedSeconds: 0,
   completedSessions: [],
   
   startFocus: (identityId, taskId) => set({
     isActive: true,
     isPaused: false,
     elapsedSeconds: 0,
+    accumulatedSeconds: 0,
     currentIdentityId: identityId,
     currentTaskId: taskId || null,
     startTime: Date.now(),
   }),
   
-  pauseFocus: () => set({ isPaused: true }),
+  pauseFocus: () => {
+    const { startTime, accumulatedSeconds } = get();
+    set({
+      isPaused: true,
+      startTime: null,
+      accumulatedSeconds: getElapsed(startTime, accumulatedSeconds),
+    });
+  },
   
-  resumeFocus: () => set({ isPaused: false }),
+  resumeFocus: () => set({
+    isPaused: false,
+    startTime: Date.now(),
+  }),
   
   stopFocus: () => {
     const state = get();
     if (!state.isActive || !state.currentIdentityId) return null;
     
     const result = {
-      duration: state.elapsedSeconds,
+      duration: Math.round(getElapsed(state.startTime, state.accumulatedSeconds)),
       identityId: state.currentIdentityId,
       taskId: state.currentTaskId || undefined,
     };
@@ -64,6 +82,7 @@ export const useFocusStore = create<FocusState>((set, get) => ({
       isActive: false,
       isPaused: false,
       elapsedSeconds: 0,
+      accumulatedSeconds: 0,
       currentIdentityId: null,
       currentTaskId: null,
       startTime: null,
@@ -76,6 +95,7 @@ export const useFocusStore = create<FocusState>((set, get) => ({
     isActive: false,
     isPaused: false,
     elapsedSeconds: 0,
+    accumulatedSeconds: 0,
     currentIdentityId: null,
     currentTaskId: null,
     startTime: null,
@@ -84,7 +104,9 @@ export const useFocusStore = create<FocusState>((set, get) => ({
   tick: () => {
     const state = get();
     if (state.isActive && !state.isPaused) {
-      set({ elapsedSeconds: state.elapsedSeconds + 1 });
+      set({
+        elapsedSeconds: Math.floor(getElapsed(state.startTime, state.accumulatedSeconds)),
+      });
     }
   },
 

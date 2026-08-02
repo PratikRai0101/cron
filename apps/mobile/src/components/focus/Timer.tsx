@@ -27,6 +27,7 @@ export function Timer({ seconds, size = 'large', paused = false }: TimerProps) {
           Paused
         </Text>
       )}
+      {!paused && <View className="mt-2 h-[12px]" />}
     </View>
   );
 }
