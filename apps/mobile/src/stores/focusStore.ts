@@ -119,7 +119,7 @@ export const useFocusStore = create<FocusState>()(
   })),
     }),
     {
-      name: 'monolith-focus',
+      name: 'monolith-focus-v2',
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({
         completedSessions: state.completedSessions,

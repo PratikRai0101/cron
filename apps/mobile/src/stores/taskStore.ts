@@ -56,7 +56,7 @@ export const useTaskStore = create<TaskState>()(
         get().tasks.filter((t) => t.identityId === identityId),
     }),
     {
-      name: 'monolith-tasks',
+      name: 'monolith-tasks-v2',
       storage: createJSONStorage(() => AsyncStorage),
     }
   )
