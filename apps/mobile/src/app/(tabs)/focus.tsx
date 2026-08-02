@@ -7,13 +7,13 @@ import {
 import { useFocusStore } from '@/stores';
 import { Timer, RingProgress } from '@/components/focus';
 import { IdentityPill } from '@/components/identity';
-import { demoIdentities } from '@/lib/demo-data';
+import { useIdentities } from '@/hooks/useIdentities';
 import { formatMinutes } from '@monolith/shared';
 
 const SESSION_GOAL_MINUTES = 60;
 
 export default function FocusTabScreen() {
-  const {
+  const identities = useIdentities();  const {
     isActive,
     isPaused,
     elapsedSeconds,
@@ -46,7 +46,7 @@ export default function FocusTabScreen() {
 
   const handleStart = useCallback(() => {
     if (!isActive) {
-      startFocus(demoIdentities[0].id);
+      startFocus(identities[0].id);
     } else if (isPaused) {
       resumeFocus();
     } else {
@@ -57,7 +57,7 @@ export default function FocusTabScreen() {
   const handleStop = useCallback(() => {
     const result = stopFocus();
     if (result && result.duration >= 60) {
-      const identity = demoIdentities.find((i) => i.id === result.identityId);
+      const identity = identities.find((i) => i.id === result.identityId);
       logSession({
         id: Date.now().toString(),
         duration: result.duration,
@@ -74,9 +74,9 @@ export default function FocusTabScreen() {
     cancelFocus();
   }, [cancelFocus]);
 
-  const currentIdentity = demoIdentities.find((i) => i.id === currentIdentityId);
-  const [selectedIdentityId, setSelectedIdentityId] = useState(demoIdentities[0].id);
-  const selectedIdentity = demoIdentities.find((i) => i.id === selectedIdentityId) || demoIdentities[0];
+  const currentIdentity = identities.find((i) => i.id === currentIdentityId);
+  const [selectedIdentityId, setSelectedIdentityId] = useState(identities[0].id);
+  const selectedIdentity = identities.find((i) => i.id === selectedIdentityId) || identities[0];
 
   const handleStartWithIdentity = useCallback(() => {
     startFocus(selectedIdentityId);
@@ -92,7 +92,7 @@ export default function FocusTabScreen() {
             Tracking
           </Text>
           <View className="flex-row gap-2">
-            {demoIdentities.map((identity) => (
+            {identities.map((identity) => (
               <IdentityPill
                 key={identity.id}
                 name={identity.name}

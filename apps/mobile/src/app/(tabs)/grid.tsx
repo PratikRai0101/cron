@@ -11,9 +11,9 @@ import { IdentityPill } from '@/components/identity';
 import { RingProgress } from '@/components/focus';
 import {
   generateDemoGridData,
-  demoIdentities,
   getTodayMinutes,
 } from '@/lib/demo-data';
+import { useIdentities } from '@/hooks/useIdentities';
 import { useFocusStore, useTaskStore } from '@/stores';
 import { formatMinutes, formatDate } from '@monolith/shared';
 import { router } from 'expo-router';
@@ -35,15 +35,18 @@ export default function GridScreen() {
   const baseTodayMinutes = getTodayMinutes(gridData);
   const totalTodayMinutes = baseTodayMinutes + sessionMinutesToday;
 
-  const identities = [{ id: 'all', name: 'All', color: '#ffffff' }, ...demoIdentities];
+  const identities = [{ id: 'all', name: 'All', color: '#ffffff' }, ...useIdentities()];
 
   // Compute identity share for grid filtering
-  const totalIdentityMinutes = demoIdentities.reduce((sum, i) => sum + i.totalMinutes, 0);
+  const totalIdentityMinutes = identities.reduce(
+    (sum, i) => sum + (i.totalMinutes || 0),
+    0
+  );
   const selectedIdentityData = selectedIdentity
-    ? demoIdentities.find((i) => i.id === selectedIdentity)
+    ? identities.find((i) => i.id === selectedIdentity)
     : null;
   const identityShare = selectedIdentityData
-    ? selectedIdentityData.totalMinutes / totalIdentityMinutes
+    ? (selectedIdentityData.totalMinutes || 0) / Math.max(totalIdentityMinutes, 1)
     : 1;
 
   // Filter grid data proportionally when an identity is selected
@@ -56,7 +59,7 @@ export default function GridScreen() {
 
   const filteredTasks = selectedIdentity
     ? tasks.filter((t) => {
-        const identity = demoIdentities.find((i) => i.id === selectedIdentity);
+        const identity = identities.find((i) => i.id === selectedIdentity);
         return identity && t.identityName === identity.name;
       })
     : tasks;

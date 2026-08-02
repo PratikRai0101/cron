@@ -7,6 +7,7 @@ export interface IdentityItem {
   name: string;
   color: string;
   isArchived: boolean;
+  totalMinutes?: number;
   createdAt: string;
 }
 

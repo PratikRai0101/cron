@@ -3,15 +3,16 @@ import { View, Text, Pressable, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { Input } from '@/components/ui';
 import { useTaskStore } from '@/stores';
-import { demoIdentities } from '@/lib/demo-data';
+import { useIdentities } from '@/hooks/useIdentities';
 
 export default function LogTaskScreen() {
+  const identities = useIdentities();
   const [title, setTitle] = useState('');
-  const [selectedIdentityId, setSelectedIdentityId] = useState(demoIdentities[0].id);
+  const [selectedIdentityId, setSelectedIdentityId] = useState(identities[0].id);
   const [estimatedMinutes, setEstimatedMinutes] = useState('');
   const addTask = useTaskStore((s) => s.addTask);
 
-  const selectedIdentity = demoIdentities.find((i) => i.id === selectedIdentityId);
+  const selectedIdentity = identities.find((i) => i.id === selectedIdentityId);
 
   const handleSave = () => {
     if (!title.trim()) return;
@@ -51,8 +52,8 @@ export default function LogTaskScreen() {
           <Text className="text-caption text-text-secondary uppercase font-sans mt-6 mb-3">
             Identity
           </Text>
-          <View className="flex-row gap-2">
-            {demoIdentities.map((identity) => (
+          <View className="flex-row gap-2 flex-wrap">
+            {identities.map((identity) => (
               <Pressable
                 key={identity.id}
                 onPress={() => setSelectedIdentityId(identity.id)}

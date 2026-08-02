@@ -1,10 +1,10 @@
 import { View, Text, ScrollView, Pressable } from 'react-native';
-import { demoIdentities } from '@/lib/demo-data';
 import { Card } from '@/components/ui';
 import { ContributionGrid } from '@/components/contribution-grid';
 import { formatMinutes } from '@monolith/shared';
 import { useState, useMemo } from 'react';
 import { generateDemoGridData } from '@/lib/demo-data';
+import { useIdentities } from '@/hooks/useIdentities';
 import { useFocusStore } from '@/stores';
 
 // Deterministic grid seed per identity
@@ -21,7 +21,7 @@ function seededGridData(identityId: string, days: number) {
 }
 
 export default function IdentityScreen() {
-  const [identities] = useState(demoIdentities);
+  const identities = useIdentities();
   const completedSessions = useFocusStore((s) => s.completedSessions);
 
   // Pre-compute grids once per identity
@@ -52,7 +52,7 @@ export default function IdentityScreen() {
             .filter((s) => s.identityId === identity.id)
             .reduce((sum, s) => sum + Math.floor(s.duration / 60), 0);
 
-          const totalMinutes = identity.totalMinutes + sessionMinutes;
+          const totalMinutes = (identity.totalMinutes || 0) + sessionMinutes;
 
           // Deterministic consistency from identity id
           const consistency = 40 + (identity.id.charCodeAt(0) * 7) % 40;

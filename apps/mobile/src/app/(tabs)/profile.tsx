@@ -1,12 +1,13 @@
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { Card } from '@/components/ui';
 import { MomentumRing } from '@/components/insights';
-import { demoIdentities } from '@/lib/demo-data';
+import { useIdentities } from '@/hooks/useIdentities';
 import { formatMinutes } from '@monolith/shared';
 import { useFocusStore } from '@/stores';
 import { router } from 'expo-router';
 
 export default function ProfileScreen() {
+  const identities = useIdentities();
   const completedSessions = useFocusStore((s) => s.completedSessions);
 
   // Compute session minutes per identity
@@ -39,9 +40,9 @@ export default function ProfileScreen() {
     { label: 'Best Week', value: '32h 10m', date: 'Feb 1–7' },
   ];
 
-  const identityBreakdown = demoIdentities.map((id) => ({
+  const identityBreakdown = identities.map((id) => ({
     name: id.name,
-    minutes: id.totalMinutes + (sessionMinutesById[id.id] || 0),
+    minutes: (id.totalMinutes || 0) + (sessionMinutesById[id.id] || 0),
     color: id.color,
   }));
 
