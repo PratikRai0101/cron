@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SubscriptionTier } from '@/types/models';
 
 interface UserState {
@@ -20,32 +22,45 @@ interface UserState {
   clearUser: () => void;
 }
 
-export const useUserStore = create<UserState>((set) => ({
-  id: null,
-  displayName: null,
-  username: null,
-  avatarUrl: null,
-  dailyGoalMinutes: 60,
-  subscriptionTier: 'free',
-  accentColor: 'lime',
-  totalFocusMinutes: 0,
-  level: 0,
-  isLoading: true,
-  
-  setUser: (user) => set((state) => ({ ...state, ...user, isLoading: false })),
-  setSubscriptionTier: (tier) => set({ subscriptionTier: tier }),
-  setDailyGoal: (minutes) => set({ dailyGoalMinutes: minutes }),
-  setAccentColor: (color) => set({ accentColor: color }),
-  clearUser: () => set({
-    id: null,
-    displayName: null,
-    username: null,
-    avatarUrl: null,
-    dailyGoalMinutes: 60,
-    subscriptionTier: 'free',
-    accentColor: 'lime',
-    totalFocusMinutes: 0,
-    level: 0,
-    isLoading: false,
-  }),
-}));
+export const useUserStore = create<UserState>()(
+  persist(
+    (set) => ({
+      id: null,
+      displayName: null,
+      username: null,
+      avatarUrl: null,
+      dailyGoalMinutes: 60,
+      subscriptionTier: 'free',
+      accentColor: 'lime',
+      totalFocusMinutes: 0,
+      level: 0,
+      isLoading: true,
+      
+      setUser: (user) => set((state) => ({ ...state, ...user, isLoading: false })),
+      setSubscriptionTier: (tier) => set({ subscriptionTier: tier }),
+      setDailyGoal: (minutes) => set({ dailyGoalMinutes: minutes }),
+      setAccentColor: (color) => set({ accentColor: color }),
+      clearUser: () => set({
+        id: null,
+        displayName: null,
+        username: null,
+        avatarUrl: null,
+        dailyGoalMinutes: 60,
+        subscriptionTier: 'free',
+        accentColor: 'lime',
+        totalFocusMinutes: 0,
+        level: 0,
+        isLoading: false,
+      }),
+    }),
+    {
+      name: 'monolith-user',
+      storage: createJSONStorage(() => AsyncStorage),
+      partialize: (state) => ({
+        dailyGoalMinutes: state.dailyGoalMinutes,
+        subscriptionTier: state.subscriptionTier,
+        accentColor: state.accentColor,
+      }),
+    }
+  )
+);
