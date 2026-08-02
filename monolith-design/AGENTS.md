@@ -34,6 +34,25 @@
 - [x] Supabase initial migration (all tables, RLS policies, indexes, triggers)
 - [x] Git repo initialized and pushed to GitHub (`PratikRai0101/cron`)
 
+### Core Screens (React Native Implementation)
+- [x] Grid screen — contribution grid, identity filter pills, momentum ring, task list, FAB
+- [x] Focus Mode — count-up timer, ring progress, identity picker, pause/stop/cancel
+- [x] Log Task sheet — title, identity selector, time estimate
+- [x] Identity screen — identity cards with mini grids and stats
+- [x] Profile screen — level badge, momentum ring, skill velocity, records, breakdown
+- [x] Settings modal — daily goal, accent color picker, subscription info
+- [x] Onboarding — welcome, set goal, pick identities (seeds identityStore), done
+
+### State Management & Data Layer
+- [x] `taskStore` — CRUD operations, persisted via AsyncStorage
+- [x] `identityStore` — identities, seeded from onboarding, persisted via AsyncStorage
+- [x] `focusStore` — drift-free wall-clock timer, sessions persisted via AsyncStorage
+- [x] `userStore` — daily goal, accent color, tier, persisted
+- [x] `appStore` — onboarding state, persisted
+- [ ] Focus session sync to Supabase
+- [ ] Daily logs aggregation
+- [ ] Offline-first sync implementation (queue flush, conflict resolution)
+
 ### Open Design Integration (Complete)
 - [x] Custom `monolith` design system for Open Design
 - [x] Custom `monolith-mobile` skill for Open Design
@@ -326,9 +345,9 @@ When generating code for this project:
 
 ## Last Updated
 
-**Date**: 2025-05-13
-**Session**: Set up Open Design integration, generated Grid/Home reference screen
-**Next Session**: Generate remaining reference screens OR start React Native implementation
+**Date**: 2026-08-02
+**Session**: Fixed UI glitches (grid label scroll sync, drift-free focus timer, stable paused layout), added identityStore, persisted all stores with AsyncStorage, wired screens to identityStore, fixed turbo 2.x config
+**Next Session**: Supabase auth + focus session sync, or offline queue
 
 ---
 
