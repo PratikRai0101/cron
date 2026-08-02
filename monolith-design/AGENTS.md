@@ -41,7 +41,10 @@
 - [x] Identity screen — identity cards with mini grids and stats
 - [x] Profile screen — level badge, momentum ring, skill velocity, records, breakdown
 - [x] Settings modal — daily goal, accent color picker, subscription info
-- [x] Onboarding — welcome, set goal, pick identities (seeds identityStore), done
+- [x] Onboarding — welcome, set goal, pick identities (seeds identityStore), widget setup, done
+- [x] Retroactive logging — tap/long-press grid cell opens retro-log sheet (FR-4)
+- [x] Add-identity modal — name + color picker, wired to Identity tab "+"
+- [x] Insight card — weekly deep-work hours + delta vs last week, below grid
 
 ### State Management & Data Layer
 - [x] `taskStore` — CRUD operations, persisted via AsyncStorage
@@ -49,6 +52,7 @@
 - [x] `focusStore` — drift-free wall-clock timer, sessions persisted via AsyncStorage
 - [x] `userStore` — daily goal, accent color, tier, persisted
 - [x] `appStore` — onboarding state, persisted
+- [x] `logStore` — retro logs per date, persisted
 - [ ] Focus session sync to Supabase
 - [ ] Daily logs aggregation
 - [ ] Offline-first sync implementation (queue flush, conflict resolution)
@@ -346,7 +350,7 @@ When generating code for this project:
 ## Last Updated
 
 **Date**: 2026-08-02
-**Session**: Fixed UI glitches (grid label scroll sync, drift-free focus timer, stable paused layout), added identityStore, persisted all stores with AsyncStorage, wired screens to identityStore, fixed turbo 2.x config
+**Session**: Retroactive logging (tap/long-press cell → retro-log sheet), add-identity modal, insight card, widget-setup onboarding step
 **Next Session**: Supabase auth + focus session sync, or offline queue
 
 ---
