@@ -10,6 +10,7 @@ import { ContributionGrid } from '@/components/contribution-grid';
 import { TaskRow } from '@/components/tasks';
 import { IdentityPill } from '@/components/identity';
 import { RingProgress } from '@/components/focus';
+import { InsightCard } from '@/components/insights';
 import {
   generateDemoGridData,
   getTodayMinutes,
@@ -78,6 +79,35 @@ export default function GridScreen() {
   const handleCellPress = useCallback((date: string) => {
     router.navigate({ pathname: '/modals/retro-log', params: { date } });
   }, []);
+
+  // Weekly insight: sum focus sessions + retro logs for this week vs last week
+  const weekMinutes = useMemo(() => {
+    const startOfThisWeek = new Date();
+    startOfThisWeek.setHours(0, 0, 0, 0);
+    startOfThisWeek.setDate(startOfThisWeek.getDate() - startOfThisWeek.getDay());
+    const startOfLastWeek = new Date(startOfThisWeek);
+    startOfLastWeek.setDate(startOfLastWeek.getDate() - 7);
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    let thisWeek = 0;
+    let lastWeek = 0;
+
+    completedSessions.forEach((s) => {
+      const sessionDate = new Date(s.completedAt);
+      const minutes = Math.floor(s.duration / 60);
+      if (sessionDate >= startOfThisWeek) thisWeek += minutes;
+      else if (sessionDate >= startOfLastWeek) lastWeek += minutes;
+    });
+
+    retroLogs.forEach((l) => {
+      const logDate = new Date(`${l.date}T12:00:00`);
+      if (logDate >= startOfThisWeek && logDate < startOfToday) thisWeek += l.minutes;
+      else if (logDate >= startOfLastWeek && logDate < startOfThisWeek) lastWeek += l.minutes;
+    });
+
+    return { thisWeek, lastWeek };
+  }, [completedSessions, retroLogs]);
 
   const identities = [{ id: 'all', name: 'All', color: '#ffffff', totalMinutes: 0 }, ...useIdentities()];
 
@@ -168,6 +198,14 @@ export default function GridScreen() {
               </Text>
             </View>
           </RingProgress>
+        </View>
+
+        {/* Insight Card */}
+        <View className="pb-6">
+          <InsightCard
+            thisWeekMinutes={weekMinutes.thisWeek}
+            lastWeekMinutes={weekMinutes.lastWeek}
+          />
         </View>
 
         {/* Task List */}
