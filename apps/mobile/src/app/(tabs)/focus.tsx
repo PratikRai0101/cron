@@ -4,6 +4,7 @@ import {
   Text,
   Pressable,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusStore } from '@/stores';
 import { Timer, RingProgress } from '@/components/focus';
 import { IdentityPill } from '@/components/identity';
@@ -13,6 +14,7 @@ import { formatMinutes } from '@monolith/shared';
 const SESSION_GOAL_MINUTES = 60;
 
 export default function FocusTabScreen() {
+  const insets = useSafeAreaInsets();
   const identities = useIdentities();  const {
     isActive,
     isPaused,
@@ -87,7 +89,7 @@ export default function FocusTabScreen() {
     return (
       <View className="flex-1 bg-background items-center justify-center px-5">
         {/* Identity Picker */}
-        <View className="absolute top-16 items-center">
+        <View className="absolute items-center" style={{ top: insets.top + 8 }}>
           <Text className="text-caption text-text-secondary uppercase mb-3 font-sans">
             Tracking
           </Text>
@@ -127,7 +129,7 @@ export default function FocusTabScreen() {
   return (
     <View className="flex-1 bg-background items-center justify-center px-5">
       {/* Identity Pill */}
-      <View className="absolute top-16 items-center">
+      <View className="absolute items-center" style={{ top: insets.top + 8 }}>
         <View
           className="rounded-full px-4 py-1.5 border"
           style={{ borderColor: currentIdentity ? `${currentIdentity.color}4D` : 'rgba(255,255,255,0.12)' }}

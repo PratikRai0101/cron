@@ -3,5 +3,15 @@ import { demoIdentities } from '@/lib/demo-data';
 
 export function useIdentities() {
   const stored = useIdentityStore((s) => s.identities);
-  return stored.length > 0 ? stored : demoIdentities;
+  if (stored.length === 0) return demoIdentities;
+
+  return stored.map((identity) => {
+    const demo = demoIdentities.find(
+      (d) => d.name === identity.name || d.id === identity.id
+    );
+    return {
+      ...identity,
+      totalMinutes: identity.totalMinutes ?? demo?.totalMinutes ?? 0,
+    };
+  });
 }

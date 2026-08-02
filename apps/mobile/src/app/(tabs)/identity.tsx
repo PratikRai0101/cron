@@ -1,4 +1,5 @@
 import { View, Text, ScrollView, Pressable } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card } from '@/components/ui';
 import { ContributionGrid } from '@/components/contribution-grid';
 import { formatMinutes } from '@monolith/shared';
@@ -21,6 +22,7 @@ function seededGridData(identityId: string, days: number) {
 }
 
 export default function IdentityScreen() {
+  const insets = useSafeAreaInsets();
   const identities = useIdentities();
   const completedSessions = useFocusStore((s) => s.completedSessions);
 
@@ -36,7 +38,7 @@ export default function IdentityScreen() {
   return (
     <View className="flex-1 bg-background">
       {/* Header */}
-      <View className="px-5 pt-6 pb-2 flex-row items-center justify-between">
+      <View className="px-5 pb-2 flex-row items-center justify-between" style={{ paddingTop: insets.top + 8 }}>
         <Text className="text-h1 text-text-primary font-sans">Identities</Text>
         <Pressable className="w-8 h-8 items-center justify-center">
           <Text className="text-text-primary text-xl font-mono">+</Text>

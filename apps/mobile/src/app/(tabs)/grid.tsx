@@ -1,10 +1,11 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
   ScrollView,
   Pressable,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ContributionGrid } from '@/components/contribution-grid';
 import { TaskRow } from '@/components/tasks';
 import { IdentityPill } from '@/components/identity';
@@ -12,6 +13,7 @@ import { RingProgress } from '@/components/focus';
 import {
   generateDemoGridData,
   getTodayMinutes,
+  demoTasks,
 } from '@/lib/demo-data';
 import { useIdentities } from '@/hooks/useIdentities';
 import { useFocusStore, useTaskStore, useUserStore } from '@/stores';
@@ -19,12 +21,29 @@ import { formatMinutes, formatDate } from '@monolith/shared';
 import { router } from 'expo-router';
 
 export default function GridScreen() {
+  const insets = useSafeAreaInsets();
   const dailyGoal = useUserStore((s) => s.dailyGoalMinutes);
   const [gridData] = useState(() => generateDemoGridData(140));
   const [selectedIdentity, setSelectedIdentity] = useState<string | null>(null);
   const tasks = useTaskStore((s) => s.tasks);
+  const addTask = useTaskStore((s) => s.addTask);
   const toggleTask = useTaskStore((s) => s.toggleTask);
   const completedSessions = useFocusStore((s) => s.completedSessions);
+
+  // Seed demo tasks on first render if store is empty
+  useEffect(() => {
+    if (tasks.length === 0) {
+      demoTasks.forEach((task) => {
+        addTask({
+          title: task.title,
+          identityId: task.identityName,
+          identityName: task.identityName,
+          identityColor: task.identityColor,
+          estimatedMinutes: task.estimatedMinutes,
+        });
+      });
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Add completed session minutes to today's total
   const today = formatDate(new Date());
@@ -75,7 +94,7 @@ export default function GridScreen() {
     <View className="flex-1 bg-background">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <View className="px-5 pt-6 pb-2 flex-row items-center justify-center">
+        <View className="px-5 pb-2 flex-row items-center justify-center" style={{ paddingTop: insets.top + 8 }}>
           <Text className="text-caption text-text-secondary uppercase font-mono">
             MONOLITH
           </Text>

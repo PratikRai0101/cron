@@ -1,13 +1,13 @@
 import { Tabs } from 'expo-router';
 import { View, Text } from 'react-native';
 
-function TabIcon({ name, focused }: { name: string; focused: boolean }) {
+function TabIcon({ icon, focused }: { icon: string; focused: boolean }) {
   return (
     <View className="items-center justify-center">
-      <Text 
-        className={`text-xs ${focused ? 'text-accent' : 'text-text-secondary'}`}
+      <Text
+        className={`text-base ${focused ? 'text-accent' : 'text-text-secondary'}`}
       >
-        {name[0]}
+        {icon}
       </Text>
     </View>
   );
@@ -30,28 +30,28 @@ export default function TabLayout() {
         name="grid"
         options={{
           title: 'Grid',
-          tabBarIcon: ({ focused }) => <TabIcon name="Grid" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon icon="▦" focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="focus"
         options={{
           title: 'Focus',
-          tabBarIcon: ({ focused }) => <TabIcon name="Focus" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon icon="◉" focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="identity"
         options={{
           title: 'Identity',
-          tabBarIcon: ({ focused }) => <TabIcon name="Identity" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon icon="◇" focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ focused }) => <TabIcon name="Profile" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon icon="☰" focused={focused} />,
         }}
       />
     </Tabs>

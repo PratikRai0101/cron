@@ -1,4 +1,5 @@
 import { View, Text, ScrollView, Pressable } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card } from '@/components/ui';
 import { MomentumRing } from '@/components/insights';
 import { useIdentities } from '@/hooks/useIdentities';
@@ -7,6 +8,7 @@ import { useFocusStore } from '@/stores';
 import { router } from 'expo-router';
 
 export default function ProfileScreen() {
+  const insets = useSafeAreaInsets();
   const identities = useIdentities();
   const completedSessions = useFocusStore((s) => s.completedSessions);
 
@@ -53,7 +55,7 @@ export default function ProfileScreen() {
     <View className="flex-1 bg-background">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <View className="px-5 pt-6 pb-2 flex-row items-center justify-between">
+        <View className="px-5 pb-2 flex-row items-center justify-between" style={{ paddingTop: insets.top + 8 }}>
           <Text className="text-h1 text-text-primary font-sans">Profile</Text>
           <Pressable
             onPress={() => router.navigate('/modals/settings')}
@@ -155,7 +157,9 @@ export default function ProfileScreen() {
           <Text className="text-h3 text-text-primary font-sans mb-3">Where Your Time Goes</Text>
           <View className="gap-3">
             {identityBreakdown.map((identity) => {
-              const percent = Math.round((identity.minutes / totalBreakdownMinutes) * 100);
+              const percent = totalBreakdownMinutes > 0
+                ? Math.round((identity.minutes / totalBreakdownMinutes) * 100)
+                : 0;
               return (
                 <View key={identity.name} className="flex-row items-center">
                   <Text className="text-body text-text-secondary font-sans w-16">
