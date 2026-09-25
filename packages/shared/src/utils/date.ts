@@ -1,26 +1,38 @@
+function asDate(date: Date | string): Date {
+  if (typeof date === 'string') {
+    const calendarDate = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+    if (calendarDate) {
+      return new Date(
+        Number(calendarDate[1]),
+        Number(calendarDate[2]) - 1,
+        Number(calendarDate[3])
+      );
+    }
+  }
+  return new Date(date);
+}
+
 export function formatDate(date: Date | string): string {
-  const d = typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)
-    ? new Date(`${date}T12:00:00`)
-    : new Date(date);
+  const d = asDate(date);
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 export function addDays(date: Date | string, days: number): Date {
-  const d = typeof date === 'string' ? new Date(date) : new Date(date);
+  const d = asDate(date);
   d.setDate(d.getDate() + days);
   return d;
 }
 
 export function startOfWeek(date: Date | string): Date {
-  const d = typeof date === 'string' ? new Date(date) : new Date(date);
+  const d = asDate(date);
   const day = d.getDay();
   const diff = d.getDate() - day;
   return new Date(d.setDate(diff));
 }
 
 export function isSameDay(a: Date | string, b: Date | string): boolean {
-  const da = typeof a === 'string' ? new Date(a) : a;
-  const db = typeof b === 'string' ? new Date(b) : b;
+  const da = asDate(a);
+  const db = asDate(b);
   return (
     da.getFullYear() === db.getFullYear() &&
     da.getMonth() === db.getMonth() &&
