@@ -27,7 +27,8 @@ export default function GridScreen() {
   const filteredDates = selectedIdentity ? byIdentityDate[selectedIdentity] ?? {} : byDate;
   const gridData = Object.entries(filteredDates).map(([date, minutes]) => ({ date, minutes }));
   const todayMinutes = filteredDates[today] || 0;
-  const filteredTasks = selectedIdentity ? tasks.filter((t) => t.identityId === selectedIdentity) : tasks;
+  const todaysTasks = tasks.filter((task) => !task.dueDate || task.dueDate === today);
+  const filteredTasks = selectedIdentity ? todaysTasks.filter((task) => task.identityId === selectedIdentity) : todaysTasks;
 
   const weekStart = new Date();
   weekStart.setHours(0, 0, 0, 0);
@@ -84,8 +85,9 @@ export default function GridScreen() {
               completed={task.completed} estimatedMinutes={task.estimatedMinutes}
               onLogTime={() => router.push({ pathname: '/modals/retro-log', params: { date: today, identityId: task.identityId } })}
               onToggleComplete={() => toggleTask(task.id)}
-              onLongPress={() => Alert.alert('Delete task?', task.title, [
-                { text: 'Keep', style: 'cancel' },
+              onLongPress={() => Alert.alert(task.title, 'Manage task', [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Edit', onPress: () => router.push({ pathname: '/modals/log-task', params: { id: task.id } }) },
                 { text: 'Delete', style: 'destructive', onPress: () => deleteTask(task.id) },
               ])}
               onPress={() => { if (!isActive) startFocus(task.identityId, task.id); router.navigate('/(tabs)/focus'); }} />

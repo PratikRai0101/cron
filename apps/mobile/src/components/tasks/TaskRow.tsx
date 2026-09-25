@@ -32,7 +32,7 @@ export function TaskRow({
       onPress={onPress}
       onLongPress={onLongPress}
       accessibilityRole="button"
-      accessibilityLabel={`${title}, ${identityName}${completed ? ', completed' : ''}. Tap to focus, long press to delete`}
+      accessibilityLabel={`${title}, ${identityName}${completed ? ', completed' : ''}. Tap to focus, use time button to log, long press to edit or delete`}
       className="flex-row items-center py-3 border-b border-border-subtle active:bg-surface"
     >
       {/* Checkbox */}

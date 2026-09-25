@@ -12,12 +12,14 @@ export interface TaskItem {
   estimatedMinutes?: number;
   completed: boolean;
   createdAt: string;
+  dueDate?: string;
 }
 
 interface TaskState {
   tasks: TaskItem[];
   addTask: (task: Omit<TaskItem, 'id' | 'completed' | 'createdAt'>) => void;
   toggleTask: (id: string) => void;
+  updateTask: (id: string, patch: Partial<Pick<TaskItem, 'title' | 'identityId' | 'identityName' | 'identityColor' | 'estimatedMinutes' | 'dueDate'>>) => void;
   deleteTask: (id: string) => void;
   getTasksForIdentity: (identityId: string) => TaskItem[];
 }
@@ -46,6 +48,9 @@ export const useTaskStore = create<TaskState>()(
             t.id === id ? { ...t, completed: !t.completed } : t
           ),
         })),
+
+      updateTask: (id, patch) =>
+        set((state) => ({ tasks: state.tasks.map((task) => task.id === id ? { ...task, ...patch, title: patch.title?.trim() ?? task.title } : task) })),
 
       deleteTask: (id) =>
         set((state) => ({

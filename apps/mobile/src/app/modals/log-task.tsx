@@ -1,18 +1,22 @@
 import { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable, ScrollView } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Input } from '@/components/ui';
 import { useTaskStore } from '@/stores';
 import { useIdentities } from '@/hooks/useIdentities';
+import { formatDate } from '@monolith/shared';
 
 export default function LogTaskScreen() {
   const insets = useSafeAreaInsets();
   const identities = useIdentities();
-  const [title, setTitle] = useState('');
-  const [selectedIdentityId, setSelectedIdentityId] = useState<string | null>(null);
-  const [estimatedMinutes, setEstimatedMinutes] = useState('');
+  const { id } = useLocalSearchParams<{ id?: string }>();
+  const task = useTaskStore((s) => s.tasks.find((item) => item.id === id));
+  const [title, setTitle] = useState(task?.title ?? '');
+  const [selectedIdentityId, setSelectedIdentityId] = useState<string | null>(task?.identityId ?? null);
+  const [estimatedMinutes, setEstimatedMinutes] = useState(task?.estimatedMinutes?.toString() ?? '');
   const addTask = useTaskStore((s) => s.addTask);
+  const updateTask = useTaskStore((s) => s.updateTask);
 
   const selectedIdentity = identities.find((i) => i.id === selectedIdentityId) ?? identities[0];
   const estimate = estimatedMinutes ? Number(estimatedMinutes) : undefined;
@@ -21,13 +25,15 @@ export default function LogTaskScreen() {
   const handleSave = () => {
     if (!canSave || !selectedIdentity) return;
 
-    addTask({
+    const fields = {
       title: title.trim(),
       identityId: selectedIdentity.id,
       identityName: selectedIdentity.name,
       identityColor: selectedIdentity.color,
       estimatedMinutes: estimate,
-    });
+    };
+    if (task) updateTask(task.id, fields);
+    else addTask({ ...fields, dueDate: formatDate(new Date()) });
 
     router.back();
   };
@@ -36,7 +42,7 @@ export default function LogTaskScreen() {
     <View className="flex-1 bg-background">
       <View className="flex-1">
         <ScrollView className="px-5" contentContainerStyle={{ paddingTop: insets.top + 20, paddingBottom: insets.bottom + 32 }} keyboardShouldPersistTaps="handled">
-          <Text className="text-h2 text-text-primary font-sans mb-6">New Task</Text>
+          <Text className="text-h2 text-text-primary font-sans mb-6">{task ? 'Edit Task' : 'New Task'}</Text>
 
           {/* Title Input */}
           <Input
@@ -103,7 +109,7 @@ export default function LogTaskScreen() {
               style={{ opacity: canSave ? 1 : 0.5 }}
               disabled={!canSave}
             >
-              <Text className="text-text-inverse font-sans font-semibold">Save</Text>
+              <Text className="text-text-inverse font-sans font-semibold">{task ? 'Save Changes' : 'Save'}</Text>
             </Pressable>
           </View>
         </ScrollView>
