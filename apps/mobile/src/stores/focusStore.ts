@@ -31,9 +31,11 @@ interface FocusState {
   logSession: (session: CompletedSession) => void;
 }
 
+const MAX_SESSION_SECONDS = 12 * 60 * 60;
+
 function getElapsed(startTime: number | null, accumulatedSeconds: number): number {
-  if (!startTime) return accumulatedSeconds;
-  return accumulatedSeconds + (Date.now() - startTime) / 1000;
+  if (!startTime) return Math.min(accumulatedSeconds, MAX_SESSION_SECONDS);
+  return Math.min(accumulatedSeconds + (Date.now() - startTime) / 1000, MAX_SESSION_SECONDS);
 }
 
 export const useFocusStore = create<FocusState>()(

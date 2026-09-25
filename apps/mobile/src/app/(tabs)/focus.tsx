@@ -4,6 +4,7 @@ import {
   Text,
   Pressable,
   Alert,
+  AppState,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusStore, useTaskStore, useUserStore } from '@/stores';
@@ -12,6 +13,7 @@ import { IdentityPill } from '@/components/identity';
 import { useIdentities } from '@/hooks/useIdentities';
 import { formatMinutes } from '@monolith/shared';
 import { uid } from '@/lib/id';
+import { useKeepAwake } from 'expo-keep-awake';
 
 export default function FocusTabScreen() {
   const insets = useSafeAreaInsets();
@@ -32,6 +34,7 @@ export default function FocusTabScreen() {
   } = useFocusStore();
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  useKeepAwake(isActive && !isPaused ? 'monolith-focus-session' : undefined);
 
   // Timer tick effect
   useEffect(() => {
@@ -48,6 +51,13 @@ export default function FocusTabScreen() {
     };
   }, [isActive, isPaused, tick]);
 
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'active' && isActive && !isPaused) tick();
+    });
+    return () => subscription.remove();
+  }, [isActive, isPaused, tick]);
+
   const handleStart = useCallback(() => {
     if (!isActive) {
       startFocus(identities[0].id);
@@ -59,6 +69,9 @@ export default function FocusTabScreen() {
   }, [isActive, isPaused, startFocus, resumeFocus, pauseFocus]);
 
   const handleStop = useCallback(() => {
+    if (elapsedSeconds >= 12 * 60 * 60) {
+      Alert.alert('Session limit reached', 'Focus sessions are capped at 12 hours. This session will be saved at the limit.');
+    }
     if (elapsedSeconds < 60) {
       Alert.alert('Session too short', 'Focus for at least one minute to save a session. Cancel to discard it.');
       return;
