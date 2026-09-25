@@ -50,8 +50,8 @@
 ### State Management & Data Layer
 - [x] `taskStore`, `identityStore`, `focusStore`, `userStore`, `appStore`, and `logStore` persist locally via AsyncStorage
 - [x] Grid, identity totals, and profile derive from actual local focus sessions and retro logs
-- [ ] Supabase authentication and session sync
-- [ ] Durable offline mutation queue, conflict resolution, and realtime subscriptions
+- [x] Supabase email sign-up/sign-in UI, optional client config, and auth profile trigger migration
+- [ ] Cloud data sync, durable offline mutation queue, conflict resolution, and realtime subscriptions
 
 ### Open Design Integration (Complete)
 - [x] Custom `monolith` design system for Open Design
@@ -346,8 +346,8 @@ When generating code for this project:
 ## Last Updated
 
 **Date**: 2026-09-25
-**Session**: iPhone 17 Pro simulator audit; corrected layouts/fonts/data flows, identity/task management, focus keep-awake, local JSON export/reset, and local-calendar date handling. Added store/date tests, ESLint config, and daily/weekly/monthly recurring tasks. Latest pushed commit before this session: `10214c5`.
-**Next Session**: Build Supabase auth/offline sync and native widget support; then finish notifications, billing, social, and desktop features before release QA.
+**Session**: Added daily/weekly/monthly recurring tasks and optional Supabase email account creation/sign-in with a profile trigger migration. Live auth and data sync require project credentials; sync is still unimplemented. Current work is being built before the requested later test pass.
+**Next Session**: Implement cloud/offline sync, then native widgets, notifications, billing, social, and desktop features before release QA.
 
 ---
 

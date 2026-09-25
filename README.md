@@ -40,6 +40,11 @@ npm install
 # Start Supabase locally
 npm run supabase:start
 
+# Configure optional Supabase email authentication
+cp apps/mobile/.env.example apps/mobile/.env
+# Set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY in apps/mobile/.env
+# Apply database migrations with the Supabase CLI before enabling accounts
+
 # Start mobile app
 npm run mobile
 
