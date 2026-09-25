@@ -1,10 +1,11 @@
-jest.mock('@react-native-async-storage/async-storage', () =>
-  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
-);
-
 import { useFocusStore } from '@/stores/focusStore';
 import { useIdentityStore } from '@/stores/identityStore';
 import { useTaskStore } from '@/stores/taskStore';
+
+jest.mock('@react-native-async-storage/async-storage', () =>
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+);
 
 const identityDefaults = {
   identities: [],

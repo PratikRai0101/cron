@@ -66,7 +66,7 @@ export default function FocusTabScreen() {
     } else {
       pauseFocus();
     }
-  }, [isActive, isPaused, startFocus, resumeFocus, pauseFocus]);
+  }, [identities, isActive, isPaused, startFocus, resumeFocus, pauseFocus]);
 
   const handleStop = useCallback(() => {
     if (elapsedSeconds >= 12 * 60 * 60) {

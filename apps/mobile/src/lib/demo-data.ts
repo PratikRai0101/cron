@@ -1,4 +1,4 @@
-import { formatDate, addDays } from '@monolith/shared';
+import { formatDate } from '@monolith/shared';
 
 export interface DemoDayData {
   date: string;

@@ -1,9 +1,8 @@
 import { useRef } from 'react';
 import { View, ScrollView, Text } from 'react-native';
 import { GridCell } from './GridCell';
-import { getGridIntensity } from '@monolith/shared';
+import { formatDate, getGridIntensity } from '@monolith/shared';
 import type { GridIntensity } from '@monolith/shared';
-import { formatDate } from '@monolith/shared';
 
 interface DayData {
   date: string;

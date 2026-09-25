@@ -346,8 +346,8 @@ When generating code for this project:
 ## Last Updated
 
 **Date**: 2026-09-25
-**Session**: iPhone 17 Pro simulator visual audit; fixed card/modal layouts, bundled design fonts, local activity/grid accuracy, identity/task management, focus keep-awake, and local JSON export/data reset. Pushed micro-commits through `f871145`.
-**Next Session**: Agree test seams, add automated tests and lint config, then verify native task/focus/log/export flows and decide whether cloud sync/widgets are in MVP scope.
+**Session**: iPhone 17 Pro simulator audit; corrected layouts/fonts/data flows, identity/task management, focus keep-awake, local JSON export/reset, and local-calendar date handling. Added store/date tests and ESLint config. Pushed micro-commits through `f9d9330`.
+**Next Session**: Add UI-level simulator coverage and accessibility checks; decide whether auth/sync and native widgets are required for the MVP release.
 
 ---
 

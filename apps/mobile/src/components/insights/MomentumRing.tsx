@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 
 interface DaySegment {
@@ -30,8 +30,6 @@ export function MomentumRing({
     <View className="items-center justify-center">
       <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
         {segments.map((segment, index) => {
-          const offset = circumference - segmentArc * index;
-          const rotation = -90 + (360 / segments.length) * index;
           const trackColor = segment.isRestDay ? '#737373' : '#1a1a1a';
           const fillColor = segment.filled ? '#ffffff' : trackColor;
 

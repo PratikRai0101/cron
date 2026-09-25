@@ -23,7 +23,7 @@ export default function DoneScreen() {
         </View>
       </View>
 
-      <Text className="text-h1 text-text-primary font-sans text-center">You're all set</Text>
+      <Text className="text-h1 text-text-primary font-sans text-center">You&apos;re all set</Text>
       <Text className="text-body text-text-secondary font-sans text-center mt-3 max-w-[280px]">
         Start tracking your deep work, building momentum, and leveling up your skills.
       </Text>
