@@ -10,6 +10,8 @@ interface TaskRowProps {
   loggedMinutes?: number;
   estimatedMinutes?: number;
   onPress?: () => void;
+  onLongPress?: () => void;
+  onLogTime?: () => void;
   onToggleComplete?: () => void;
 }
 
@@ -21,11 +23,16 @@ export function TaskRow({
   loggedMinutes,
   estimatedMinutes,
   onPress,
+  onLongPress,
+  onLogTime,
   onToggleComplete,
 }: TaskRowProps) {
   return (
     <Pressable
       onPress={onPress}
+      onLongPress={onLongPress}
+      accessibilityRole="button"
+      accessibilityLabel={`${title}, ${identityName}${completed ? ', completed' : ''}. Tap to focus, long press to delete`}
       className="flex-row items-center py-3 border-b border-border-subtle active:bg-surface"
     >
       {/* Checkbox */}
@@ -57,6 +64,13 @@ export function TaskRow({
         </View>
       </View>
 
+      {onLogTime && (
+        <Pressable onPress={(event) => { event.stopPropagation(); onLogTime(); }}
+          accessibilityRole="button" accessibilityLabel={`Log time for ${title}`} hitSlop={8}
+          className="w-11 h-11 items-center justify-center">
+          <Text className="text-text-secondary text-base font-mono">◷</Text>
+        </Pressable>
+      )}
       {/* Duration */}
       <View className="items-end">
         {loggedMinutes !== undefined && (

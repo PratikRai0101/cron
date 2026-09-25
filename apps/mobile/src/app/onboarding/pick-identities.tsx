@@ -10,7 +10,7 @@ const ALL_IDENTITIES = [
   { id: '4', name: 'Exercise', color: '#737373', description: 'Fitness, sports, movement' },
 ];
 
-const FALLBACK_IDS = ['1', '2', '3'];
+const FALLBACK_IDS = ['1'];
 
 export default function PickIdentitiesScreen() {
   const seedFromPresets = useIdentityStore((s) => s.seedFromPresets);
@@ -20,6 +20,7 @@ export default function PickIdentitiesScreen() {
     setSelected((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {
+        if (next.size === 1) return prev;
         next.delete(id);
       } else {
         next.add(id);
@@ -57,7 +58,7 @@ export default function PickIdentitiesScreen() {
 
       <Text className="text-h1 text-text-primary font-sans text-center">Pick your identities</Text>
       <Text className="text-body text-text-secondary font-sans text-center mt-3 max-w-[280px] self-center">
-        What areas do you want to track?
+        Choose one area to start. The Free plan supports one active identity.
       </Text>
 
       <View className="mt-8 gap-3">

@@ -9,7 +9,7 @@ import { formatDate, formatMinutes } from '@monolith/shared';
 
 export default function RetroLogScreen() {
   const insets = useSafeAreaInsets();
-  const { date } = useLocalSearchParams<{ date: string }>();
+  const { date, identityId } = useLocalSearchParams<{ date: string; identityId?: string }>();
   const dateStr = date || formatDate(new Date());
   const validDate = /^\d{4}-\d{2}-\d{2}$/.test(dateStr) &&
     !Number.isNaN(new Date(`${dateStr}T12:00:00`).getTime()) &&
@@ -21,7 +21,7 @@ export default function RetroLogScreen() {
   const logRetroActivity = useLogStore((s) => s.logRetroActivity);
 
   const [minutes, setMinutes] = useState('');
-  const [selectedIdentityId, setSelectedIdentityId] = useState<string | null>(null);
+  const [selectedIdentityId, setSelectedIdentityId] = useState<string | null>(identityId ?? identities[0]?.id ?? null);
 
   const selectedIdentity = identities.find((i) => i.id === selectedIdentityId) ?? identities[0];
 

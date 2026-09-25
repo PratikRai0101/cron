@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable, ScrollView } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Input } from '@/components/ui';
-import { useIdentityStore } from '@/stores';
+import { useIdentityStore, useUserStore } from '@/stores';
 
 const IDENTITY_COLORS = [
   '#ffffff',
@@ -18,15 +18,24 @@ const IDENTITY_COLORS = [
 
 export default function AddIdentityScreen() {
   const insets = useSafeAreaInsets();
+  const { id } = useLocalSearchParams<{ id?: string }>();
+  const identities = useIdentityStore((s) => s.identities);
+  const updateIdentity = useIdentityStore((s) => s.updateIdentity);
+  const tier = useUserStore((s) => s.subscriptionTier);
   const addIdentity = useIdentityStore((s) => s.addIdentity);
-  const [name, setName] = useState('');
-  const [color, setColor] = useState(IDENTITY_COLORS[0]);
+  const existing = identities.find((identity) => identity.id === id);
+  const [name, setName] = useState(existing?.name ?? '');
+  const [color, setColor] = useState(existing?.color ?? IDENTITY_COLORS[0]);
+  const duplicate = identities.some((identity) => identity.id !== id && !identity.isArchived && identity.name.toLowerCase() === name.trim().toLowerCase());
+  const atFreeLimit = !existing && tier === 'free' && identities.filter((identity) => !identity.isArchived).length >= 1;
+  const canSave = !!name.trim() && !duplicate && !atFreeLimit;
 
   const handleSave = () => {
     const trimmed = name.trim();
-    if (!trimmed) return;
+    if (!trimmed || duplicate || atFreeLimit) return;
 
-    addIdentity({ name: trimmed, color });
+    if (existing) updateIdentity(existing.id, { name: trimmed, color });
+    else addIdentity({ name: trimmed, color });
     router.back();
   };
 
@@ -34,7 +43,7 @@ export default function AddIdentityScreen() {
     <View className="flex-1 bg-background">
       <View className="flex-1">
         <ScrollView className="px-5" contentContainerStyle={{ paddingTop: insets.top + 20, paddingBottom: insets.bottom + 32 }} keyboardShouldPersistTaps="handled">
-          <Text className="text-h2 text-text-primary font-sans mb-6">New Identity</Text>
+          <Text className="text-h2 text-text-primary font-sans mb-6">{existing ? 'Edit Identity' : 'New Identity'}</Text>
 
           {/* Name Input */}
           <Input
@@ -43,6 +52,7 @@ export default function AddIdentityScreen() {
             value={name}
             onChangeText={setName}
             maxLength={24}
+            error={duplicate ? 'An active identity already uses this name.' : atFreeLimit ? 'The Free plan supports one active identity.' : undefined}
           />
 
           {/* Color Picker */}
@@ -54,7 +64,10 @@ export default function AddIdentityScreen() {
               <Pressable
                 key={c}
                 onPress={() => setColor(c)}
-                className="w-10 h-10 rounded-full items-center justify-center"
+                accessibilityRole="button"
+                accessibilityLabel={`${c === color ? 'Selected ' : ''}color ${c}`}
+                accessibilityState={{ selected: color === c }}
+                className="w-11 h-11 rounded-full items-center justify-center"
                 style={{
                   backgroundColor: c,
                   borderWidth: color === c ? 3 : 0,
@@ -80,10 +93,10 @@ export default function AddIdentityScreen() {
             <Pressable
               onPress={handleSave}
               className="flex-1 py-3 rounded-monolith bg-accent items-center active:opacity-70"
-              style={{ opacity: name.trim() ? 1 : 0.5 }}
-              disabled={!name.trim()}
+              style={{ opacity: canSave ? 1 : 0.5 }}
+              disabled={!canSave}
             >
-              <Text className="text-text-inverse font-sans font-semibold">Save</Text>
+              <Text className="text-text-inverse font-sans font-semibold">{existing ? 'Save Changes' : 'Save'}</Text>
             </Pressable>
           </View>
         </ScrollView>
