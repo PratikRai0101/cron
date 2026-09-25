@@ -10,7 +10,7 @@
 
 **Product Philosophy:** Competence-tracking, not engagement-farming. Users are rewarded for meaningful progress, not app usage.
 
-**Current Phase:** Design & planning complete. Moving into active development (screen implementation).
+**Current Phase:** Local-first mobile MVP implementation. iOS Simulator build verified; backend sync, widgets, and release QA remain incomplete.
 
 ---
 
@@ -36,26 +36,22 @@
 
 ### Core Screens (React Native Implementation)
 - [x] Grid screen — contribution grid, identity filter pills, momentum ring, task list, FAB
-- [x] Focus Mode — count-up timer, ring progress, identity picker, pause/stop/cancel
-- [x] Log Task sheet — title, identity selector, time estimate
-- [x] Identity screen — identity cards with mini grids and stats
-- [x] Profile screen — level badge, momentum ring, skill velocity, records, breakdown
-- [x] Settings modal — daily goal, accent color picker, subscription info
+- [x] Focus Mode — count-up timer, ring progress, identity picker, pause/stop/cancel, keep-awake, background elapsed-time recovery
+- [x] Task flows — create/edit/complete/delete, identity selection, estimates, quick time logging
+- [x] Identity screen — local activity grids/stats, add/edit/archive/restore, Free-tier identity limit
+- [x] Profile screen — locally computed focus totals, level, momentum, records, identity breakdown
+- [x] Settings — daily goal, local JSON export, confirmed local-data deletion
+- [ ] Verify every flow with automated UI tests and accessibility audit
 - [x] Onboarding — welcome, set goal, pick identities (seeds identityStore), widget setup, done
 - [x] Retroactive logging — tap/long-press grid cell opens retro-log sheet (FR-4)
 - [x] Add-identity modal — name + color picker, wired to Identity tab "+"
 - [x] Insight card — weekly deep-work hours + delta vs last week, below grid
 
 ### State Management & Data Layer
-- [x] `taskStore` — CRUD operations, persisted via AsyncStorage
-- [x] `identityStore` — identities, seeded from onboarding, persisted via AsyncStorage
-- [x] `focusStore` — drift-free wall-clock timer, sessions persisted via AsyncStorage
-- [x] `userStore` — daily goal, accent color, tier, persisted
-- [x] `appStore` — onboarding state, persisted
-- [x] `logStore` — retro logs per date, persisted
-- [ ] Focus session sync to Supabase
-- [ ] Daily logs aggregation
-- [ ] Offline-first sync implementation (queue flush, conflict resolution)
+- [x] `taskStore`, `identityStore`, `focusStore`, `userStore`, `appStore`, and `logStore` persist locally via AsyncStorage
+- [x] Grid, identity totals, and profile derive from actual local focus sessions and retro logs
+- [ ] Supabase authentication and session sync
+- [ ] Durable offline mutation queue, conflict resolution, and realtime subscriptions
 
 ### Open Design Integration (Complete)
 - [x] Custom `monolith` design system for Open Design
@@ -349,9 +345,9 @@ When generating code for this project:
 
 ## Last Updated
 
-**Date**: 2026-08-02
-**Session**: Retroactive logging (tap/long-press cell → retro-log sheet), add-identity modal, insight card, widget-setup onboarding step
-**Next Session**: Supabase auth + focus session sync, or offline queue
+**Date**: 2026-09-25
+**Session**: iPhone 17 Pro simulator visual audit; fixed card/modal layouts, bundled design fonts, local activity/grid accuracy, identity/task management, focus keep-awake, and local JSON export/data reset. Pushed micro-commits through `f871145`.
+**Next Session**: Agree test seams, add automated tests and lint config, then verify native task/focus/log/export flows and decide whether cloud sync/widgets are in MVP scope.
 
 ---
 
