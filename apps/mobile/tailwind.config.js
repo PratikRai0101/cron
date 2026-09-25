@@ -39,8 +39,8 @@ module.exports = {
         warning: '#ffaa00',
       },
       fontFamily: {
-        mono: ['ui-monospace', 'monospace'],
-        sans: ['system-ui', 'sans-serif'],
+        mono: ['JetBrainsMono_400Regular'],
+        sans: ['PlusJakartaSans_400Regular'],
       },
       fontSize: {
         display: ['48px', { lineHeight: '1.0', fontWeight: '700' }],

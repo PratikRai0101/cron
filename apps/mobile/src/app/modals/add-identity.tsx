@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { Input } from '@/components/ui';
@@ -16,6 +17,7 @@ const IDENTITY_COLORS = [
 ];
 
 export default function AddIdentityScreen() {
+  const insets = useSafeAreaInsets();
   const addIdentity = useIdentityStore((s) => s.addIdentity);
   const [name, setName] = useState('');
   const [color, setColor] = useState(IDENTITY_COLORS[0]);
@@ -30,13 +32,8 @@ export default function AddIdentityScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <View className="flex-1 justify-end">
-        {/* Drag handle */}
-        <View className="items-center py-3">
-          <View className="w-10 h-1 rounded-full bg-border" />
-        </View>
-
-        <ScrollView className="px-5 pb-8">
+      <View className="flex-1">
+        <ScrollView className="px-5" contentContainerStyle={{ paddingTop: insets.top + 20, paddingBottom: insets.bottom + 32 }} keyboardShouldPersistTaps="handled">
           <Text className="text-h2 text-text-primary font-sans mb-6">New Identity</Text>
 
           {/* Name Input */}
@@ -45,7 +42,6 @@ export default function AddIdentityScreen() {
             placeholder="e.g. Music"
             value={name}
             onChangeText={setName}
-            autoFocus
             maxLength={24}
           />
 

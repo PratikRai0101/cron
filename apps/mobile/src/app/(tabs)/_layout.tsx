@@ -1,5 +1,6 @@
-import { Tabs } from 'expo-router';
+import { Tabs, usePathname } from 'expo-router';
 import { View, Text } from 'react-native';
+import { useFocusStore } from '@/stores';
 
 function TabIcon({ icon, focused }: { icon: string; focused: boolean }) {
   return (
@@ -14,11 +15,14 @@ function TabIcon({ icon, focused }: { icon: string; focused: boolean }) {
 }
 
 export default function TabLayout() {
+  const isActive = useFocusStore((s) => s.isActive);
+  const pathname = usePathname();
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
+          display: isActive && pathname === '/focus' ? 'none' : 'flex',
           backgroundColor: '#141414',
           borderTopColor: '#262626',
         },

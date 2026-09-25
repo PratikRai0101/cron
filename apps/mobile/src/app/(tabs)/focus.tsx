@@ -3,24 +3,25 @@ import {
   View,
   Text,
   Pressable,
+  Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useFocusStore } from '@/stores';
+import { useFocusStore, useTaskStore, useUserStore } from '@/stores';
 import { Timer, RingProgress } from '@/components/focus';
 import { IdentityPill } from '@/components/identity';
 import { useIdentities } from '@/hooks/useIdentities';
 import { formatMinutes } from '@monolith/shared';
 import { uid } from '@/lib/id';
 
-const SESSION_GOAL_MINUTES = 60;
-
 export default function FocusTabScreen() {
   const insets = useSafeAreaInsets();
-  const identities = useIdentities();  const {
+  const identities = useIdentities();
+  const {
     isActive,
     isPaused,
     elapsedSeconds,
     currentIdentityId,
+    currentTaskId,
     startFocus,
     pauseFocus,
     resumeFocus,
@@ -58,6 +59,10 @@ export default function FocusTabScreen() {
   }, [isActive, isPaused, startFocus, resumeFocus, pauseFocus]);
 
   const handleStop = useCallback(() => {
+    if (elapsedSeconds < 60) {
+      Alert.alert('Session too short', 'Focus for at least one minute to save a session. Cancel to discard it.');
+      return;
+    }
     const result = stopFocus();
     if (result && result.duration >= 60) {
       const identity = identities.find((i) => i.id === result.identityId);
@@ -71,19 +76,24 @@ export default function FocusTabScreen() {
         completedAt: new Date().toISOString(),
       });
     }
-  }, [stopFocus, logSession]);
+  }, [elapsedSeconds, identities, stopFocus, logSession]);
 
   const handleCancel = useCallback(() => {
-    cancelFocus();
+    Alert.alert('Discard session?', 'Elapsed time will not be saved.', [
+      { text: 'Keep focusing', style: 'cancel' },
+      { text: 'Discard', style: 'destructive', onPress: cancelFocus },
+    ]);
   }, [cancelFocus]);
 
   const currentIdentity = identities.find((i) => i.id === currentIdentityId);
-  const [selectedIdentityId, setSelectedIdentityId] = useState(identities[0].id);
-  const selectedIdentity = identities.find((i) => i.id === selectedIdentityId) || identities[0];
+  const taskTitle = useTaskStore((s) => s.tasks.find((t) => t.id === currentTaskId)?.title);
+  const sessionGoal = useUserStore((s) => s.dailyGoalMinutes);
+  const [selectedIdentityId, setSelectedIdentityId] = useState<string | null>(null);
+  const identityToStart = identities.find((i) => i.id === selectedIdentityId) ?? identities[0];
 
   const handleStartWithIdentity = useCallback(() => {
-    startFocus(selectedIdentityId);
-  }, [selectedIdentityId, startFocus]);
+    if (identityToStart) startFocus(identityToStart.id);
+  }, [identityToStart, startFocus]);
 
   // If no active session, show idle state with start prompt
   if (!isActive) {
@@ -100,7 +110,7 @@ export default function FocusTabScreen() {
                 key={identity.id}
                 name={identity.name}
                 color={identity.color}
-                active={selectedIdentityId === identity.id}
+                active={identityToStart?.id === identity.id}
                 onPress={() => setSelectedIdentityId(identity.id)}
               />
             ))}
@@ -112,12 +122,15 @@ export default function FocusTabScreen() {
 
         {/* Hint */}
         <Text className="text-caption text-text-tertiary uppercase mt-4 font-sans">
-          Tap to start
+          Press play to start
         </Text>
 
         {/* Start Button */}
         <Pressable
           onPress={handleStartWithIdentity}
+          disabled={!identityToStart}
+          accessibilityRole="button"
+          accessibilityLabel="Start focus session"
           className="mt-12 w-20 h-20 rounded-full bg-accent items-center justify-center active:scale-[0.97]"
         >
           <Text className="text-text-inverse text-2xl font-mono">▶</Text>
@@ -147,7 +160,7 @@ export default function FocusTabScreen() {
       {/* Timer with Ring */}
       <Pressable onPress={handleStart}>
         <RingProgress
-          progress={Math.min(elapsedSeconds / (SESSION_GOAL_MINUTES * 60), 1)}
+          progress={Math.min(elapsedSeconds / (sessionGoal * 60), 1)}
           size={220}
           strokeWidth={6}
         >
@@ -155,9 +168,9 @@ export default function FocusTabScreen() {
         </RingProgress>
       </Pressable>
 
-      {/* Task name placeholder */}
+      {taskTitle && <Text className="text-body text-text-primary mt-3 font-sans" numberOfLines={2}>{taskTitle}</Text>}
       <Text className="text-body-sm text-text-secondary mt-2 font-sans">
-        {formatMinutes(Math.floor(elapsedSeconds / 60))} / {SESSION_GOAL_MINUTES}m
+        {formatMinutes(Math.floor(elapsedSeconds / 60))} / {sessionGoal}m
       </Text>
 
       {/* Controls */}
@@ -165,16 +178,20 @@ export default function FocusTabScreen() {
         {/* Pause / Resume */}
         <Pressable
           onPress={handleStart}
+          accessibilityRole="button"
+          accessibilityLabel={isPaused ? 'Resume focus' : 'Pause focus'}
           className="w-11 h-11 rounded-full border border-border items-center justify-center active:scale-[0.97]"
         >
           <Text className="text-text-primary text-sm font-mono">
-            {isPaused ? '▶' : '⏸'}
+            {isPaused ? '▶' : 'Ⅱ'}
           </Text>
         </Pressable>
 
         {/* Stop */}
         <Pressable
           onPress={handleStop}
+          accessibilityRole="button"
+          accessibilityLabel="Save and end focus session"
           className="w-16 h-16 rounded-full bg-accent items-center justify-center active:scale-[0.97]"
         >
           <Text className="text-text-inverse text-lg font-mono">■</Text>
@@ -183,16 +200,15 @@ export default function FocusTabScreen() {
         {/* Cancel */}
         <Pressable
           onPress={handleCancel}
+          accessibilityRole="button"
+          accessibilityLabel="Discard focus session"
           className="w-11 h-11 rounded-full border border-border items-center justify-center active:scale-[0.97]"
         >
           <Text className="text-text-secondary text-sm font-sans">✕</Text>
         </Pressable>
       </View>
 
-      {/* Cancel hint */}
-      <Text className="absolute bottom-8 text-caption text-text-tertiary font-sans">
-        Swipe up to cancel
-      </Text>
+
     </View>
   );
 }

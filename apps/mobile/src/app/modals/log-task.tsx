@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { Input } from '@/components/ui';
@@ -6,23 +7,26 @@ import { useTaskStore } from '@/stores';
 import { useIdentities } from '@/hooks/useIdentities';
 
 export default function LogTaskScreen() {
+  const insets = useSafeAreaInsets();
   const identities = useIdentities();
   const [title, setTitle] = useState('');
-  const [selectedIdentityId, setSelectedIdentityId] = useState(identities[0].id);
+  const [selectedIdentityId, setSelectedIdentityId] = useState<string | null>(null);
   const [estimatedMinutes, setEstimatedMinutes] = useState('');
   const addTask = useTaskStore((s) => s.addTask);
 
-  const selectedIdentity = identities.find((i) => i.id === selectedIdentityId);
+  const selectedIdentity = identities.find((i) => i.id === selectedIdentityId) ?? identities[0];
+  const estimate = estimatedMinutes ? Number(estimatedMinutes) : undefined;
+  const canSave = !!title.trim() && !!selectedIdentity && (estimate === undefined || (Number.isInteger(estimate) && estimate > 0 && estimate <= 720));
 
   const handleSave = () => {
-    if (!title.trim()) return;
+    if (!canSave || !selectedIdentity) return;
 
     addTask({
       title: title.trim(),
-      identityId: selectedIdentityId,
-      identityName: selectedIdentity?.name || 'Focus',
-      identityColor: selectedIdentity?.color || '#ffffff',
-      estimatedMinutes: estimatedMinutes ? parseInt(estimatedMinutes, 10) : undefined,
+      identityId: selectedIdentity.id,
+      identityName: selectedIdentity.name,
+      identityColor: selectedIdentity.color,
+      estimatedMinutes: estimate,
     });
 
     router.back();
@@ -30,14 +34,9 @@ export default function LogTaskScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <View className="flex-1 justify-end">
-        {/* Drag handle */}
-        <View className="items-center py-3">
-          <View className="w-10 h-1 rounded-full bg-border" />
-        </View>
-
-        <ScrollView className="px-5 pb-8">
-          <Text className="text-h2 text-text-primary font-sans mb-6">Log Task</Text>
+      <View className="flex-1">
+        <ScrollView className="px-5" contentContainerStyle={{ paddingTop: insets.top + 20, paddingBottom: insets.bottom + 32 }} keyboardShouldPersistTaps="handled">
+          <Text className="text-h2 text-text-primary font-sans mb-6">New Task</Text>
 
           {/* Title Input */}
           <Input
@@ -45,7 +44,7 @@ export default function LogTaskScreen() {
             placeholder="What are you working on?"
             value={title}
             onChangeText={setTitle}
-            autoFocus
+            maxLength={100}
           />
 
           {/* Identity Picker */}
@@ -61,7 +60,7 @@ export default function LogTaskScreen() {
                 style={{
                   borderColor: `${identity.color}4D`,
                   backgroundColor:
-                    selectedIdentityId === identity.id
+                    selectedIdentity?.id === identity.id
                       ? `${identity.color}26`
                       : 'transparent',
                 }}
@@ -70,7 +69,7 @@ export default function LogTaskScreen() {
                   className="text-caption uppercase font-sans"
                   style={{
                     color:
-                      selectedIdentityId === identity.id
+                      selectedIdentity?.id === identity.id
                         ? identity.color
                         : '#737373',
                   }}
@@ -82,14 +81,13 @@ export default function LogTaskScreen() {
           </View>
 
           {/* Estimated Time Input */}
-          <Input
+          <View className="mt-6"><Input
             label="Estimated time (minutes)"
             placeholder="e.g. 30"
             value={estimatedMinutes}
             onChangeText={setEstimatedMinutes}
             keyboardType="number-pad"
-            className="mt-6"
-          />
+          /></View>
 
           {/* Actions */}
           <View className="flex-row gap-3 mt-8">
@@ -102,8 +100,8 @@ export default function LogTaskScreen() {
             <Pressable
               onPress={handleSave}
               className="flex-1 py-3 rounded-monolith bg-accent items-center active:opacity-70"
-              style={{ opacity: title.trim() ? 1 : 0.5 }}
-              disabled={!title.trim()}
+              style={{ opacity: canSave ? 1 : 0.5 }}
+              disabled={!canSave}
             >
               <Text className="text-text-inverse font-sans font-semibold">Save</Text>
             </Pressable>
