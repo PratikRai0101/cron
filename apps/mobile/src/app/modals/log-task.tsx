@@ -15,6 +15,7 @@ export default function LogTaskScreen() {
   const [title, setTitle] = useState(task?.title ?? '');
   const [selectedIdentityId, setSelectedIdentityId] = useState<string | null>(task?.identityId ?? null);
   const [estimatedMinutes, setEstimatedMinutes] = useState(task?.estimatedMinutes?.toString() ?? '');
+  const [recurrenceRule, setRecurrenceRule] = useState(task?.recurrenceRule ?? '');
   const addTask = useTaskStore((s) => s.addTask);
   const updateTask = useTaskStore((s) => s.updateTask);
 
@@ -31,6 +32,7 @@ export default function LogTaskScreen() {
       identityName: selectedIdentity.name,
       identityColor: selectedIdentity.color,
       estimatedMinutes: estimate,
+      recurrenceRule: recurrenceRule || undefined,
     };
     if (task) updateTask(task.id, fields);
     else addTask({ ...fields, dueDate: formatDate(new Date()) });
@@ -94,6 +96,26 @@ export default function LogTaskScreen() {
             onChangeText={setEstimatedMinutes}
             keyboardType="number-pad"
           /></View>
+
+          <Text className="text-caption text-text-secondary uppercase font-sans mt-6 mb-3">Repeat</Text>
+          <View className="flex-row gap-2 flex-wrap">
+            {[
+              { label: 'Never', value: '' },
+              { label: 'Daily', value: 'FREQ=DAILY' },
+              { label: 'Weekly', value: 'FREQ=WEEKLY' },
+              { label: 'Monthly', value: 'FREQ=MONTHLY' },
+            ].map((option) => (
+              <Pressable
+                key={option.value || 'never'}
+                onPress={() => setRecurrenceRule(option.value)}
+                accessibilityRole="button"
+                accessibilityState={{ selected: recurrenceRule === option.value }}
+                className={`rounded-full px-4 py-2 border ${recurrenceRule === option.value ? 'border-accent bg-surface' : 'border-border'}`}
+              >
+                <Text className={`text-caption font-sans ${recurrenceRule === option.value ? 'text-accent' : 'text-text-secondary'}`}>{option.label}</Text>
+              </Pressable>
+            ))}
+          </View>
 
           {/* Actions */}
           <View className="flex-row gap-3 mt-8">

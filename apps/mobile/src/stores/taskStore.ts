@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { uid } from '@/lib/id';
+import { formatDate } from '@monolith/shared';
 
 export interface TaskItem {
   id: string;
@@ -13,13 +14,35 @@ export interface TaskItem {
   completed: boolean;
   createdAt: string;
   dueDate?: string;
+  recurrenceRule?: string;
+  recurringSourceId?: string;
+}
+
+function getNextRecurringDate(date: string, rule: string): string | null {
+  const parts = Object.fromEntries(rule.split(';').map((part) => part.split('=')));
+  const interval = Number(parts.INTERVAL ?? 1);
+  if (!Number.isInteger(interval) || interval < 1 || interval > 365) return null;
+
+  const next = new Date(`${date}T12:00:00`);
+  if (!Number.isFinite(next.getTime())) return null;
+  if (parts.FREQ === 'DAILY') next.setDate(next.getDate() + interval);
+  else if (parts.FREQ === 'WEEKLY') next.setDate(next.getDate() + 7 * interval);
+  else if (parts.FREQ === 'MONTHLY') {
+    const day = next.getDate();
+    next.setDate(1);
+    next.setMonth(next.getMonth() + interval);
+    const lastDay = new Date(next.getFullYear(), next.getMonth() + 1, 0).getDate();
+    next.setDate(Math.min(day, lastDay));
+  } else return null;
+
+  return formatDate(next);
 }
 
 interface TaskState {
   tasks: TaskItem[];
   addTask: (task: Omit<TaskItem, 'id' | 'completed' | 'createdAt'>) => void;
   toggleTask: (id: string) => void;
-  updateTask: (id: string, patch: Partial<Pick<TaskItem, 'title' | 'identityId' | 'identityName' | 'identityColor' | 'estimatedMinutes' | 'dueDate'>>) => void;
+  updateTask: (id: string, patch: Partial<Pick<TaskItem, 'title' | 'identityId' | 'identityName' | 'identityColor' | 'estimatedMinutes' | 'dueDate' | 'recurrenceRule'>>) => void;
   deleteTask: (id: string) => void;
   getTasksForIdentity: (identityId: string) => TaskItem[];
 }
@@ -34,7 +57,9 @@ export const useTaskStore = create<TaskState>()(
           const title = task.title.trim();
           const estimateIsValid = task.estimatedMinutes === undefined ||
             (Number.isInteger(task.estimatedMinutes) && task.estimatedMinutes > 0 && task.estimatedMinutes <= 720);
-          if (!title || title.length > 100 || !task.identityId || !estimateIsValid) return state;
+          const recurrenceIsValid = task.recurrenceRule === undefined ||
+            getNextRecurringDate(task.dueDate ?? formatDate(new Date()), task.recurrenceRule) !== null;
+          if (!title || title.length > 100 || !task.identityId || !estimateIsValid || !recurrenceIsValid) return state;
           return {
             tasks: [
               {
@@ -50,11 +75,23 @@ export const useTaskStore = create<TaskState>()(
         }),
 
       toggleTask: (id) =>
-        set((state) => ({
-          tasks: state.tasks.map((t) =>
-            t.id === id ? { ...t, completed: !t.completed } : t
-          ),
-        })),
+        set((state) => {
+          const target = state.tasks.find((task) => task.id === id);
+          if (!target) return state;
+          const completing = !target.completed;
+          const tasks = state.tasks.map((task) =>
+            task.id === id ? { ...task, completed: completing } : task
+          );
+          if (!completing || !target.recurrenceRule) return { tasks };
+          const nextDueDate = getNextRecurringDate(target.dueDate ?? formatDate(new Date()), target.recurrenceRule);
+          if (!nextDueDate || tasks.some((task) => task.recurringSourceId === target.id && task.dueDate === nextDueDate)) return { tasks };
+          return {
+            tasks: [
+              { ...target, id: uid('task-'), dueDate: nextDueDate, completed: false, createdAt: new Date().toISOString(), recurringSourceId: target.id },
+              ...tasks,
+            ],
+          };
+        }),
 
       updateTask: (id, patch) =>
         set((state) => {
@@ -64,7 +101,11 @@ export const useTaskStore = create<TaskState>()(
           const estimate = patch.estimatedMinutes === undefined ? existing.estimatedMinutes : patch.estimatedMinutes;
           const estimateIsValid = estimate === undefined ||
             (Number.isInteger(estimate) && estimate > 0 && estimate <= 720);
-          if (!title || title.length > 100 || !estimateIsValid) return state;
+          const recurrenceRule = patch.recurrenceRule ?? existing.recurrenceRule;
+          const dueDate = patch.dueDate ?? existing.dueDate ?? formatDate(new Date());
+          const recurrenceIsValid = recurrenceRule === undefined ||
+            getNextRecurringDate(dueDate, recurrenceRule) !== null;
+          if (!title || title.length > 100 || !estimateIsValid || !recurrenceIsValid) return state;
           return {
             tasks: state.tasks.map((task) => task.id === id ? { ...task, ...patch, title } : task),
           };

@@ -37,7 +37,7 @@
 ### Core Screens (React Native Implementation)
 - [x] Grid screen — contribution grid, identity filter pills, momentum ring, task list, FAB
 - [x] Focus Mode — count-up timer, ring progress, identity picker, pause/stop/cancel, keep-awake, background elapsed-time recovery
-- [x] Task flows — create/edit/complete/delete, identity selection, estimates, quick time logging
+- [x] Task flows — create/edit/complete/delete, identity selection, estimates, quick time logging, daily/weekly/monthly recurrence
 - [x] Identity screen — local activity grids/stats, add/edit/archive/restore, Free-tier identity limit
 - [x] Profile screen — locally computed focus totals, level, momentum, records, identity breakdown
 - [x] Settings — daily goal, local JSON export, confirmed local-data deletion
@@ -346,8 +346,8 @@ When generating code for this project:
 ## Last Updated
 
 **Date**: 2026-09-25
-**Session**: iPhone 17 Pro simulator audit; corrected layouts/fonts/data flows, identity/task management, focus keep-awake, local JSON export/reset, and local-calendar date handling. Added store/date tests and ESLint config. Pushed micro-commits through `f9d9330`.
-**Next Session**: Add UI-level simulator coverage and accessibility checks; decide whether auth/sync and native widgets are required for the MVP release.
+**Session**: iPhone 17 Pro simulator audit; corrected layouts/fonts/data flows, identity/task management, focus keep-awake, local JSON export/reset, and local-calendar date handling. Added store/date tests, ESLint config, and daily/weekly/monthly recurring tasks. Latest pushed commit before this session: `10214c5`.
+**Next Session**: Build Supabase auth/offline sync and native widget support; then finish notifications, billing, social, and desktop features before release QA.
 
 ---
 
