@@ -30,17 +30,24 @@ export const useTaskStore = create<TaskState>()(
       tasks: [],
 
       addTask: (task) =>
-        set((state) => ({
-          tasks: [
-            {
-              ...task,
-              id: uid('task-'),
-              completed: false,
-              createdAt: new Date().toISOString(),
-            },
-            ...state.tasks,
-          ],
-        })),
+        set((state) => {
+          const title = task.title.trim();
+          const estimateIsValid = task.estimatedMinutes === undefined ||
+            (Number.isInteger(task.estimatedMinutes) && task.estimatedMinutes > 0 && task.estimatedMinutes <= 720);
+          if (!title || title.length > 100 || !task.identityId || !estimateIsValid) return state;
+          return {
+            tasks: [
+              {
+                ...task,
+                title,
+                id: uid('task-'),
+                completed: false,
+                createdAt: new Date().toISOString(),
+              },
+              ...state.tasks,
+            ],
+          };
+        }),
 
       toggleTask: (id) =>
         set((state) => ({
@@ -50,7 +57,18 @@ export const useTaskStore = create<TaskState>()(
         })),
 
       updateTask: (id, patch) =>
-        set((state) => ({ tasks: state.tasks.map((task) => task.id === id ? { ...task, ...patch, title: patch.title?.trim() ?? task.title } : task) })),
+        set((state) => {
+          const existing = state.tasks.find((task) => task.id === id);
+          if (!existing) return state;
+          const title = patch.title === undefined ? existing.title : patch.title.trim();
+          const estimate = patch.estimatedMinutes === undefined ? existing.estimatedMinutes : patch.estimatedMinutes;
+          const estimateIsValid = estimate === undefined ||
+            (Number.isInteger(estimate) && estimate > 0 && estimate <= 720);
+          if (!title || title.length > 100 || !estimateIsValid) return state;
+          return {
+            tasks: state.tasks.map((task) => task.id === id ? { ...task, ...patch, title } : task),
+          };
+        }),
 
       deleteTask: (id) =>
         set((state) => ({

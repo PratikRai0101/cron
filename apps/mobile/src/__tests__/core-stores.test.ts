@@ -44,9 +44,12 @@ describe('task store', () => {
     });
 
     let [task] = useTaskStore.getState().tasks;
-    expect(task.title).toBe('  Review pull requests  ');
+    expect(task.title).toBe('Review pull requests');
     expect(task.completed).toBe(false);
     expect(task.dueDate).toBe('2026-09-25');
+    tasks.addTask({ title: '   ', identityId: 'identity-code', identityName: 'Code', identityColor: '#fff' });
+    tasks.addTask({ title: 'Invalid estimate', identityId: 'identity-code', identityName: 'Code', identityColor: '#fff', estimatedMinutes: 721 });
+    expect(useTaskStore.getState().tasks).toHaveLength(1);
 
     tasks.updateTask(task.id, { title: '  Merge pull requests  ', estimatedMinutes: 45 });
     task = useTaskStore.getState().tasks[0];
