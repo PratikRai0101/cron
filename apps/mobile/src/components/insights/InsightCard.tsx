@@ -29,12 +29,12 @@ export function InsightCard({ thisWeekMinutes, lastWeekMinutes }: InsightCardPro
   }
 
   return (
-    <Card className="mx-5 p-4">
+    <View className="px-5"><Card>
       <Text className="text-caption text-text-secondary uppercase font-sans">INSIGHT</Text>
       <Text className="text-body text-text-primary font-sans mt-1">{body}</Text>
       {meta && (
         <Text className="text-body-sm text-text-tertiary font-sans mt-0.5">{meta}</Text>
       )}
-    </Card>
+    </Card></View>
   );
 }

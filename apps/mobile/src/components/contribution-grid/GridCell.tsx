@@ -4,6 +4,9 @@ import type { GridIntensity } from '@monolith/shared';
 
 interface GridCellProps {
   intensity: GridIntensity;
+  date: string;
+  minutes: number;
+  disabled?: boolean;
   isToday?: boolean;
   size?: number;
   gap?: number;
@@ -13,6 +16,9 @@ interface GridCellProps {
 
 export function GridCell({
   intensity,
+  date,
+  minutes,
+  disabled = false,
   isToday = false,
   size = 12,
   gap = 3,
@@ -21,6 +27,9 @@ export function GridCell({
 }: GridCellProps) {
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`${date}, ${minutes} minutes of focus${isToday ? ', today' : ''}`}
+      disabled={disabled || (!onPress && !onLongPress)}
       onPress={onPress}
       onLongPress={onLongPress}
       style={{
@@ -29,8 +38,8 @@ export function GridCell({
         margin: gap / 2,
         borderRadius: 2,
         backgroundColor: getGridColor(intensity),
-        borderWidth: isToday ? 1 : 0,
-        borderColor: '#ffffff',
+        borderWidth: isToday ? 1 : intensity === 0 ? 0.5 : 0,
+        borderColor: isToday ? '#ffffff' : '#303030',
       }}
     />
   );

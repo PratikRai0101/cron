@@ -1,8 +1,9 @@
+import { useRef } from 'react';
 import { View, ScrollView, Text } from 'react-native';
 import { GridCell } from './GridCell';
 import { getGridIntensity } from '@monolith/shared';
 import type { GridIntensity } from '@monolith/shared';
-import { addDays, formatDate } from '@monolith/shared';
+import { formatDate } from '@monolith/shared';
 
 interface DayData {
   date: string;
@@ -30,10 +31,10 @@ export function ContributionGrid({
   onCellPress,
   onCellLongPress,
 }: ContributionGridProps) {
+  const scrollRef = useRef<ScrollView>(null);
   const today = new Date();
-  const endDate = today;
   const startDate = new Date(today);
-  startDate.setDate(startDate.getDate() - weeksToShow * 7 + 6);
+  startDate.setDate(startDate.getDate() - startDate.getDay() - (weeksToShow - 1) * 7);
 
   // Build a map for quick lookup
   const dataMap = new Map<string, number>();
@@ -44,8 +45,6 @@ export function ContributionGrid({
   let currentWeek: { date: string; intensity: GridIntensity; isToday: boolean }[] = [];
 
   const current = new Date(startDate);
-  // Align to Sunday
-  current.setDate(current.getDate() - current.getDay());
 
   const totalDays = weeksToShow * 7;
 
@@ -75,7 +74,7 @@ export function ContributionGrid({
   weeks.forEach((week, weekIndex) => {
     const firstDay = week[0];
     if (firstDay) {
-      const d = new Date(firstDay.date);
+      const d = new Date(`${firstDay.date}T12:00:00`);
       const month = d.getMonth();
       if (month !== lastMonth) {
         monthLabelPositions.push({ label: MONTH_LABELS[month], index: weekIndex });
@@ -85,7 +84,8 @@ export function ContributionGrid({
   });
 
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+    <ScrollView ref={scrollRef} horizontal showsHorizontalScrollIndicator={false}
+      onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: false })}>
       <View>
         {/* Month labels */}
         <View className="flex-row mb-1" style={{ paddingLeft: gap / 2 }}>
@@ -118,8 +118,11 @@ export function ContributionGrid({
                   isToday={day.isToday}
                   size={cellSize}
                   gap={gap}
-                  onPress={() => onCellPress?.(day.date, dataMap.get(day.date) || 0)}
-                  onLongPress={() => onCellLongPress?.(day.date, dataMap.get(day.date) || 0)}
+                  date={day.date}
+                  minutes={dataMap.get(day.date) || 0}
+                  disabled={day.date > formatDate(today)}
+                  onPress={onCellPress ? () => onCellPress(day.date, dataMap.get(day.date) || 0) : undefined}
+                  onLongPress={onCellLongPress ? () => onCellLongPress(day.date, dataMap.get(day.date) || 0) : undefined}
                 />
               ))}
             </View>
