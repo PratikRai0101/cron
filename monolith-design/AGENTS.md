@@ -346,7 +346,7 @@ When generating code for this project:
 ## Last Updated
 
 **Date**: 2026-09-25
-**Session**: Added daily/weekly/monthly recurring tasks and optional Supabase email accounts. Resolved the Xcode 27 DeviceHub/Expo CLI mismatch for local development, added the dev client and iOS 15.1 Pod target override, and launched the app in the iPhone 17 Pro simulator.
+**Session**: Added recurring tasks and optional Supabase email accounts. Added Xcode 27 DeviceHub support for local development. Fixed onboarding so Free setup selects exactly one identity, raised identity option contrast, and constrained daily goals to 15–240 minutes.
 **Next Session**: Implement cloud/offline sync, then native widgets, notifications, billing, social, and desktop features before release QA.
 
 ---

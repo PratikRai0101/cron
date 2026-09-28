@@ -17,16 +17,7 @@ export default function PickIdentitiesScreen() {
   const [selected, setSelected] = useState<Set<string>>(new Set(FALLBACK_IDS));
 
   const toggle = useCallback((id: string) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        if (next.size === 1) return prev;
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
+    setSelected((previous) => previous.has(id) ? previous : new Set([id]));
   }, []);
 
   const commit = useCallback((ids: string[]) => {
@@ -68,6 +59,9 @@ export default function PickIdentitiesScreen() {
             <Pressable
               key={identity.id}
               onPress={() => toggle(identity.id)}
+              accessibilityRole="radio"
+              accessibilityState={{ selected: isSelected }}
+              accessibilityLabel={`${identity.name}. ${identity.description}`}
               className="flex-row items-center p-4 rounded-monolith border"
               style={{
                 borderColor: isSelected ? identity.color : '#262626',
@@ -90,11 +84,11 @@ export default function PickIdentitiesScreen() {
               <View className="flex-1">
                 <Text
                   className="text-body font-sans"
-                  style={{ color: isSelected ? '#f5f5f0' : '#737373' }}
+                  style={{ color: isSelected ? '#f5f5f0' : '#a3a3a3' }}
                 >
                   {identity.name}
                 </Text>
-                <Text className="text-caption text-text-tertiary font-sans mt-0.5">
+                <Text className="text-caption text-text-secondary font-sans mt-0.5">
                   {identity.description}
                 </Text>
               </View>

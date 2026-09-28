@@ -8,7 +8,7 @@ export default function SetGoalScreen() {
   const setDailyGoal = useUserStore((s) => s.setDailyGoal);
 
   const adjustGoal = useCallback((delta: number) => {
-    setGoal((g) => Math.max(15, Math.min(480, g + delta)));
+    setGoal((g) => Math.max(15, Math.min(240, g + delta)));
   }, []);
 
   const handleNext = useCallback(() => {
@@ -36,16 +36,24 @@ export default function SetGoalScreen() {
       <View className="flex-row items-center justify-center mt-10 gap-8">
         <Pressable
           onPress={() => adjustGoal(-15)}
+          accessibilityRole="button"
+          accessibilityLabel="Decrease daily goal by 15 minutes"
+          accessibilityState={{ disabled: goal <= 15 }}
+          disabled={goal <= 15}
           className="w-12 h-12 rounded-full border border-border items-center justify-center active:opacity-70"
         >
           <Text className="text-text-primary text-xl font-mono">−</Text>
         </Pressable>
         <View className="items-center">
           <Text className="text-display text-text-primary font-mono">{goal}</Text>
-          <Text className="text-caption text-text-tertiary uppercase font-sans mt-1">min/day</Text>
+          <Text className="text-caption text-text-secondary uppercase font-sans mt-1">min/day</Text>
         </View>
         <Pressable
           onPress={() => adjustGoal(15)}
+          accessibilityRole="button"
+          accessibilityLabel="Increase daily goal by 15 minutes"
+          accessibilityState={{ disabled: goal >= 240 }}
+          disabled={goal >= 240}
           className="w-12 h-12 rounded-full border border-border items-center justify-center active:opacity-70"
         >
           <Text className="text-text-primary text-xl font-mono">+</Text>
