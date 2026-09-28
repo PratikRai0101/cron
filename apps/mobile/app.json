@@ -17,6 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "deploymentTarget": "15.1",
       "bundleIdentifier": "app.monolith",
       "buildNumber": "0.1.0",
       "infoPlist": {
@@ -43,7 +44,16 @@
       "expo-background-fetch",
       "expo-task-manager",
       "expo-font",
-      "expo-router"
+      "expo-router",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "15.1"
+          }
+        }
+      ],
+      "./plugins/with-ios-pod-target"
     ],
     "experiments": {
       "typedRoutes": true
