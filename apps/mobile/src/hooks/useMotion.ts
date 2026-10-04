@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AccessibilityInfo, Animated } from "react-native";
 
 export function useReducedMotion() {
@@ -25,7 +25,7 @@ export function useReducedMotion() {
 
 export function useSpringValue(target: number, native = true) {
   const reduced = useReducedMotion();
-  const value = useRef(new Animated.Value(target)).current;
+  const [value] = useState(() => new Animated.Value(target));
   useEffect(() => {
     value.stopAnimation();
     if (reduced) value.setValue(target);

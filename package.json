@@ -2,7 +2,7 @@
   "name": "monolith",
   "private": true,
   "version": "0.1.0",
-  "description": "Monolith — Minimalist competence tracker with gamified productivity",
+  "description": "Monolith \u2014 Minimalist competence tracker with gamified productivity",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -25,11 +25,8 @@
     "turbo": "^2.0.0",
     "typescript": "^5.4.0"
   },
-  "dependencies": {
-    "react-native-worklets": "0.5.1"
-  },
   "packageManager": "npm@10.2.4",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.13.0"
   }
 }

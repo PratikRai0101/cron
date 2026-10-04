@@ -1,4 +1,4 @@
-// Central Strata roles shared by NativeWind and React consumers. SDK54 hex fallback.
+// Central Strata roles shared by NativeWind and React consumers. Cross-platform hex roles.
 const light = {
   background: "#F1F4F3",
   secondaryBackground: "#E5ECEE",

@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Animated, type TextProps } from "react-native";
-import { styled } from "nativewind";
+import { cssInterop } from "nativewind";
 import { useReducedMotion } from "@/hooks/useMotion";
-const MotionText = styled(Animated.Text);
+const MotionText = Animated.Text;
+cssInterop(MotionText, { className: "style" });
 export function AnimatedTotal({
   value,
   animateOnMount = false,
@@ -14,8 +15,8 @@ export function AnimatedTotal({
 }) {
   const reduced = useReducedMotion();
   const previous = useRef<number | null>(animateOnMount ? null : value);
-  const opacity = useRef(new Animated.Value(1)).current;
-  const offset = useRef(new Animated.Value(0)).current;
+  const [opacity] = useState(() => new Animated.Value(1));
+  const [offset] = useState(() => new Animated.Value(0));
   useEffect(() => {
     if (previous.current === value) {
       offset.setValue(0);

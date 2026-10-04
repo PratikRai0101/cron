@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, type ReactNode } from "react";
 import { useColorScheme } from "react-native";
-import { NativeWindStyleSheet } from "nativewind";
+import { colorScheme } from "nativewind";
 import { useAppStore } from "@/stores";
 import { getColors } from "./colors";
 const Context = createContext<{
@@ -14,7 +14,7 @@ export function ColorsProvider({ children }: { children: ReactNode }) {
     preference === "system" ? system === "dark" : preference === "dark";
   // An explicit scheme dependency re-renders SVGs and navigation as well as text.
   useEffect(() => {
-    NativeWindStyleSheet.setColorScheme(dark ? "dark" : "light");
+    colorScheme.set(dark ? "dark" : "light");
     if (typeof document !== "undefined")
       document.documentElement.classList.toggle("dark", dark);
   }, [dark]);

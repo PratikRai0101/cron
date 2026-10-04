@@ -49,3 +49,19 @@ Validation: TypeScript/lint pass; existing22tests pass. Isolated3x browser captu
 
 ## Expo Go verification — 2026-10-05
 The earlier custom-client requirement was too strict: GlassEffect is included in Expo Go. Added `npm run go` (explicit `expo start --go`) and tested official SDK54 Expo Go54.0.7 on the QA simulator. Onboarding skip reaches the actual Strata core screen; no missing-native-module failure. Capture: expo-go.png. Expo Go uses separate storage; development-client records preserved. No SDK upgrade or UI fallback rewrite needed. Xcode27 Device Hub is not recognized by SDK54 CLI’s iOS launcher, so this Mac uses simctl to open the already-installed Expo Go app; details in RUN.md. Physical phone QR connectivity unverified.
+
+## SDK 57 migration — 2026-10-05
+
+Upgraded the approved Strata branch from Expo54 to Expo57.0.26, React Native0.86.3 and React19.2.3. Expo modules, Reanimated4.5.1, Worklets0.10.1, Gesture Handler2.32, TypeScript6 and Jest Expo57 are aligned. Root Worklets0.5 dependency removed. NativeWind2 migrated to4 with shared Metro CSS, class-based themes, colorScheme and cssInterop for animated controls. Stable Animated.Value instances use lazy state to satisfy current React lint rules; their timing and reduced-motion behavior are preserved. Tab-bar types are derived from Expo Router, which now carries its own navigation types.
+
+Splash configuration moved to its native plugin; obsolete pod-target workaround removed. iOS minimum16.4 and scene support enabled for Xcode27/iOS27. Previous ignored native folders were backed up outside the repository before regeneration. Local app storage was not cleared.
+
+Supabase2.106.0 currently leaves a webpackIgnore dynamic import for OpenTelemetry in the native bundle. Hermes rejects it during bytecode generation. Pinning Supabase to~2.105.0 avoids this issue; revisit the pin when a compatible upstream release is available. No auth or storage schema changes.
+
+Validation: Expo Doctor21/21; all22tests across3suites; TypeScript and ESLint pass; production iOS Hermes and web exports pass. Expo Go57.0.9 visibly reports SDK57.0.0 and renders Strata on iPhone17Pro/iOS26.5. Navigation, Settings dark preference and Focus start checked in the actual runtime. Physical phone connection, Android runtime, and physical haptic feel remain unverified. Run instructions: RUN.md. Native build result and final session verification recorded below.
+
+Runtime loop confirmed: a real~1min Focus session in Expo Go advances the outlined draft, saves exactly1min and1layer on Finish, and displays Recorded with the exact total. Dark capture: expo-go-sdk57.png. Existing native-development-client records remain in their separate sandbox.
+
+Final build checks: Android Hermes export passed as well. Fresh Xcode27 Debug simulator build succeeded from the regenerated SDK57 iOS project (`/tmp/strata-sdk57-build/Build/Products/Debug-iphonesimulator/Monolith.app`), and installed over the existing QA development client without uninstalling/clearing its data. All22tests and Expo Doctor21/21 passed again after the Supabase pin. Theme preference in the Expo Go QA sandbox was restored to System after verification.
+
+Rebuilt development client also launches with runtime exposdk:57.0.0. Its existing78records/3082saved minutes and3tasks are present after installing the upgrade; no data reset. Expo Go remains the preferred launch mode at port8087.

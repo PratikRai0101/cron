@@ -7,17 +7,11 @@
     "icon": "./assets/images/icon.png",
     "scheme": "monolith",
     "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#F1F4F3"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true,
-      "deploymentTarget": "15.1",
       "bundleIdentifier": "app.monolith",
       "buildNumber": "0.1.0",
       "infoPlist": {
@@ -49,11 +43,19 @@
         "expo-build-properties",
         {
           "ios": {
-            "deploymentTarget": "15.1"
+            "deploymentTarget": "16.4",
+            "enableSceneSupport": true
           }
         }
       ],
-      "./plugins/with-ios-pod-target"
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#F1F4F3"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

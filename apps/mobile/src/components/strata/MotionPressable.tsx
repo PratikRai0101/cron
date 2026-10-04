@@ -6,9 +6,10 @@ import {
   type StyleProp,
   type ViewStyle,
 } from "react-native";
-import { styled } from "nativewind";
+import { cssInterop } from "nativewind";
 import { useReducedMotion, useSpringValue } from "@/hooks/useMotion";
-const AnimatedPressable = styled(Animated.createAnimatedComponent(Pressable));
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+cssInterop(AnimatedPressable, { className: "style" });
 type Props = Omit<PressableProps, "style"> & {
   className?: string;
   style?: StyleProp<ViewStyle>;

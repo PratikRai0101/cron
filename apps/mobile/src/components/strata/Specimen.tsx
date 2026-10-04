@@ -1,7 +1,7 @@
 import * as Haptics from "expo-haptics";
 import Svg, { G, Path } from "react-native-svg";
 import { Animated, AccessibilityInfo } from "react-native";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useColors } from "@/theme/ThemeContext";
 import { buildStrata, layerPaths, type Stratum } from "@/lib/strata";
 interface SpecimenProps {
@@ -27,8 +27,8 @@ export function Specimen({
   );
   const newest = rock.layers.at(-1);
   const animates = !!animatedLayerId && newest?.id === animatedLayerId;
-  const opacity = useRef(new Animated.Value(1)).current;
-  const y = useRef(new Animated.Value(0)).current;
+  const [opacity] = useState(() => new Animated.Value(1));
+  const [y] = useState(() => new Animated.Value(0));
   const lastAnimatedId = useRef<string | null>(null);
   // Replay only for a newly saved record, never a timer tick or a theme change.
   useEffect(() => {
