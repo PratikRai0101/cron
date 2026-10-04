@@ -1,3 +1,4 @@
+import { useFloatingNavigation } from "@/components/strata/FloatingNavigation";
 import { AnimatedTotal } from "@/components/strata/AnimatedTotal";
 import { GoalProgress } from "@/components/strata/GoalProgress";
 import { useState } from "react";
@@ -27,6 +28,7 @@ import { useFocusStore, useTaskStore, useUserStore } from "@/stores";
 export default function GridScreen() {
   const { height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const floating = useFloatingNavigation();
   const dailyGoal = useUserStore((s) => s.dailyGoalMinutes);
   const identities = useIdentities();
   const { byDate, byIdentityDate, strata } = useActivity();
@@ -85,7 +87,7 @@ export default function GridScreen() {
         contentContainerStyle={{
           paddingTop:
             Math.max(insets.top, initialWindowMetrics?.insets.top ?? 0) + 16,
-          paddingBottom: insets.bottom + 176,
+          paddingBottom: floating.contentPaddingBottom,
           paddingHorizontal: 24,
         }}
       >
@@ -104,7 +106,8 @@ export default function GridScreen() {
         {empty ? (
           <>
             <Text
-              className={`font-serif text-text-primary dark:text-dark-ink mt-4 mb-8 ${height < 720 ? "text-[28px] leading-[32px]" : "text-[56px] leading-[58px]"}`}
+              style={{ paddingBottom: 6 }}
+              className={`font-serif text-text-primary dark:text-dark-ink mt-4 mb-8 ${height < 720 ? "text-[28px] leading-[36px]" : "text-[56px] leading-[70px]"}`}
             >
               No work recorded yet.
             </Text>
@@ -297,7 +300,7 @@ export default function GridScreen() {
       </ScrollView>
       <View
         className="absolute left-6 right-6 flex-row"
-        style={{ bottom: insets.bottom + 78 }}
+        style={{ bottom: floating.actionBottom }}
       >
         <Action
           title={isActive ? "Return to focus" : "Start focus"}

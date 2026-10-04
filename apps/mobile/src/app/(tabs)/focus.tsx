@@ -1,3 +1,4 @@
+import { useFloatingNavigation } from "@/components/strata/FloatingNavigation";
 import { AnimatedTotal } from "@/components/strata/AnimatedTotal";
 import { useEffect, useRef, useCallback, useState } from "react";
 import {
@@ -32,6 +33,7 @@ export default function FocusTabScreen() {
   const [savedLayerId, setSavedLayerId] = useState<string | null>(null);
   const [saved, setSaved] = useState<number | null>(null);
   const insets = useSafeAreaInsets();
+  const floating = useFloatingNavigation();
   const identities = useIdentities();
   const {
     isActive,
@@ -155,7 +157,9 @@ export default function FocusTabScreen() {
           paddingTop:
             Math.max(insets.top, initialWindowMetrics?.insets.top ?? 0) + 20,
           paddingHorizontal: 24,
-          paddingBottom: insets.bottom + (isActive ? 100 : 164),
+          paddingBottom: isActive
+            ? insets.bottom + 100
+            : floating.contentPaddingBottom,
         }}
       >
         <Text className="text-[28px] font-bold text-text-primary dark:text-dark-ink mb-5">
@@ -264,7 +268,10 @@ export default function FocusTabScreen() {
       </ScrollView>
       <View
         className="absolute left-6 right-6 flex-row "
-        style={{ gap: 12, bottom: insets.bottom + (isActive ? 12 : 78) }}
+        style={{
+          gap: 12,
+          bottom: isActive ? insets.bottom + 12 : floating.actionBottom,
+        }}
       >
         {isActive && (
           <Action

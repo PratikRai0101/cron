@@ -9,7 +9,10 @@ import {
   isGlassEffectAPIAvailable,
 } from "expo-glass-effect";
 import { Animated, Text, View, AccessibilityInfo } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  FloatingNavigationProvider,
+  useFloatingNavigation,
+} from "@/components/strata/FloatingNavigation";
 import { useFocusStore } from "@/stores";
 import { useTheme } from "@/theme/ThemeContext";
 import { Icon } from "@/components/strata/Icon";
@@ -32,15 +35,18 @@ function StrataTabs({ state, descriptors, navigation }: BottomTabBarProps) {
   }, []);
   const glass =
     !opaque && isLiquidGlassAvailable() && isGlassEffectAPIAvailable();
-  const inset = useSafeAreaInsets();
+  const floating = useFloatingNavigation();
   const active = useFocusStore((s) => s.isActive);
   if (active && state.routes[state.index].name === "focus") return null;
   return (
     <View
-      onLayout={(event) => setWidth(event.nativeEvent.layout.width)}
+      onLayout={(event) => {
+        setWidth(event.nativeEvent.layout.width);
+        floating.setHeight(event.nativeEvent.layout.height);
+      }}
       className="absolute left-4 right-4 rounded-full border flex-row p-1"
       style={{
-        bottom: Math.max(inset.bottom, 16),
+        bottom: floating.bottom,
         backgroundColor: glass ? "transparent" : c.glass,
         borderColor: c.background,
         shadowColor: c.text,
@@ -119,14 +125,16 @@ function StrataTabs({ state, descriptors, navigation }: BottomTabBarProps) {
 }
 export default function TabLayout() {
   return (
-    <Tabs
-      tabBar={(props) => <StrataTabs {...props} />}
-      screenOptions={{ headerShown: false }}
-    >
-      <Tabs.Screen name="grid" options={{ title: "Grid" }} />
-      <Tabs.Screen name="focus" options={{ title: "Focus" }} />
-      <Tabs.Screen name="identity" options={{ title: "Identity" }} />
-      <Tabs.Screen name="profile" options={{ title: "Profile" }} />
-    </Tabs>
+    <FloatingNavigationProvider>
+      <Tabs
+        tabBar={(props) => <StrataTabs {...props} />}
+        screenOptions={{ headerShown: false }}
+      >
+        <Tabs.Screen name="grid" options={{ title: "Grid" }} />
+        <Tabs.Screen name="focus" options={{ title: "Focus" }} />
+        <Tabs.Screen name="identity" options={{ title: "Identity" }} />
+        <Tabs.Screen name="profile" options={{ title: "Profile" }} />
+      </Tabs>
+    </FloatingNavigationProvider>
   );
 }
