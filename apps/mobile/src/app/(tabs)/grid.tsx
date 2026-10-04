@@ -29,7 +29,7 @@ export default function GridScreen() {
   const insets = useSafeAreaInsets();
   const dailyGoal = useUserStore((s) => s.dailyGoalMinutes);
   const identities = useIdentities();
-  const { byDate, byIdentityDate } = useActivity();
+  const { byDate, byIdentityDate, strata } = useActivity();
   const [selectedIdentity, setSelectedIdentity] = useState<string | null>(null);
   const tasks = useTaskStore((s) => s.tasks);
   const toggleTask = useTaskStore((s) => s.toggleTask);
@@ -174,7 +174,14 @@ export default function GridScreen() {
         )}
         {!empty && (
           <>
-            <Specimen height={82} />
+            <Specimen
+              height={82}
+              records={
+                selectedIdentity
+                  ? strata.filter((r) => r.identityId === selectedIdentity)
+                  : strata
+              }
+            />
             <View className="mt-4">
               <HistoryGrid
                 dates={filteredDates}
@@ -194,7 +201,7 @@ export default function GridScreen() {
                 </Text>
               </Pressable>
               <Text className="text-[11px] text-text-secondary dark:text-dark-muted mt-4">
-                {worked} days worked · 26 weeks
+                {worked} {worked === 1 ? "day" : "days"} worked · 26 weeks
               </Text>
             </View>
             <Text className="text-[13px] text-text-secondary dark:text-dark-muted mb-3">

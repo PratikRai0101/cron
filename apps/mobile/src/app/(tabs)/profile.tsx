@@ -14,7 +14,7 @@ import { useUserStore } from "@/stores";
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const identities = useIdentities();
-  const { byDate, byIdentity, sessions } = useActivity();
+  const { byDate, byIdentity, sessions, strata } = useActivity();
   const goal = useUserStore((s) => s.dailyGoalMinutes);
   const total = Object.values(byDate).reduce(
     (sum, minutes) => sum + minutes,
@@ -89,7 +89,7 @@ export default function ProfileScreen() {
           worked
         </Text>
         <View className="my-6">
-          <Specimen height={120} empty={total === 0} />
+          <Specimen height={120} records={strata} />
         </View>
         <View className="flex-row justify-between " style={{ gap: 12 }}>
           <Text className="text-[15px] font-bold text-text-primary dark:text-dark-ink">

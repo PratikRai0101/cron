@@ -1,0 +1,91 @@
+{
+  "frames": [
+    {
+      "name": "03-landing-start",
+      "attrs": [
+        {
+          "transform": null,
+          "opacity": null
+        },
+        {
+          "transform": null,
+          "opacity": null
+        },
+        {
+          "transform": null,
+          "opacity": null
+        },
+        {
+          "transform": "translate(0, 0.04877042748477215)",
+          "opacity": "1"
+        }
+      ]
+    },
+    {
+      "name": "04-landing-mid",
+      "attrs": [
+        {
+          "transform": null,
+          "opacity": null
+        },
+        {
+          "transform": null,
+          "opacity": null
+        },
+        {
+          "transform": null,
+          "opacity": null
+        },
+        {
+          "transform": "translate(0, 0.09418880465525116)",
+          "opacity": "1"
+        }
+      ]
+    },
+    {
+      "name": "05-landing-near",
+      "attrs": [
+        {
+          "transform": null,
+          "opacity": null
+        },
+        {
+          "transform": null,
+          "opacity": null
+        },
+        {
+          "transform": null,
+          "opacity": null
+        },
+        {
+          "transform": null,
+          "opacity": "1"
+        }
+      ]
+    },
+    {
+      "name": "06-settled",
+      "attrs": [
+        {
+          "transform": null,
+          "opacity": null
+        },
+        {
+          "transform": null,
+          "opacity": null
+        },
+        {
+          "transform": null,
+          "opacity": null
+        },
+        {
+          "transform": null,
+          "opacity": "1"
+        }
+      ]
+    }
+  ],
+  "savedCount": 2,
+  "savedSeconds": 900,
+  "errors": []
+}

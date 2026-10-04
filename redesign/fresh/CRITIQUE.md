@@ -73,3 +73,17 @@ No application code changed. Browser-rendered glass approximates native Liquid G
 Same independent critic reviewed all eight final native captures. Concept4, Category4, Skill distinction4, Hierarchy4, Typography4, Colour4, Richness4, Rhythm3, Craft3, Native fluency4, Signature3, Feature test4, Fidelity4. Done by the visual stop rule: 9/12 design lines at4, none below3. No remaining concrete must-fix defect. Native spacing has broader gaps than static mockups; animation timing was not inspected by the critic.
 
 Corrections landed: compact empty-state zero/goal baseline, paused controls separated with no runtime warning, coherent Pro fixture, singular session copy, consistent historical fixture labels, basalt goal track. Actual historical snapshot names remain preserved in product data. Scroll content behind glass is deliberate and remains scrollable. Functional timer/persistence validation and limits are recorded in BUILD.md.
+
+## Living strata: motion review — 2026-10-05
+Same independent critic reviewed the seven 3x React Native web frames, model/component code and verification.json. This is an incremental signature review; the accepted three-direction exploration and full native set are unchanged. Physical haptics/frame pacing not scored from screenshots.
+
+| Changed rubric line | Motion round1 | Motion round2 |
+|---|---:|---:|
+| Signature | 4 | 4 |
+| Richness | 4 | 4 |
+| Craft | 3 | 4 |
+| Rhythm | 3 | 3 |
+
+Round1: outlined draft is distinct from saved fill, saved band visibly suspended, settled seams join, reduced-motion has no translate. Two concrete asks: singular “1 day worked”; enough SVG headroom for maximum stack’s incoming cap at−41. Both landed: singular conditional and viewBox top−44. Thin first band retained deliberately because one real record must not invent six strata.
+
+Round2: both fixes verified; no remaining concrete motion defect. Signature4, Richness4, Craft4, Rhythm3. Existing other native scores carry forward rather than being claimed as newly rescored. Done by the stop rule. No declined asks. Latest evidence: motion-shots/sheet.png and landing.webm. Existing static mockup scan stays0FAIL; actual runtime screenshots were visually reviewed, not DOM-scanned.

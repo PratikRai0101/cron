@@ -27,7 +27,8 @@ function SessionAwake() {
 }
 
 export default function FocusTabScreen() {
-  const { byDate } = useActivity();
+  const { byDate, strata } = useActivity();
+  const [savedLayerId, setSavedLayerId] = useState<string | null>(null);
   const [saved, setSaved] = useState<number | null>(null);
   const insets = useSafeAreaInsets();
   const identities = useIdentities();
@@ -99,8 +100,10 @@ export default function FocusTabScreen() {
     if (result && result.duration >= 60) {
       const identity = identities.find((i) => i.id === result.identityId);
       setSaved(Math.floor(result.duration / 60));
+      const id = uid("session-");
+      setSavedLayerId(id);
       logSession({
-        id: uid("session-"),
+        id,
         duration: result.duration,
         identityId: result.identityId,
         identityName: identity?.name || "Focus",
@@ -132,6 +135,7 @@ export default function FocusTabScreen() {
   const handleStartWithIdentity = useCallback(() => {
     if (identityToStart) {
       setSaved(null);
+      setSavedLayerId(null);
       startFocus(identityToStart.id);
     }
   }, [identityToStart, startFocus]);
@@ -187,9 +191,10 @@ export default function FocusTabScreen() {
           {saved !== null ? `minutes today · ${saved} min added` : "elapsed"}
         </Text>
         <Specimen
-          key={saved === null ? "focus" : "saved"}
           height={130}
-          landing={saved !== null}
+          records={strata}
+          previewMinutes={isActive ? elapsedSeconds / 60 : 0}
+          animatedLayerId={savedLayerId}
         />
         <Text className="text-[13px] text-text-secondary dark:text-dark-muted mt-5">
           {saved !== null

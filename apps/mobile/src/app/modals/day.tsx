@@ -110,7 +110,14 @@ export default function DayScreen() {
           {identities.size === 1 ? "identity" : "identities"}
         </Text>
         <View className="my-6">
-          <Specimen height={140} empty={total === 0} />
+          <Specimen
+            height={140}
+            records={activity.strata.filter(
+              (r) =>
+                r.date.slice(0, 10) === day &&
+                (!identityId || r.identityId === identityId),
+            )}
+          />
         </View>
         <View className="flex-row justify-between">
           <Text className="text-[15px] font-bold text-text-primary dark:text-dark-ink">

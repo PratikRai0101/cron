@@ -95,3 +95,8 @@ First-run and storyboard headlines reduce to28pt on375×667 to preserve the prim
 
 ## Final delivery
 Full mockups complete after three full-set critique rounds. Latest sheet: shots/full-r3/sheet.png; small phone: shots/full-r3-se/sheet.png. Zero scan FAILs, warnings explained in CRITIQUE.md. Final independent scores4/5 on all13 lines. Before/after: shots/before-after/sheet.png. No app implementation performed.
+
+## Implemented living specimen — 2026-10-05
+User requested animation after seeing the static rock. This supersedes the abstract fixed-layer mapping in the original mockups. Each saved session/manual log now deposits a true data-driven band; recent seven stay distinct, earlier effort compresses into the base. Longer sessions give thicker bands within a legibility cap, so it is an illustrative history rather than a proportional chart. Scope/identity/day filters follow each screen’s data. No work means a wire outline.
+
+Signature storyboard: while focusing, an outlined draft grows with elapsed time above saved strata; pausing freezes it; discard removes it. Finish saves once, immediately updates the real total, fills the new band, and drops the entire band32SVG units onto the stack with a spring (230/25/1 stiffness/damping/mass). Light impact at rest. Reduced Motion fills in place with120ms opacity and no impact. No decorative loop or replay on hydration/theme changes. Native appearance checked; web save sequence and reduced motion verified. Physical haptics/frame pacing remain unverified. Evidence: motion-shots/.

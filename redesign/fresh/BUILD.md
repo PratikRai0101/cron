@@ -13,13 +13,13 @@ Branch: `feat/strata-redesign`. Existing Expo/React Native app; no SwiftUI rewri
 ## Implementation choices
 Shared light/dark tokens feed NativeWind, navigation and SVGs. UI uses the iOS system font; Instrument Serif is bundled with its OFL for static totals. Native Liquid Glass belongs only to floating navigation, with a tinted opaque fallback when unavailable or Reduce Transparency is enabled. SDK54 provides the native glass module on supported iOS26 runtimes.
 
-Landing: 420ms ease-out, light impact at completion. Reduce Motion uses a 120ms dissolve without movement or haptics. Physical haptic feel is unverified. The new history route retains the app’s sheet/navigation conventions.
+Landing: the entire newly saved stratum drops 32 SVG units and settles with a spring (stiffness230, damping25, mass1); light impact at completion. Reduce Motion uses a 120ms dissolve without movement or haptics. Physical haptic feel is unverified. The new history route retains the app’s sheet/navigation conventions.
 
 NativeWind2 uses its own native dark pseudo-selector. Web has a separate class-mode Tailwind config and normal CSS PostCSS pipeline; the native extractor must not rewrite web selectors. The web-only Expo import-meta transform supports the existing Zustand ESM export.
 
 ## Validation
 - Xcode Debug iOS simulator build: BUILD SUCCEEDED.
-- TypeScript: pass. ESLint: pass. Jest: 2 suites, 16 tests pass.
+- TypeScript: pass. ESLint: pass. Jest: 3 suites, 22 tests pass.
 - Regression: restoring a paused session displays accumulated seconds without advancing during pause.
 - Simulator: onboarding skip, focus start, pause, app restart, paused clock restoration, finish/save, recorded layer, history, identity collection, profile and light/dark switching inspected.
 - Web export succeeds without malformed CSS warnings; fresh-browser onboarding skip reaches the core screen with zero page errors.
@@ -31,4 +31,13 @@ NativeWind2 uses its own native dark pseudo-selector. Web has a separate class-m
 Physical-device haptics, Android rendering, VoiceOver end-to-end, enlarged Dynamic Type and live widgets were not verified. Existing cloud-sync/purchase/widget limitations are unchanged. Small-phone static mockups passed; native small-phone validation remains unverified.
 
 ## Visual review
-Same independent critic: 9/12 design scores4, 3 scores3; Fidelity4. Passed stop rule with no concrete remaining defect in eight native frames. Rhythm/craft3 reflect broader native spacing; Signature3 reflects motion not observed by critic. See CRITIQUE.md. Latest native sheet: `native-shots/sheet.png`.
+Same independent critic: 9/12 design scores4, 3 scores3; Fidelity4. Passed stop rule with no concrete remaining defect in eight native frames. Rhythm/craft3 reflect broader native spacing; Signature3 originally reflected motion not observed by critic; the subsequent motion review scores it4 (see below). See CRITIQUE.md. Latest native sheet: `native-shots/sheet.png`.
+
+## Data-driven strata — 2026-10-05
+The rock now renders actual saved sessions and manual logs across Grid, Focus, Profile and day detail, using each screen’s filter. Zero records render a wire outline. Each record deposits a band; thickness is sqrt(minutes)×3, clamped6–30units for legibility, and the whole stack compresses to96units. The latest seven records stay distinct; older records merge into a base that retains every minute and record count. Thickness is illustrative, not a linear time chart. Date-only manual logs precede timed sessions on the same local day.
+
+An outlined unsaved layer grows with the count-up timer. It does not change saved totals, survives pause/restart through existing timer state, and disappears on discard. Finishing saves once and animates that actual new band’s front, side and cap into the stack. No replay on timer ticks, theme changes or ordinary history hydration. Reduce Motion uses120ms opacity only and no impact. SVG headroom covers the full stack plus incoming cap at−41units.
+
+`motion-shots/` contains 3x React Native web captures and a native rich-history screenshot. Isolated browser tests seeded one15min saved session, advanced a live session15min, then finished: two records/30min, outline removed, translated group settled to0. A second1min save with reduced motion had no translate. Zero page errors. Synthetic test records live only in a fresh browser context; existing simulator records were not reseeded. Unit tests cover chronology, empty/invalid data, thickness, preview separation and100-record compression. Actual physical haptic feel and frame pacing still require a device.
+
+Motion critique: Signature4, Richness4, Craft4, Rhythm3 after two rounds. Fixed singular day copy and max-stack animation headroom; no remaining concrete motion defect. Reviewer carries other accepted native scores forward. Review sheet: motion-shots/sheet.png; recording: motion-shots/landing.webm; browser viewer: motion-shots/index.html.
