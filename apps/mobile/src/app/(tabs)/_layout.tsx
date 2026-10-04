@@ -1,3 +1,6 @@
+import * as Haptics from "expo-haptics";
+import { useSpringValue } from "@/hooks/useMotion";
+import { MotionPressable } from "@/components/strata/MotionPressable";
 import { Tabs } from "expo-router";
 import { useEffect, useState } from "react";
 import {
@@ -5,7 +8,7 @@ import {
   isLiquidGlassAvailable,
   isGlassEffectAPIAvailable,
 } from "expo-glass-effect";
-import { Pressable, Text, View, AccessibilityInfo } from "react-native";
+import { Animated, Text, View, AccessibilityInfo } from "react-native";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusStore } from "@/stores";
@@ -14,6 +17,9 @@ import { Icon } from "@/components/strata/Icon";
 function StrataTabs({ state, descriptors, navigation }: BottomTabBarProps) {
   const { colors: c, dark } = useTheme();
   const [opaque, setOpaque] = useState(false);
+  const [width, setWidth] = useState(0);
+  const selection = useSpringValue(state.index);
+  const tabWidth = Math.max(0, (width - 10) / state.routes.length);
   useEffect(() => {
     AccessibilityInfo.isReduceTransparencyEnabled?.().then(setOpaque);
     const subscription = AccessibilityInfo.addEventListener(
@@ -29,6 +35,7 @@ function StrataTabs({ state, descriptors, navigation }: BottomTabBarProps) {
   if (active && state.routes[state.index].name === "focus") return null;
   return (
     <View
+      onLayout={(event) => setWidth(event.nativeEvent.layout.width)}
       className="absolute left-4 right-4 rounded-full border flex-row p-1"
       style={{
         bottom: Math.max(inset.bottom, 16),
@@ -55,15 +62,29 @@ function StrataTabs({ state, descriptors, navigation }: BottomTabBarProps) {
           }}
         />
       )}
+      <Animated.View
+        pointerEvents="none"
+        style={{
+          position: "absolute",
+          left: 5,
+          top: 5,
+          bottom: 5,
+          width: tabWidth,
+          borderRadius: 32,
+          backgroundColor: c.selected,
+          transform: [{ translateX: Animated.multiply(selection, tabWidth) }],
+        }}
+      />
       {state.routes.map((route, index) => {
         const selected = state.index === index;
         const name = route.name as "grid" | "focus" | "identity" | "profile";
         const title = descriptors[route.key].options.title ?? route.name;
         return (
-          <Pressable
+          <MotionPressable
             key={route.key}
             accessibilityRole="tab"
             accessibilityState={{ selected }}
+            aria-selected={selected}
             accessibilityLabel={title}
             onLongPress={() =>
               navigation.emit({ type: "tabLongPress", target: route.key })
@@ -74,11 +95,12 @@ function StrataTabs({ state, descriptors, navigation }: BottomTabBarProps) {
                 target: route.key,
                 canPreventDefault: true,
               });
-              if (!selected && !event.defaultPrevented)
+              if (!selected && !event.defaultPrevented) {
                 navigation.navigate(route.name, route.params);
+                void Haptics.selectionAsync().catch(() => {});
+              }
             }}
             className="flex-1 rounded-full items-center justify-center py-2 gap-1 min-h-[54px]"
-            style={{ backgroundColor: selected ? c.selected : "transparent" }}
           >
             <Icon name={name} color={selected ? c.primary : c.text} />
             <Text
@@ -87,7 +109,7 @@ function StrataTabs({ state, descriptors, navigation }: BottomTabBarProps) {
             >
               {title}
             </Text>
-          </Pressable>
+          </MotionPressable>
         );
       })}
     </View>

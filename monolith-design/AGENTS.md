@@ -372,3 +372,6 @@ NativeWind2 needs its own `darkMode: off` pseudo-variant; web CSS uses `tailwind
 
 ## Living strata — 2026-10-05
 User requested the intended animation. On feat/strata-redesign, Specimen is now data driven through useActivity and lib/strata.ts: actual layers, latest7 plus compressed base, unsaved timer outline, full saved-layer spring and reduced-motion dissolve. Date-only retro logs precede timed sessions on the same local day. 22tests across3suites; motion evidence and limitations in redesign/fresh/BUILD.md and motion-shots/. Preserve existing simulator records when testing; use isolated browser fixtures. Main/master stays untouched.
+
+## Strata microinteractions — 2026-10-05
+User requested supporting microanimations and manual run steps. MotionPressable uses NativeWind2 styled AnimatedPressable so layout classes remain intact. useMotion shares spring behaviour and listens for Reduce Motion preference changes. Tab selection uses a measured sliding indicator; task checkmark, exact total settlement and anchored goal bar animate only state changes. QA fixtures remain browser-only; preserve the active simulator session. Manual instructions: redesign/fresh/RUN.md; captures/video: micro-shots/. Same branch; local commits only.

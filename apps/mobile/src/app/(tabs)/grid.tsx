@@ -1,3 +1,5 @@
+import { AnimatedTotal } from "@/components/strata/AnimatedTotal";
+import { GoalProgress } from "@/components/strata/GoalProgress";
 import { useState } from "react";
 import {
   View,
@@ -18,14 +20,12 @@ import { IdentityPill } from "@/components/identity";
 import { Specimen } from "@/components/strata/Specimen";
 import { HistoryGrid } from "@/components/strata/HistoryGrid";
 import { Action } from "@/components/strata/Action";
-import { useColors } from "@/theme/ThemeContext";
 import { useIdentities } from "@/hooks/useIdentities";
 import { useActivity } from "@/hooks/useActivity";
 import { useFocusStore, useTaskStore, useUserStore } from "@/stores";
 
 export default function GridScreen() {
   const { height } = useWindowDimensions();
-  const c = useColors();
   const insets = useSafeAreaInsets();
   const dailyGoal = useUserStore((s) => s.dailyGoalMinutes);
   const identities = useIdentities();
@@ -137,12 +137,11 @@ export default function GridScreen() {
         ) : (
           <>
             <View className="flex-row items-end " style={{ gap: 16 }}>
-              <Text
+              <AnimatedTotal
+                value={todayMinutes}
                 className="font-serif text-[76px] leading-[80px] text-text-primary dark:text-dark-ink"
                 accessibilityLabel={`${todayMinutes} minutes today`}
-              >
-                {todayMinutes}
-              </Text>
+              />
               <View className="pb-1 flex-1">
                 <Text className="text-[20px] text-text-primary dark:text-dark-ink">
                   minutes today
@@ -162,13 +161,7 @@ export default function GridScreen() {
               </View>
             </View>
             <View className="h-[3px] mt-3 mb-4 bg-border dark:bg-dark-rule">
-              <View
-                className="h-full"
-                style={{
-                  width: `${Math.min(todayMinutes / dailyGoal, 1) * 100}%`,
-                  backgroundColor: c.primary,
-                }}
-              />
+              <GoalProgress minutes={todayMinutes} goal={dailyGoal} />
             </View>
           </>
         )}
@@ -247,8 +240,8 @@ export default function GridScreen() {
           </Pressable>
         </View>
         <Text className="text-[11px] text-text-secondary dark:text-dark-muted mb-2">
-          {filteredTasks.length} tasks ·{" "}
-          {filteredTasks.filter((t) => t.completed).length} done
+          {filteredTasks.length} {filteredTasks.length === 1 ? "task" : "tasks"}{" "}
+          · {filteredTasks.filter((t) => t.completed).length} done
         </Text>
         {filteredTasks.length === 0 && (
           <Text className="text-[15px] text-text-secondary dark:text-dark-muted py-4">

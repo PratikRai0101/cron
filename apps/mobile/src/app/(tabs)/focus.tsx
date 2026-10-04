@@ -1,3 +1,4 @@
+import { AnimatedTotal } from "@/components/strata/AnimatedTotal";
 import { useEffect, useRef, useCallback, useState } from "react";
 import {
   View,
@@ -172,21 +173,23 @@ export default function FocusTabScreen() {
             {isPaused ? "Paused" : isActive ? "Counting up" : "Ready"}
           </Text>
         </View>
-        <Text
-          className={
-            saved !== null
-              ? "font-serif text-[76px] leading-[86px] text-text-primary dark:text-dark-ink mt-4"
-              : "text-[76px] leading-[86px] text-text-primary dark:text-dark-ink mt-4"
-          }
-          style={{ fontVariant: ["tabular-nums"], letterSpacing: -2 }}
-          accessibilityLabel={
-            saved !== null
-              ? `${todaySaved} minutes today, ${saved} minutes recorded`
-              : `${Math.floor(seconds / 60)} minutes ${seconds % 60} seconds elapsed`
-          }
-        >
-          {saved !== null ? `${todaySaved}` : timer}
-        </Text>
+        {saved !== null ? (
+          <AnimatedTotal
+            animateOnMount
+            value={todaySaved}
+            className="font-serif text-[76px] leading-[86px] text-text-primary dark:text-dark-ink mt-4"
+            style={{ fontVariant: ["tabular-nums"], letterSpacing: -2 }}
+            accessibilityLabel={`${todaySaved} minutes today, ${saved} minutes recorded`}
+          />
+        ) : (
+          <Text
+            className="text-[76px] leading-[86px] text-text-primary dark:text-dark-ink mt-4"
+            style={{ fontVariant: ["tabular-nums"], letterSpacing: -2 }}
+            accessibilityLabel={`${Math.floor(seconds / 60)} minutes ${seconds % 60} seconds elapsed`}
+          >
+            {timer}
+          </Text>
+        )}
         <Text className="text-[13px] text-text-secondary dark:text-dark-muted mb-6">
           {saved !== null ? `minutes today · ${saved} min added` : "elapsed"}
         </Text>

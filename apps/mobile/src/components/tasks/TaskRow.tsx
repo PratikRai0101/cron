@@ -1,4 +1,7 @@
-import { Pressable, Text, View } from "react-native";
+import * as Haptics from "expo-haptics";
+import { MotionPressable } from "@/components/strata/MotionPressable";
+import { useReducedMotion, useSpringValue } from "@/hooks/useMotion";
+import { Animated, Text, View } from "react-native";
 import { formatMinutes } from "@monolith/shared";
 import { useColors } from "@/theme/ThemeContext";
 import { Icon } from "@/components/strata/Icon";
@@ -28,14 +31,24 @@ export function TaskRow({
   onToggleComplete,
 }: TaskRowProps) {
   const c = useColors();
+  const reduced = useReducedMotion();
+  const check = useSpringValue(completed ? 1 : 0);
   const minutes = loggedMinutes ?? estimatedMinutes;
   return (
     <View className="flex-row items-center border-b border-border dark:border-dark-rule min-h-[72px]">
-      <Pressable
+      <MotionPressable
         accessibilityRole="checkbox"
         accessibilityState={{ checked: completed }}
+        aria-checked={completed}
         accessibilityLabel={`Complete ${title}`}
-        onPress={onToggleComplete}
+        onPress={() => {
+          if (!onToggleComplete) return;
+          onToggleComplete();
+          if (!completed && !reduced)
+            void Haptics.notificationAsync(
+              Haptics.NotificationFeedbackType.Success,
+            ).catch(() => {});
+        }}
         className="w-11 h-11 justify-center"
       >
         <View
@@ -45,10 +58,25 @@ export function TaskRow({
             backgroundColor: completed ? c.primary : "transparent",
           }}
         >
-          {completed && <Icon name="check" color={c.onPrimary} size={12} />}
+          <Animated.View
+            pointerEvents="none"
+            style={{
+              opacity: check,
+              transform: [
+                {
+                  scale: check.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.65, 1],
+                  }),
+                },
+              ],
+            }}
+          >
+            <Icon name="check" color={c.onPrimary} size={12} />
+          </Animated.View>
         </View>
-      </Pressable>
-      <Pressable
+      </MotionPressable>
+      <MotionPressable
         accessibilityRole="button"
         accessibilityLabel={`${title}, ${identityName}. Tap to focus, hold to manage`}
         onPress={onPress}
@@ -64,8 +92,8 @@ export function TaskRow({
           {identityName}
           {metadata ? ` · ${metadata}` : ""}
         </Text>
-      </Pressable>
-      <Pressable
+      </MotionPressable>
+      <MotionPressable
         accessibilityRole="button"
         accessibilityLabel={`Log time for ${title}`}
         onPress={onLogTime}
@@ -74,7 +102,7 @@ export function TaskRow({
         <Text className="text-[13px] text-text-primary dark:text-dark-ink">
           {minutes !== undefined ? formatMinutes(minutes) : "Log"}
         </Text>
-      </Pressable>
+      </MotionPressable>
     </View>
   );
 }

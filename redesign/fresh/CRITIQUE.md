@@ -87,3 +87,18 @@ Same independent critic reviewed the seven 3x React Native web frames, model/com
 Round1: outlined draft is distinct from saved fill, saved band visibly suspended, settled seams join, reduced-motion has no translate. Two concrete asks: singular “1 day worked”; enough SVG headroom for maximum stack’s incoming cap at−41. Both landed: singular conditional and viewBox top−44. Thin first band retained deliberately because one real record must not invent six strata.
 
 Round2: both fixes verified; no remaining concrete motion defect. Signature4, Richness4, Craft4, Rhythm3. Existing other native scores carry forward rather than being claimed as newly rescored. Done by the stop rule. No declined asks. Latest evidence: motion-shots/sheet.png and landing.webm. Existing static mockup scan stays0FAIL; actual runtime screenshots were visually reviewed, not DOM-scanned.
+
+## Supporting microinteractions — 2026-10-05
+Same critic reviewed six3x runtime web frames, the interaction sources and a native focus capture.
+
+| Changed line | Round1 | Round2 |
+|---|---:|---:|
+| Colour | 3 | 4 |
+| Craft | 4 | 4 |
+| Native fluency | 4 | 4 |
+| Signature | 4 | 4 |
+| Rhythm | 3 | 3 |
+
+Other accepted native scores carry forward. Round1 found one concrete defect: Profile dark time-share tracks were light, visually dominating filled blue portions. Changed to dark-rule. Singular task/day copy also corrected, checkbox/tab web semantics added, and interrupted total fades now finish in place when the motion preference changes. Native focus recaptured without Expo’s Refreshing banner.
+
+Round2: track fix and native header clearance verified; no remaining concrete defects. Done by stop rule. No declined asks. Physical spring feel/haptics remain unverified. Latest sheet: micro-shots/sheet.png; runtime recording: micro-shots/interactions.webm. The static scan remains0FAIL; these runtime frames were visually reviewed rather than DOM-scanned.

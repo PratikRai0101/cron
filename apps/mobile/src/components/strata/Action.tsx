@@ -1,4 +1,5 @@
-import { Pressable, Text } from "react-native";
+import { MotionPressable } from "./MotionPressable";
+import { Text } from "react-native";
 interface ActionProps {
   title: string;
   onPress: () => void;
@@ -12,7 +13,7 @@ export function Action({
   disabled = false,
 }: ActionProps) {
   return (
-    <Pressable
+    <MotionPressable
       accessibilityRole="button"
       accessibilityLabel={title}
       disabled={disabled}
@@ -24,6 +25,6 @@ export function Action({
       >
         {title}
       </Text>
-    </Pressable>
+    </MotionPressable>
   );
 }

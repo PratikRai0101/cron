@@ -1,4 +1,5 @@
-import { Pressable, Text } from "react-native";
+import { MotionPressable } from "@/components/strata/MotionPressable";
+import { Text } from "react-native";
 import { useColors } from "@/theme/ThemeContext";
 interface IdentityPillProps {
   name: string;
@@ -15,7 +16,7 @@ export function IdentityPill({
 }: IdentityPillProps) {
   const c = useColors();
   return (
-    <Pressable
+    <MotionPressable
       onPress={onPress}
       disabled={!onPress}
       accessibilityRole={onPress ? "button" : "text"}
@@ -30,6 +31,6 @@ export function IdentityPill({
       >
         {name}
       </Text>
-    </Pressable>
+    </MotionPressable>
   );
 }

@@ -85,8 +85,8 @@ export default function ProfileScreen() {
         </View>
         <Text className="text-[13px] text-text-secondary dark:text-dark-muted mt-3">
           Level {Math.floor(total / 600) + 1} · {sessions.length} focus{" "}
-          {sessions.length === 1 ? "session" : "sessions"}· {daysWorked} days
-          worked
+          {sessions.length === 1 ? "session" : "sessions"} · {daysWorked}{" "}
+          {daysWorked === 1 ? "day" : "days"} worked
         </Text>
         <View className="my-6">
           <Specimen height={120} records={strata} />
@@ -172,7 +172,7 @@ export default function ProfileScreen() {
               >
                 {identity.name}
               </Text>
-              <View className="flex-1 h-1 bg-border">
+              <View className="flex-1 h-1 bg-border dark:bg-dark-rule">
                 <View
                   className="h-full"
                   style={{
