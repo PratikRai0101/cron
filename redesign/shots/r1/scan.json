@@ -1,0 +1,193 @@
+[
+  {
+    "name": "core",
+    "fails": [],
+    "warns": [
+      "Three saturated hue families (24°, 0°, 216°). Is each one earning its place?"
+    ],
+    "facts": {
+      "fonts": {
+        "SF Pro": 24
+      },
+      "sizes": [
+        54,
+        17,
+        15,
+        14,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "700",
+        "800"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        24,
+        0,
+        216
+      ],
+      "cards": 1
+    }
+  },
+  {
+    "name": "day",
+    "fails": [],
+    "warns": [
+      "Three saturated hue families (24°, 0°, 216°). Is each one earning its place?"
+    ],
+    "facts": {
+      "fonts": {
+        "SF Pro": 17
+      },
+      "sizes": [
+        46,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "800"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        24,
+        0,
+        216
+      ],
+      "cards": 1
+    }
+  },
+  {
+    "name": "focus",
+    "fails": [],
+    "warns": [
+      "Text inside the system's safe areas: \"This thread joins 78 day\" (home indicator)",
+      "7 distinct left edges in the left third. Align to fewer verticals."
+    ],
+    "facts": {
+      "fonts": {
+        "SF Pro": 16,
+        "Arial": 2
+      },
+      "sizes": [
+        76,
+        17,
+        16,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "800"
+      ],
+      "leftEdges": 7,
+      "accentHues": [
+        24,
+        216
+      ],
+      "cards": 1
+    }
+  },
+  {
+    "name": "signature",
+    "fails": [
+      "Text running off the screen (mark data-bleed if deliberate): \"1 · shuttle docks\""
+    ],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 7
+      },
+      "sizes": [
+        28,
+        13,
+        11
+      ],
+      "weights": [
+        "500",
+        "800"
+      ],
+      "leftEdges": 2,
+      "accentHues": [],
+      "cards": 0
+    }
+  },
+  {
+    "name": "cloth-light",
+    "fails": [
+      "Contrast below WCAG on solid ground: 2.33:1 11px \"Focus\"; 2.33:1 11px \"Areas\"; 2.33:1 11px \"You\""
+    ],
+    "warns": [
+      "Three saturated hue families (24°, 0°, 216°). Is each one earning its place?"
+    ],
+    "facts": {
+      "fonts": {
+        "SF Pro": 24
+      },
+      "sizes": [
+        54,
+        17,
+        15,
+        14,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "700",
+        "800"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        24,
+        0,
+        216
+      ],
+      "cards": 1
+    }
+  },
+  {
+    "name": "empty",
+    "fails": [
+      "Text overlapping text: \"10 weeks on the loom\" / \"0\""
+    ],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 13
+      },
+      "sizes": [
+        44,
+        22,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "800"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        24,
+        216
+      ],
+      "cards": 1
+    }
+  }
+]

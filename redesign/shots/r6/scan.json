@@ -1,0 +1,195 @@
+[
+  {
+    "name": "core",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 24
+      },
+      "sizes": [
+        54,
+        17,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "700",
+        "800"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        24,
+        216
+      ],
+      "cards": 1
+    }
+  },
+  {
+    "name": "day",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 17
+      },
+      "sizes": [
+        54,
+        17,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "800"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        24,
+        216
+      ],
+      "cards": 1
+    }
+  },
+  {
+    "name": "focus",
+    "fails": [],
+    "warns": [
+      "7 distinct left edges in the left third. Align to fewer verticals."
+    ],
+    "facts": {
+      "fonts": {
+        "SF Pro": 16
+      },
+      "sizes": [
+        76,
+        17,
+        13,
+        11
+      ],
+      "weights": [
+        "500",
+        "600",
+        "800"
+      ],
+      "leftEdges": 7,
+      "accentHues": [
+        24,
+        216
+      ],
+      "cards": 1
+    }
+  },
+  {
+    "name": "signature",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 7
+      },
+      "sizes": [
+        28,
+        13,
+        11
+      ],
+      "weights": [
+        "500",
+        "800"
+      ],
+      "leftEdges": 2,
+      "accentHues": [],
+      "cards": 0
+    }
+  },
+  {
+    "name": "cloth-light",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 24
+      },
+      "sizes": [
+        54,
+        17,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "700",
+        "800"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        24,
+        216
+      ],
+      "cards": 1
+    }
+  },
+  {
+    "name": "empty",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 13
+      },
+      "sizes": [
+        54,
+        28,
+        17,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "800"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        24,
+        216
+      ],
+      "cards": 1
+    }
+  },
+  {
+    "name": "areas",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 18
+      },
+      "sizes": [
+        28,
+        17,
+        13,
+        11
+      ],
+      "weights": [
+        "500",
+        "600",
+        "800"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        24,
+        216
+      ],
+      "cards": 1
+    }
+  }
+]

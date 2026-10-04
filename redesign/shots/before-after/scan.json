@@ -1,0 +1,28 @@
+[
+  {
+    "name": "01-before",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {},
+      "sizes": [],
+      "weights": [],
+      "leftEdges": 0,
+      "accentHues": [],
+      "cards": 0
+    }
+  },
+  {
+    "name": "02-after",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {},
+      "sizes": [],
+      "weights": [],
+      "leftEdges": 0,
+      "accentHues": [],
+      "cards": 0
+    }
+  }
+]

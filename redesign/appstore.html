@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Monolith — App Store</title>
+<link rel="stylesheet" href="file:///Users/pratikrai/.pi/agent/skills/app-designer/assets/device.css" />
+<style>
+  /* Each panel is 440 x 956 CSS px -> 1320 x 2868 at --scale 3 (6.9"). */
+  .panel {
+    --screen-w: 440px;
+    --screen-h: 956px;
+    width: 440px; height: 956px;
+    border-radius: 0; background: #18243f; color: #f2e9d6;
+    overflow: hidden; font-family: var(--sf);
+  }
+  .cap {
+    position: absolute; top: 112px; left: 40px; right: 40px;
+    font: 800 28px/1.12 var(--sf); font-stretch: 126%; letter-spacing: -.022em;
+    color: #f2e9d6; text-wrap: balance;
+  }
+  .cap em { font-style: normal; color: #e07a3f; }
+  .device {
+    position: absolute; left: 50%; top: 292px; width: 338px;
+    transform: translateX(-50%);
+    border-radius: 42px; overflow: hidden;
+    box-shadow: 0 34px 80px rgba(0,0,0,.5), 0 0 0 7px #0b1220;
+  }
+  .device img { display: block; width: 100%; height: auto; }
+  .panel.tilt .device { transform: translateX(-50%) rotate(-6deg) scale(1.04); transform-origin: 50% 0; }
+</style>
+</head>
+<body>
+
+<section class="screen panel" data-name="01-promise" data-chrome="none">
+  <div class="cap">Your focus,<br /><em>woven</em> into cloth.</div>
+  <div class="device"><img src="shots/r6/01-core.png" alt="" /></div>
+</section>
+
+<section class="screen panel" data-name="02-focus" data-chrome="none">
+  <div class="cap">A timer that <em>counts up</em>,<br />not down.</div>
+  <div class="device"><img src="shots/r6/03-focus.png" alt="" /></div>
+</section>
+
+<section class="screen panel" data-name="03-areas" data-chrome="none">
+  <div class="cap">Every area of life,<br /><em>its own thread</em>.</div>
+  <div class="device"><img src="shots/r6/07-areas.png" alt="" /></div>
+</section>
+
+<section class="screen panel" data-name="04-history" data-chrome="none">
+  <div class="cap">Fill in a day you<br /><em>missed</em>.</div>
+  <div class="device"><img src="shots/r6/02-day.png" alt="" /></div>
+</section>
+
+<section class="screen panel tilt" data-name="05-daylight" data-chrome="none">
+  <div class="cap">Woven in <em>daylight</em>, too.</div>
+  <div class="device"><img src="shots/r6/05-cloth-light.png" alt="" /></div>
+</section>
+
+<script src="file:///Users/pratikrai/.pi/agent/skills/app-designer/assets/device.js"></script>
+</body>
+</html>
