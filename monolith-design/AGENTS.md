@@ -375,3 +375,6 @@ User requested the intended animation. On feat/strata-redesign, Specimen is now 
 
 ## Strata microinteractions — 2026-10-05
 User requested supporting microanimations and manual run steps. MotionPressable uses NativeWind2 styled AnimatedPressable so layout classes remain intact. useMotion shares spring behaviour and listens for Reduce Motion preference changes. Tab selection uses a measured sliding indicator; task checkmark, exact total settlement and anchored goal bar animate only state changes. QA fixtures remain browser-only; preserve the active simulator session. Manual instructions: redesign/fresh/RUN.md; captures/video: micro-shots/. Same branch; local commits only.
+
+## Expo Go launch — 2026-10-05
+User prefers Expo Go. `npm run go -- --port8087` explicitly chooses Go despite installed expo-dev-client. Official Expo Go54.0.7 tested on QA simulator: SDK54 and native glass imports work, onboarding skip reaches core. Native app data preserved in separate sandbox. SDK54 CLI cannot find conventional Simulator under Xcode27 Device Hub; manual simctl launch documented in redesign/fresh/RUN.md. Main unchanged; no SDK upgrade.
