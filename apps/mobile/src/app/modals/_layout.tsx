@@ -4,6 +4,7 @@ export default function ModalsLayout() {
   return (
     <Stack screenOptions={{ headerShown: false, presentation: "modal" }}>
       <Stack.Screen name="index" />
+      <Stack.Screen name="layer" options={{ presentation: "card" }} />
       <Stack.Screen name="day" options={{ presentation: "card" }} />
       <Stack.Screen
         name="log-task"

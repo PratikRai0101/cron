@@ -1,3 +1,4 @@
+import { useFloatingNavigation } from "@/components/strata/FloatingNavigation";
 import { View, Text, ScrollView, Pressable, Alert } from "react-native";
 import {
   useSafeAreaInsets,
@@ -13,6 +14,7 @@ import { useIdentityStore, useUserStore } from "@/stores";
 
 export default function IdentityScreen() {
   const insets = useSafeAreaInsets();
+  const floating = useFloatingNavigation();
   const identities = useIdentityStore((s) => s.identities);
   const archiveIdentity = useIdentityStore((s) => s.archiveIdentity);
   const restoreIdentity = useIdentityStore((s) => s.restoreIdentity);
@@ -83,7 +85,7 @@ export default function IdentityScreen() {
           paddingTop:
             Math.max(insets.top, initialWindowMetrics?.insets.top ?? 0) + 16,
           paddingHorizontal: 24,
-          paddingBottom: insets.bottom + 112,
+          paddingBottom: floating.bottom + floating.height + 24,
         }}
       >
         <View className="flex-row items-center justify-between">

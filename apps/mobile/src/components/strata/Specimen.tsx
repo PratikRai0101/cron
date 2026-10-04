@@ -5,6 +5,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useColors } from "@/theme/ThemeContext";
 import { buildStrata, layerPaths, type Stratum } from "@/lib/strata";
 interface SpecimenProps {
+  onSelectLayer?: (id: string) => void;
+  selectedLayerId?: string | null;
   height?: number;
   empty?: boolean;
   records?: readonly Stratum[];
@@ -14,6 +16,8 @@ interface SpecimenProps {
 const AnimatedG = Animated.createAnimatedComponent(G);
 const NO_RECORDS: readonly Stratum[] = [];
 export function Specimen({
+  onSelectLayer,
+  selectedLayerId = null,
   height = 100,
   empty = false,
   records = NO_RECORDS,
@@ -83,8 +87,8 @@ export function Specimen({
       width="100%"
       height={height}
       viewBox="0 -44 354 188"
-      accessible
-      accessibilityRole="image"
+      accessible={!onSelectLayer}
+      accessibilityRole={onSelectLayer ? undefined : "image"}
       accessibilityLabel={label}
     >
       {outline && (
@@ -118,7 +122,13 @@ export function Specimen({
             {faces}
           </AnimatedG>
         ) : (
-          <G key={layer.id} stroke={c.background} strokeWidth={0.8}>
+          <G
+            key={layer.id}
+            onPress={onSelectLayer ? () => onSelectLayer(layer.id) : undefined}
+            opacity={selectedLayerId && selectedLayerId !== layer.id ? 0.35 : 1}
+            stroke={selectedLayerId === layer.id ? c.primary : c.background}
+            strokeWidth={selectedLayerId === layer.id ? 1.8 : 0.8}
+          >
             {faces}
           </G>
         );

@@ -1,9 +1,17 @@
 import { useColors } from "@/theme/ThemeContext";
 import { useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { View, Text, Pressable, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Input } from "@/components/ui";
+import { offerLogUndo } from "@/lib/activityChanges";
 import { useLogStore } from "@/stores";
 import { useIdentities } from "@/hooks/useIdentities";
 import { formatDate, formatMinutes } from "@monolith/shared";
@@ -63,13 +71,19 @@ export default function RetroLogScreen() {
       identityColor: selectedIdentity.color,
     });
 
+    const saved = useLogStore.getState().retroLogs.at(-1);
+    if (saved) offerLogUndo(saved);
     router.back();
   };
 
   return (
-    <View className="flex-1 bg-background dark:bg-dark-ground">
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-background dark:bg-dark-ground"
+    >
       <View className="flex-1">
         <ScrollView
+          keyboardDismissMode="on-drag"
           className="px-5"
           contentContainerStyle={{
             paddingTop: insets.top + 20,
@@ -165,6 +179,6 @@ export default function RetroLogScreen() {
           </View>
         </ScrollView>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }

@@ -4,7 +4,8 @@ import { router, useLocalSearchParams } from "expo-router";
 import { formatDate, formatMinutes } from "@monolith/shared";
 import { useTaskStore } from "@/stores";
 import { useActivity } from "@/hooks/useActivity";
-import { Specimen } from "@/components/strata/Specimen";
+import { InspectableSpecimen } from "@/components/strata/InspectableSpecimen";
+import { UndoNotice } from "@/components/strata/UndoNotice";
 import { Icon } from "@/components/strata/Icon";
 import { Action } from "@/components/strata/Action";
 import { useColors } from "@/theme/ThemeContext";
@@ -65,6 +66,7 @@ export default function DayScreen() {
             History
           </Text>
         </View>
+        <UndoNotice />
         <View className="flex-row items-center justify-between mt-5">
           <Text className="text-[13px] text-text-secondary dark:text-dark-muted">
             {new Date(`${day}T12:00:00`).toLocaleDateString("en-GB", {
@@ -110,8 +112,10 @@ export default function DayScreen() {
           {identities.size === 1 ? "identity" : "identities"}
         </Text>
         <View className="my-6">
-          <Specimen
+          <InspectableSpecimen
             height={140}
+            date={day}
+            identityId={identityId}
             records={activity.strata.filter(
               (r) =>
                 r.date.slice(0, 10) === day &&
@@ -130,7 +134,15 @@ export default function DayScreen() {
         {sessions
           .sort((a, b) => a.completedAt.localeCompare(b.completedAt))
           .map((s) => (
-            <View
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`Inspect ${s.identityName} session`}
+              onPress={() =>
+                router.push({
+                  pathname: "/modals/layer",
+                  params: { id: `session:${s.id}`, date: day, identityId },
+                })
+              }
               key={s.id}
               className="min-h-[80px] flex-row items-center border-b border-border dark:border-dark-rule "
               style={{ gap: 12 }}
@@ -153,10 +165,18 @@ export default function DayScreen() {
               <Text className="text-[13px] text-text-primary dark:text-dark-ink">
                 {formatMinutes(Math.floor(s.duration / 60))}
               </Text>
-            </View>
+            </Pressable>
           ))}
         {logs.map((l) => (
-          <View
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Inspect ${l.identityName} log`}
+            onPress={() =>
+              router.push({
+                pathname: "/modals/layer",
+                params: { id: `log:${l.id}`, date: day, identityId },
+              })
+            }
             key={l.id}
             className="min-h-[80px] flex-row items-center border-b border-border dark:border-dark-rule "
             style={{ gap: 12 }}
@@ -175,7 +195,7 @@ export default function DayScreen() {
             <Text className="text-[13px] text-text-primary dark:text-dark-ink">
               {formatMinutes(l.minutes)}
             </Text>
-          </View>
+          </Pressable>
         ))}
         {total === 0 && (
           <Text className="text-[15px] text-text-secondary dark:text-dark-muted my-5">

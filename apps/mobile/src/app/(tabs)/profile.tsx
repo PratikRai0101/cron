@@ -1,10 +1,12 @@
+import { useFloatingNavigation } from "@/components/strata/FloatingNavigation";
 import { View, Text, ScrollView, Pressable } from "react-native";
 import {
   useSafeAreaInsets,
   initialWindowMetrics,
 } from "react-native-safe-area-context";
 import { router } from "expo-router";
-import { Specimen } from "@/components/strata/Specimen";
+import { InspectableSpecimen } from "@/components/strata/InspectableSpecimen";
+import { UndoNotice } from "@/components/strata/UndoNotice";
 import { useColors } from "@/theme/ThemeContext";
 import { useIdentities } from "@/hooks/useIdentities";
 import { useActivity } from "@/hooks/useActivity";
@@ -13,6 +15,7 @@ import { useUserStore } from "@/stores";
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
+  const floating = useFloatingNavigation();
   const identities = useIdentities();
   const { byDate, byIdentity, sessions, strata } = useActivity();
   const goal = useUserStore((s) => s.dailyGoalMinutes);
@@ -54,7 +57,7 @@ export default function ProfileScreen() {
           paddingTop:
             Math.max(insets.top, initialWindowMetrics?.insets.top ?? 0) + 16,
           paddingHorizontal: 24,
-          paddingBottom: insets.bottom + 112,
+          paddingBottom: floating.bottom + floating.height + 24,
         }}
       >
         <View className="flex-row items-center justify-between">
@@ -72,6 +75,7 @@ export default function ProfileScreen() {
             </Text>
           </Pressable>
         </View>
+        <UndoNotice />
         <Text className="text-[13px] text-text-secondary dark:text-dark-muted mt-6">
           Total focused time
         </Text>
@@ -89,7 +93,7 @@ export default function ProfileScreen() {
           {daysWorked === 1 ? "day" : "days"} worked
         </Text>
         <View className="my-6">
-          <Specimen height={120} records={strata} />
+          <InspectableSpecimen height={120} records={strata} />
         </View>
         <View className="flex-row justify-between " style={{ gap: 12 }}>
           <Text className="text-[15px] font-bold text-text-primary dark:text-dark-ink">

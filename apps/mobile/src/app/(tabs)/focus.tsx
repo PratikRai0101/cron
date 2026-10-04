@@ -1,3 +1,4 @@
+import { offerSessionUndo } from "@/lib/activityChanges";
 import { useFloatingNavigation } from "@/components/strata/FloatingNavigation";
 import { AnimatedTotal } from "@/components/strata/AnimatedTotal";
 import { useEffect, useRef, useCallback, useState } from "react";
@@ -14,7 +15,8 @@ import {
   initialWindowMetrics,
 } from "react-native-safe-area-context";
 import { useFocusStore, useTaskStore, useUserStore } from "@/stores";
-import { Specimen } from "@/components/strata/Specimen";
+import { InspectableSpecimen } from "@/components/strata/InspectableSpecimen";
+import { UndoNotice } from "@/components/strata/UndoNotice";
 import { Action } from "@/components/strata/Action";
 import { useActivity } from "@/hooks/useActivity";
 import { IdentityPill } from "@/components/identity";
@@ -29,9 +31,10 @@ function SessionAwake() {
 }
 
 export default function FocusTabScreen() {
-  const { byDate, strata } = useActivity();
+  const { byDate, strata, sessions } = useActivity();
   const [savedLayerId, setSavedLayerId] = useState<string | null>(null);
-  const [saved, setSaved] = useState<number | null>(null);
+  const savedRecord = sessions.find((s) => s.id === savedLayerId);
+  const saved = savedRecord ? Math.floor(savedRecord.duration / 60) : null;
   const insets = useSafeAreaInsets();
   const floating = useFloatingNavigation();
   const identities = useIdentities();
@@ -102,10 +105,9 @@ export default function FocusTabScreen() {
     const result = stopFocus();
     if (result && result.duration >= 60) {
       const identity = identities.find((i) => i.id === result.identityId);
-      setSaved(Math.floor(result.duration / 60));
       const id = uid("session-");
       setSavedLayerId(id);
-      logSession({
+      const session = {
         id,
         duration: result.duration,
         identityId: result.identityId,
@@ -113,7 +115,9 @@ export default function FocusTabScreen() {
         identityColor: identity?.color || "#ffffff",
         taskId: result.taskId,
         completedAt: new Date().toISOString(),
-      });
+      };
+      logSession(session);
+      offerSessionUndo(session);
     }
   }, [elapsedSeconds, identities, stopFocus, logSession]);
 
@@ -137,7 +141,6 @@ export default function FocusTabScreen() {
 
   const handleStartWithIdentity = useCallback(() => {
     if (identityToStart) {
-      setSaved(null);
       setSavedLayerId(null);
       startFocus(identityToStart.id);
     }
@@ -162,6 +165,7 @@ export default function FocusTabScreen() {
             : floating.contentPaddingBottom,
         }}
       >
+        <UndoNotice />
         <Text className="text-[28px] font-bold text-text-primary dark:text-dark-ink mb-5">
           {saved !== null ? "Recorded" : "Focus"}
         </Text>
@@ -197,11 +201,12 @@ export default function FocusTabScreen() {
         <Text className="text-[13px] text-text-secondary dark:text-dark-muted mb-6">
           {saved !== null ? `minutes today · ${saved} min added` : "elapsed"}
         </Text>
-        <Specimen
+        <InspectableSpecimen
+          interactive={!isActive}
           height={130}
           records={strata}
           previewMinutes={isActive ? elapsedSeconds / 60 : 0}
-          animatedLayerId={savedLayerId}
+          animatedLayerId={savedLayerId ? `session:${savedLayerId}` : null}
         />
         <Text className="text-[13px] text-text-secondary dark:text-dark-muted mt-5">
           {saved !== null

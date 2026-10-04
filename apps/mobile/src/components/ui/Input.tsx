@@ -25,10 +25,16 @@ export function Input({
       )}
       <TextInput
         {...props}
+        accessibilityLabel={props.accessibilityLabel ?? label}
+        style={[{ minHeight: 48 }, props.style]}
         placeholderTextColor={c.tertiaryText}
         className={`bg-surface dark:bg-dark-surface border border-border dark:border-dark-rule rounded-monolith px-4 py-3 text-body text-text-primary dark:text-dark-ink  focus:border-accent ${className}`}
       />
-      {error && <Text className="text-caption text-error mt-1 ">{error}</Text>}
+      {error && (
+        <Text className="text-caption text-error dark:text-[#F2A6A6] mt-1 ">
+          {error}
+        </Text>
+      )}
     </View>
   );
 }

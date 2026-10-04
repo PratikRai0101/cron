@@ -1,3 +1,4 @@
+import { replaceRecord } from '@/lib/activityRecords';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,6 +14,7 @@ export interface CompletedSession {
 }
 
 interface FocusState {
+  replaceSession: (id: string, expected: CompletedSession | null, next: CompletedSession | null, index?: number) => boolean;
   isActive: boolean;
   isPaused: boolean;
   elapsedSeconds: number;
@@ -41,6 +43,14 @@ function getElapsed(startTime: number | null, accumulatedSeconds: number): numbe
 export const useFocusStore = create<FocusState>()(
   persist(
     (set, get) => ({
+      replaceSession: (id, expected, next, index) => {
+        if (next && (!next.identityId || !next.identityName.trim() ||
+          !Number.isInteger(next.duration) || next.duration < 60 || next.duration > MAX_SESSION_SECONDS)) return false;
+        const records = replaceRecord(get().completedSessions, id, expected, next, index);
+        if (!records) return false;
+        set({ completedSessions: records });
+        return true;
+      },
       isActive: false,
   isPaused: false,
   elapsedSeconds: 0,

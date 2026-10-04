@@ -1,3 +1,4 @@
+import { useActivityUndoStore } from "@/stores/activityUndoStore";
 import { useEffect, useState } from "react";
 import { View, Text, Pressable, ScrollView, Alert } from "react-native";
 import { router } from "expo-router";
@@ -115,6 +116,7 @@ export default function SettingsScreen() {
           text: "Delete all data",
           style: "destructive",
           onPress: () => {
+            useActivityUndoStore.getState().dismiss();
             useIdentityStore.setState({ identities: [] });
             useTaskStore.setState({ tasks: [] });
             useFocusStore.setState({

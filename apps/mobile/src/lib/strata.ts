@@ -73,6 +73,7 @@ export function buildStrata(records: readonly Stratum[], previewMinutes = 0) {
     totalMinutes: valid.reduce((sum, r) => sum + r.minutes, 0),
     recordCount: valid.length,
     earlierCount: older.length,
+    earlierIds: older.map((record) => record.id),
   };
 }
 

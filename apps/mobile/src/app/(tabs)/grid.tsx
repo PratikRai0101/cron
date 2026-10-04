@@ -18,7 +18,8 @@ import { router } from "expo-router";
 import { formatDate, formatMinutes } from "@monolith/shared";
 import { TaskRow } from "@/components/tasks";
 import { IdentityPill } from "@/components/identity";
-import { Specimen } from "@/components/strata/Specimen";
+import { InspectableSpecimen } from "@/components/strata/InspectableSpecimen";
+import { UndoNotice } from "@/components/strata/UndoNotice";
 import { HistoryGrid } from "@/components/strata/HistoryGrid";
 import { Action } from "@/components/strata/Action";
 import { useIdentities } from "@/hooks/useIdentities";
@@ -103,6 +104,7 @@ export default function GridScreen() {
             })}
           </Text>
         </View>
+        <UndoNotice />
         {empty ? (
           <>
             <Text
@@ -111,7 +113,7 @@ export default function GridScreen() {
             >
               No work recorded yet.
             </Text>
-            <Specimen height={110} empty />
+            <InspectableSpecimen height={110} empty />
             <Text className="text-[15px] text-text-secondary dark:text-dark-muted mt-6 mb-6">
               Choose an identity, then start your first session.
             </Text>
@@ -170,8 +172,9 @@ export default function GridScreen() {
         )}
         {!empty && (
           <>
-            <Specimen
-              height={82}
+            <InspectableSpecimen
+              height={110}
+              identityId={selectedIdentity}
               records={
                 selectedIdentity
                   ? strata.filter((r) => r.identityId === selectedIdentity)

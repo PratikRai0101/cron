@@ -113,7 +113,7 @@ function StrataTabs({ state, descriptors, navigation }: BottomTabBarProps) {
             <Icon name={name} color={selected ? c.primary : c.text} />
             <Text
               className="text-[11px]"
-              style={{ color: selected ? c.primary : c.text }}
+              style={{ textAlign: "center", maxWidth: "100%", color: selected ? c.primary : c.text }}
             >
               {title}
             </Text>
