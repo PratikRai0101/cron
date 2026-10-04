@@ -1,0 +1,38 @@
+// Central Strata roles shared by NativeWind and React consumers. SDK54 hex fallback.
+const light = {
+  background: "#F1F4F3",
+  secondaryBackground: "#E5ECEE",
+  text: "#182C3B",
+  secondaryText: "#4B606B",
+  tertiaryText: "#526874",
+  separator: "#CCD7DC",
+  primary: "#24577E",
+  onPrimary: "#FFFFFF",
+  glass: "#FFFFFFE8",
+  selected: "#DCE6EB",
+  rockTop: "#B6C8D0",
+  rockSide: "#7D9CAB",
+  rockMain: "#466D83",
+  rockPale: "#ACC0C9",
+  rockMid: "#628BA2",
+  grid: ["#CCD7DC", "#B6C8D0", "#8BA7B7", "#628BA2", "#466D83", "#24577E"],
+};
+const dark = {
+  background: "#142029",
+  secondaryBackground: "#233541",
+  text: "#EDF3F4",
+  secondaryText: "#B6C8D0",
+  tertiaryText: "#A0B5C0",
+  separator: "#394D5B",
+  primary: "#99C2DF",
+  onPrimary: "#142029",
+  glass: "#233541EB",
+  selected: "#354D5B",
+  rockTop: "#819FAE",
+  rockSide: "#5D7D8E",
+  rockMain: "#7898A8",
+  rockPale: "#ADC4CF",
+  rockMid: "#8DAABA",
+  grid: ["#394D5B", "#466070", "#5D7D8E", "#7898A8", "#819FAE", "#99C2DF"],
+};
+module.exports = { light, dark };

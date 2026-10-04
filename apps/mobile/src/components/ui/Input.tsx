@@ -1,4 +1,5 @@
-import { TextInput, TextInputProps, View, Text } from 'react-native';
+import { useColors } from "@/theme/ThemeContext";
+import { TextInput, TextInputProps, View, Text } from "react-native";
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -10,25 +11,24 @@ interface InputProps extends TextInputProps {
 export function Input({
   label,
   error,
-  containerClassName = '',
-  className = '',
+  containerClassName = "",
+  className = "",
   ...props
 }: InputProps) {
+  const c = useColors();
   return (
     <View className={`w-full ${containerClassName}`}>
       {label && (
-        <Text className="text-caption text-text-secondary uppercase mb-2 font-sans">
+        <Text className="text-caption text-text-secondary dark:text-dark-muted uppercase mb-2 ">
           {label}
         </Text>
       )}
       <TextInput
         {...props}
-        placeholderTextColor="#525252"
-        className={`bg-surface border border-border rounded-monolith px-4 py-3 text-body text-text-primary font-sans focus:border-accent ${className}`}
+        placeholderTextColor={c.tertiaryText}
+        className={`bg-surface dark:bg-dark-surface border border-border dark:border-dark-rule rounded-monolith px-4 py-3 text-body text-text-primary dark:text-dark-ink  focus:border-accent ${className}`}
       />
-      {error && (
-        <Text className="text-caption text-error mt-1 font-sans">{error}</Text>
-      )}
+      {error && <Text className="text-caption text-error mt-1 ">{error}</Text>}
     </View>
   );
 }

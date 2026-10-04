@@ -1,0 +1,100 @@
+[
+  {
+    "name": "01-strata",
+    "fails": [],
+    "warns": [
+      "Em dash in visible copy. Usually a period or colon reads cleaner."
+    ],
+    "facts": {
+      "fonts": {
+        "SF Pro": 17,
+        "Instrument": 2
+      },
+      "sizes": [
+        92,
+        42,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "700"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        216
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "02-studio",
+    "fails": [],
+    "warns": [
+      "Em dash in visible copy. Usually a period or colon reads cleaner."
+    ],
+    "facts": {
+      "fonts": {
+        "SF Pro": 19,
+        "SF Mono": 2
+      },
+      "sizes": [
+        76,
+        28,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "700"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        48
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "03-workshop",
+    "fails": [],
+    "warns": [
+      "Em dash in visible copy. Usually a period or colon reads cleaner."
+    ],
+    "facts": {
+      "fonts": {
+        "SF Pro": 19
+      },
+      "sizes": [
+        96,
+        34,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "700",
+        "750",
+        "800"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        336,
+        0
+      ],
+      "cards": 0
+    }
+  }
+]

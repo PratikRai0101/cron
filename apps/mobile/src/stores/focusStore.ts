@@ -66,6 +66,7 @@ export const useFocusStore = create<FocusState>()(
       isPaused: true,
       startTime: null,
       accumulatedSeconds: getElapsed(startTime, accumulatedSeconds),
+      elapsedSeconds: Math.floor(getElapsed(startTime, accumulatedSeconds)),
     });
   },
   
@@ -109,7 +110,7 @@ export const useFocusStore = create<FocusState>()(
   
   tick: () => {
     const state = get();
-    if (state.isActive && !state.isPaused) {
+    if (state.isActive) {
       set({
         elapsedSeconds: Math.floor(getElapsed(state.startTime, state.accumulatedSeconds)),
       });

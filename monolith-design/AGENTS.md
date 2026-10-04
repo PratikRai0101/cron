@@ -359,3 +359,13 @@ When generating code for this project:
 - The `reference-screens/` HTML files are pixel-perfect targets. Match them exactly when implementing in React Native.
 - If you need to generate a new screen design, use the prompts in `open-design/prompts/screen-prompts.md` with the Open Design daemon.
 - When in doubt, check the interactive prototype: `monolith-design/SCREENS_AND_WIDGETS.html`
+
+## Design exploration — 2026-10-04
+User requested fresh directions and mockups only. New exploration is in `redesign/fresh/` (Strata, Studio, Workshop). Previous Loom files are preserved. No mobile source changed. Latest comparison: `redesign/fresh/shots/r3/sheet.png`; brief and stage limits: `redesign/fresh/DIRECTION.md`. Direction remains provisional pending user feedback; do not treat the existing Loom or these explorations as implementation requirements.
+
+## Strata mockups — 2026-10-04
+User approved A (Strata), mockups only. Full set: `redesign/fresh/mockup.html`; latest sheets `redesign/fresh/shots/full-r3/sheet.png` and `full-r3-se/sheet.png`; comparison `redesign/fresh/shots/before-after/sheet.png`. Same critic across rounds, final all13 scores4, scan0FAIL. Brief/tokens/content/keep coverage in DIRECTION.md and round history in CRITIQUE.md. No mobile source changed; no implementation authorized in this session. Prior Loom preserved.
+
+## Strata implementation — 2026-10-04
+User subsequently asked to build the approved set and requested branch isolation. Work is on `feat/strata-redesign`, carried off `master` before further edits; no main/master commit changed. Approved reference remains `redesign/fresh/shots/full-r3/`. Existing Expo SDK54 app now implements Strata across Grid, Focus/Recorded, Identities, Profile, History detail, appearance and related forms. Tokens: `apps/mobile/src/theme/config.js`; implementation evidence and limits: `redesign/fresh/BUILD.md`; native captures: `redesign/fresh/native-shots/`. Historical mockups-only scope above describes the earlier stage and is superseded by this build request.
+NativeWind2 needs its own `darkMode: off` pseudo-variant; web CSS uses `tailwind.web.config.js` with class mode, without native extractor in PostCSS. Keep the shared palette and explicit theme provider. Native focus clock restores paused accumulated time; regression test covers it.

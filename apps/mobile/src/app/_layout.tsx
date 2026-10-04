@@ -1,21 +1,36 @@
-import '../../global.css';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { useFonts } from 'expo-font';
-import { JetBrainsMono_400Regular } from '@expo-google-fonts/jetbrains-mono';
-import { PlusJakartaSans_400Regular } from '@expo-google-fonts/plus-jakarta-sans';
-
-export default function RootLayout() {
-  const [fontsLoaded] = useFonts({ JetBrainsMono_400Regular, PlusJakartaSans_400Regular });
-  if (!fontsLoaded) return null;
+import "../../global.css";
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useFonts } from "expo-font";
+import { ThemeProvider } from "@react-navigation/native";
+import { ColorsProvider, useTheme } from "@/theme/ThemeContext";
+import { getNavigationTheme } from "@/theme/colors";
+function Navigation() {
+  const { dark, colors } = useTheme();
   return (
-    <>
-      <Stack screenOptions={{ headerShown: false }}>
+    <ThemeProvider value={getNavigationTheme(dark)}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.background },
+        }}
+      >
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="modals" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="modals" options={{ presentation: "modal" }} />
         <Stack.Screen name="onboarding" />
       </Stack>
-      <StatusBar style="light" />
-    </>
+      <StatusBar style={dark ? "light" : "dark"} />
+    </ThemeProvider>
+  );
+}
+export default function RootLayout() {
+  const [loaded, error] = useFonts({
+    InstrumentSerif: require("../../assets/fonts/InstrumentSerif-Regular.ttf"),
+  });
+  if (!loaded && !error) return null;
+  return (
+    <ColorsProvider>
+      <Navigation />
+    </ColorsProvider>
   );
 }

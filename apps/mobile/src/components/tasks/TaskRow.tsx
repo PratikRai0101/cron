@@ -1,7 +1,7 @@
-import { Pressable, Text, View } from 'react-native';
-import { IdentityPill } from '@/components/identity';
-import { formatMinutes } from '@monolith/shared';
-
+import { Pressable, Text, View } from "react-native";
+import { formatMinutes } from "@monolith/shared";
+import { useColors } from "@/theme/ThemeContext";
+import { Icon } from "@/components/strata/Icon";
 interface TaskRowProps {
   title: string;
   identityName: string;
@@ -9,81 +9,72 @@ interface TaskRowProps {
   completed?: boolean;
   loggedMinutes?: number;
   estimatedMinutes?: number;
+  metadata?: string;
   onPress?: () => void;
   onLongPress?: () => void;
   onLogTime?: () => void;
   onToggleComplete?: () => void;
 }
-
 export function TaskRow({
   title,
   identityName,
-  identityColor = '#ffffff',
   completed = false,
   loggedMinutes,
   estimatedMinutes,
+  metadata,
   onPress,
   onLongPress,
   onLogTime,
   onToggleComplete,
 }: TaskRowProps) {
+  const c = useColors();
+  const minutes = loggedMinutes ?? estimatedMinutes;
   return (
-    <Pressable
-      onPress={onPress}
-      onLongPress={onLongPress}
-      accessibilityRole="button"
-      accessibilityLabel={`${title}, ${identityName}${completed ? ', completed' : ''}. Tap to focus, use time button to log, long press to edit or delete`}
-      className="flex-row items-center py-3 border-b border-border-subtle active:bg-surface"
-    >
-      {/* Checkbox */}
+    <View className="flex-row items-center border-b border-border dark:border-dark-rule min-h-[72px]">
       <Pressable
-        onPress={(e) => {
-          e.stopPropagation();
-          onToggleComplete?.();
-        }}
-        className="w-5 h-5 rounded-monolith border-2 items-center justify-center mr-3"
-        style={{
-          borderColor: completed ? '#ffffff' : '#262626',
-          backgroundColor: completed ? '#ffffff' : 'transparent',
-        }}
+        accessibilityRole="checkbox"
+        accessibilityState={{ checked: completed }}
+        accessibilityLabel={`Complete ${title}`}
+        onPress={onToggleComplete}
+        className="w-11 h-11 justify-center"
       >
-        {completed && (
-          <Text className="text-text-inverse text-[10px] font-mono">✓</Text>
-        )}
+        <View
+          className="w-[18px] h-[18px] rounded-full border items-center justify-center"
+          style={{
+            borderColor: c.secondaryText,
+            backgroundColor: completed ? c.primary : "transparent",
+          }}
+        >
+          {completed && <Icon name="check" color={c.onPrimary} size={12} />}
+        </View>
       </Pressable>
-
-      {/* Content */}
-      <View className="flex-1">
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={`${title}, ${identityName}. Tap to focus, hold to manage`}
+        onPress={onPress}
+        onLongPress={onLongPress}
+        className="flex-1 py-3 pr-2 min-h-[44px]"
+      >
         <Text
-          className={`text-body font-sans ${completed ? 'text-text-tertiary line-through' : 'text-text-primary'}`}
+          className={`text-[15px] ${completed ? "text-text-secondary dark:text-dark-muted line-through" : "text-text-primary dark:text-dark-ink"}`}
         >
           {title}
         </Text>
-        <View className="mt-1">
-          <IdentityPill name={identityName} color={identityColor} className="self-start" />
-        </View>
-      </View>
-
-      {onLogTime && (
-        <Pressable onPress={(event) => { event.stopPropagation(); onLogTime(); }}
-          accessibilityRole="button" accessibilityLabel={`Log time for ${title}`} hitSlop={8}
-          className="w-11 h-11 items-center justify-center">
-          <Text className="text-text-secondary text-base font-mono">◷</Text>
-        </Pressable>
-      )}
-      {/* Duration */}
-      <View className="items-end">
-        {loggedMinutes !== undefined && (
-          <Text className="text-mono-sm text-text-tertiary font-mono">
-            {formatMinutes(loggedMinutes)}
-          </Text>
-        )}
-        {estimatedMinutes !== undefined && loggedMinutes === undefined && (
-          <Text className="text-mono-sm text-text-tertiary font-mono">
-            {formatMinutes(estimatedMinutes)}
-          </Text>
-        )}
-      </View>
-    </Pressable>
+        <Text className="text-[13px] text-text-secondary dark:text-dark-muted mt-1">
+          {identityName}
+          {metadata ? ` · ${metadata}` : ""}
+        </Text>
+      </Pressable>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={`Log time for ${title}`}
+        onPress={onLogTime}
+        className="min-w-[44px] min-h-[44px] items-end justify-center"
+      >
+        <Text className="text-[13px] text-text-primary dark:text-dark-ink">
+          {minutes !== undefined ? formatMinutes(minutes) : "Log"}
+        </Text>
+      </Pressable>
+    </View>
   );
 }

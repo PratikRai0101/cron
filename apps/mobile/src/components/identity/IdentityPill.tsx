@@ -1,5 +1,5 @@
-import { Pressable, Text } from 'react-native';
-
+import { Pressable, Text } from "react-native";
+import { useColors } from "@/theme/ThemeContext";
 interface IdentityPillProps {
   name: string;
   color?: string;
@@ -7,29 +7,26 @@ interface IdentityPillProps {
   onPress?: () => void;
   className?: string;
 }
-
 export function IdentityPill({
   name,
-  color = '#ffffff',
   active = false,
   onPress,
-  className = '',
+  className = "",
 }: IdentityPillProps) {
-  const borderColor = `${color}4D`;
-  const bgColor = active ? `${color}26` : 'transparent';
-
+  const c = useColors();
   return (
     <Pressable
       onPress={onPress}
-      className={`rounded-full px-3 py-1 border items-center justify-center active:scale-[0.97] ${className}`}
-      style={{
-        borderColor,
-        backgroundColor: bgColor,
-      }}
+      disabled={!onPress}
+      accessibilityRole={onPress ? "button" : "text"}
+      accessibilityLabel={name}
+      accessibilityState={onPress ? { selected: active } : undefined}
+      className={`rounded-full min-h-[44px] px-3 items-center justify-center ${className}`}
+      style={{ backgroundColor: active ? c.text : "transparent" }}
     >
       <Text
-        className="text-caption uppercase font-sans"
-        style={{ color: active ? color : '#737373' }}
+        className="text-[15px]"
+        style={{ color: active ? c.background : c.text }}
       >
         {name}
       </Text>

@@ -1,0 +1,96 @@
+[
+  {
+    "name": "01-strata",
+    "fails": [],
+    "warns": [
+      "Text inside the system's safe areas: \"Completed: parser fix · \" (home indicator)"
+    ],
+    "facts": {
+      "fonts": {
+        "SF Pro": 18,
+        "Instrument": 1
+      },
+      "sizes": [
+        76,
+        20,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "700"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        216
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "02-studio",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 19,
+        "SF Mono": 2
+      },
+      "sizes": [
+        64,
+        28,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "700"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        48
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "03-workshop",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 20
+      },
+      "sizes": [
+        64,
+        24,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "700",
+        "750",
+        "800"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        336,
+        0
+      ],
+      "cards": 0
+    }
+  }
+]

@@ -1,6 +1,3 @@
 module.exports = {
-  plugins: {
-    tailwindcss: {},
-    'nativewind/postcss': {},
-  },
+  plugins: { tailwindcss: { config: "./tailwind.web.config.js" } },
 };

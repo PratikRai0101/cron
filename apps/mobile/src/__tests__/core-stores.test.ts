@@ -90,6 +90,14 @@ describe('identity store', () => {
 });
 
 describe('focus store', () => {
+  test('a restored paused session displays its accumulated time without advancing', () => {
+    useFocusStore.setState({ isActive: true, isPaused: true, startTime: null, accumulatedSeconds: 92, elapsedSeconds: 0, currentIdentityId: 'identity-code' });
+    useFocusStore.getState().tick();
+    expect(useFocusStore.getState().elapsedSeconds).toBe(92);
+    jest.advanceTimersByTime(60_000);
+    useFocusStore.getState().tick();
+    expect(useFocusStore.getState().elapsedSeconds).toBe(92);
+  });
   test('saved duration excludes time spent paused', () => {
     const focus = useFocusStore.getState();
     focus.startFocus('identity-code', 'task-1');

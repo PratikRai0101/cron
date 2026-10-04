@@ -1,21 +1,34 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback, useState } from "react";
 import {
   View,
   Text,
   Pressable,
   Alert,
   AppState,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useFocusStore, useTaskStore, useUserStore } from '@/stores';
-import { Timer, RingProgress } from '@/components/focus';
-import { IdentityPill } from '@/components/identity';
-import { useIdentities } from '@/hooks/useIdentities';
-import { formatMinutes } from '@monolith/shared';
-import { uid } from '@/lib/id';
-import { useKeepAwake } from 'expo-keep-awake';
+  ScrollView,
+} from "react-native";
+import {
+  useSafeAreaInsets,
+  initialWindowMetrics,
+} from "react-native-safe-area-context";
+import { useFocusStore, useTaskStore, useUserStore } from "@/stores";
+import { Specimen } from "@/components/strata/Specimen";
+import { Action } from "@/components/strata/Action";
+import { useActivity } from "@/hooks/useActivity";
+import { IdentityPill } from "@/components/identity";
+import { useIdentities } from "@/hooks/useIdentities";
+import { formatMinutes, formatDate } from "@monolith/shared";
+import { uid } from "@/lib/id";
+import { useKeepAwake } from "expo-keep-awake";
+
+function SessionAwake() {
+  useKeepAwake("monolith-focus-session");
+  return null;
+}
 
 export default function FocusTabScreen() {
+  const { byDate } = useActivity();
+  const [saved, setSaved] = useState<number | null>(null);
   const insets = useSafeAreaInsets();
   const identities = useIdentities();
   const {
@@ -34,10 +47,10 @@ export default function FocusTabScreen() {
   } = useFocusStore();
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  useKeepAwake(isActive && !isPaused ? 'monolith-focus-session' : undefined);
 
-  // Timer tick effect
+  // Restore the persisted clock immediately, including a paused session.
   useEffect(() => {
+    if (isActive) tick();
     if (isActive && !isPaused) {
       timerRef.current = setInterval(() => {
         tick();
@@ -52,15 +65,15 @@ export default function FocusTabScreen() {
   }, [isActive, isPaused, tick]);
 
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', (state) => {
-      if (state === 'active' && isActive && !isPaused) tick();
+    const subscription = AppState.addEventListener("change", (state) => {
+      if (state === "active" && isActive && !isPaused) tick();
     });
     return () => subscription.remove();
   }, [isActive, isPaused, tick]);
 
   const handleStart = useCallback(() => {
     if (!isActive) {
-      startFocus(identities[0].id);
+      if (identities[0]) startFocus(identities[0].id);
     } else if (isPaused) {
       resumeFocus();
     } else {
@@ -70,21 +83,28 @@ export default function FocusTabScreen() {
 
   const handleStop = useCallback(() => {
     if (elapsedSeconds >= 12 * 60 * 60) {
-      Alert.alert('Session limit reached', 'Focus sessions are capped at 12 hours. This session will be saved at the limit.');
+      Alert.alert(
+        "Session limit reached",
+        "Focus sessions are capped at 12 hours. This session will be saved at the limit.",
+      );
     }
     if (elapsedSeconds < 60) {
-      Alert.alert('Session too short', 'Focus for at least one minute to save a session. Cancel to discard it.');
+      Alert.alert(
+        "Session too short",
+        "Focus for at least one minute to save a session. Cancel to discard it.",
+      );
       return;
     }
     const result = stopFocus();
     if (result && result.duration >= 60) {
       const identity = identities.find((i) => i.id === result.identityId);
+      setSaved(Math.floor(result.duration / 60));
       logSession({
-        id: uid('session-'),
+        id: uid("session-"),
         duration: result.duration,
         identityId: result.identityId,
-        identityName: identity?.name || 'Focus',
-        identityColor: identity?.color || '#ffffff',
+        identityName: identity?.name || "Focus",
+        identityColor: identity?.color || "#ffffff",
         taskId: result.taskId,
         completedAt: new Date().toISOString(),
       });
@@ -92,136 +112,168 @@ export default function FocusTabScreen() {
   }, [elapsedSeconds, identities, stopFocus, logSession]);
 
   const handleCancel = useCallback(() => {
-    Alert.alert('Discard session?', 'Elapsed time will not be saved.', [
-      { text: 'Keep focusing', style: 'cancel' },
-      { text: 'Discard', style: 'destructive', onPress: cancelFocus },
+    Alert.alert("Discard session?", "Elapsed time will not be saved.", [
+      { text: "Keep focusing", style: "cancel" },
+      { text: "Discard", style: "destructive", onPress: cancelFocus },
     ]);
   }, [cancelFocus]);
 
   const currentIdentity = identities.find((i) => i.id === currentIdentityId);
-  const taskTitle = useTaskStore((s) => s.tasks.find((t) => t.id === currentTaskId)?.title);
+  const taskTitle = useTaskStore(
+    (s) => s.tasks.find((t) => t.id === currentTaskId)?.title,
+  );
   const sessionGoal = useUserStore((s) => s.dailyGoalMinutes);
-  const [selectedIdentityId, setSelectedIdentityId] = useState<string | null>(null);
-  const identityToStart = identities.find((i) => i.id === selectedIdentityId) ?? identities[0];
+  const [selectedIdentityId, setSelectedIdentityId] = useState<string | null>(
+    null,
+  );
+  const identityToStart =
+    identities.find((i) => i.id === selectedIdentityId) ?? identities[0];
 
   const handleStartWithIdentity = useCallback(() => {
-    if (identityToStart) startFocus(identityToStart.id);
+    if (identityToStart) {
+      setSaved(null);
+      startFocus(identityToStart.id);
+    }
   }, [identityToStart, startFocus]);
 
-  // If no active session, show idle state with start prompt
-  if (!isActive) {
-    return (
-      <View className="flex-1 bg-background items-center justify-center px-5">
-        {/* Identity Picker */}
-        <View className="absolute items-center" style={{ top: insets.top + 8 }}>
-          <Text className="text-caption text-text-secondary uppercase mb-3 font-sans">
-            Tracking
-          </Text>
-          <View className="flex-row gap-2">
-            {identities.map((identity) => (
-              <IdentityPill
-                key={identity.id}
-                name={identity.name}
-                color={identity.color}
-                active={identityToStart?.id === identity.id}
-                onPress={() => setSelectedIdentityId(identity.id)}
-              />
-            ))}
-          </View>
-        </View>
-
-        {/* Timer */}
-        <Timer seconds={0} size="large" />
-
-        {/* Hint */}
-        <Text className="text-caption text-text-tertiary uppercase mt-4 font-sans">
-          Press play to start
-        </Text>
-
-        {/* Start Button */}
-        <Pressable
-          onPress={handleStartWithIdentity}
-          disabled={!identityToStart}
-          accessibilityRole="button"
-          accessibilityLabel="Start focus session"
-          className="mt-12 w-20 h-20 rounded-full bg-accent items-center justify-center active:scale-[0.97]"
-        >
-          <Text className="text-text-inverse text-2xl font-mono">▶</Text>
-        </Pressable>
-      </View>
-    );
-  }
-
-  // Active focus mode
+  const todaySaved = byDate[formatDate(new Date())] ?? 0;
+  const seconds = Math.floor(elapsedSeconds);
+  const timer = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
   return (
-    <View className="flex-1 bg-background items-center justify-center px-5">
-      {/* Identity Pill */}
-      <View className="absolute items-center" style={{ top: insets.top + 8 }}>
-        <View
-          className="rounded-full px-4 py-1.5 border"
-          style={{ borderColor: currentIdentity ? `${currentIdentity.color}4D` : 'rgba(255,255,255,0.12)' }}
-        >
-          <Text
-            className="text-caption uppercase font-sans"
-            style={{ color: currentIdentity?.color || '#ffffff' }}
-          >
-            {currentIdentity?.name || 'Focus'}
+    <View className="flex-1 bg-background dark:bg-dark-ground">
+      {isActive && !isPaused && <SessionAwake />}
+      <ScrollView
+        automaticallyAdjustContentInsets={false}
+        contentInsetAdjustmentBehavior="never"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingTop:
+            Math.max(insets.top, initialWindowMetrics?.insets.top ?? 0) + 20,
+          paddingHorizontal: 24,
+          paddingBottom: insets.bottom + (isActive ? 100 : 164),
+        }}
+      >
+        <Text className="text-[28px] font-bold text-text-primary dark:text-dark-ink mb-5">
+          {saved !== null ? "Recorded" : "Focus"}
+        </Text>
+        <View className="flex-row justify-between">
+          <Text className="text-[13px] text-text-secondary dark:text-dark-muted">
+            {new Date().toLocaleDateString("en-GB", {
+              weekday: "short",
+              day: "numeric",
+              month: "short",
+            })}
+          </Text>
+          <Text className="text-[13px] text-text-secondary dark:text-dark-muted">
+            {isPaused ? "Paused" : isActive ? "Counting up" : "Ready"}
           </Text>
         </View>
-      </View>
-
-      {/* Timer with Ring */}
-      <Pressable onPress={handleStart}>
-        <RingProgress
-          progress={Math.min(elapsedSeconds / (sessionGoal * 60), 1)}
-          size={220}
-          strokeWidth={6}
+        <Text
+          className={
+            saved !== null
+              ? "font-serif text-[76px] leading-[86px] text-text-primary dark:text-dark-ink mt-4"
+              : "text-[76px] leading-[86px] text-text-primary dark:text-dark-ink mt-4"
+          }
+          style={{ fontVariant: ["tabular-nums"], letterSpacing: -2 }}
+          accessibilityLabel={
+            saved !== null
+              ? `${todaySaved} minutes today, ${saved} minutes recorded`
+              : `${Math.floor(seconds / 60)} minutes ${seconds % 60} seconds elapsed`
+          }
         >
-          <Timer seconds={elapsedSeconds} size="large" paused={isPaused} />
-        </RingProgress>
-      </Pressable>
-
-      {taskTitle && <Text className="text-body text-text-primary mt-3 font-sans" numberOfLines={2}>{taskTitle}</Text>}
-      <Text className="text-body-sm text-text-secondary mt-2 font-sans">
-        {formatMinutes(Math.floor(elapsedSeconds / 60))} / {sessionGoal}m
-      </Text>
-
-      {/* Controls */}
-      <View className="absolute bottom-24 flex-row items-center gap-8">
-        {/* Pause / Resume */}
-        <Pressable
-          onPress={handleStart}
-          accessibilityRole="button"
-          accessibilityLabel={isPaused ? 'Resume focus' : 'Pause focus'}
-          className="w-11 h-11 rounded-full border border-border items-center justify-center active:scale-[0.97]"
+          {saved !== null ? `${todaySaved}` : timer}
+        </Text>
+        <Text className="text-[13px] text-text-secondary dark:text-dark-muted mb-6">
+          {saved !== null ? `minutes today · ${saved} min added` : "elapsed"}
+        </Text>
+        <Specimen
+          key={saved === null ? "focus" : "saved"}
+          height={130}
+          landing={saved !== null}
+        />
+        <Text className="text-[13px] text-text-secondary dark:text-dark-muted mt-5">
+          {saved !== null
+            ? "A new layer recorded."
+            : `${Math.floor(elapsedSeconds / 60)} min in this layer`}
+        </Text>
+        <Text className="text-[20px] font-bold text-text-primary dark:text-dark-ink mt-6 mb-3">
+          {taskTitle ??
+            (saved !== null
+              ? "Today’s work is permanent."
+              : "Choose your work")}
+        </Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ gap: 3 }}
         >
-          <Text className="text-text-primary text-sm font-mono">
-            {isPaused ? '▶' : 'Ⅱ'}
+          {identities.map((identity) => (
+            <IdentityPill
+              key={identity.id}
+              name={identity.name}
+              active={
+                (isActive ? currentIdentity?.id : identityToStart?.id) ===
+                identity.id
+              }
+              onPress={
+                isActive ? undefined : () => setSelectedIdentityId(identity.id)
+              }
+            />
+          ))}
+        </ScrollView>
+        {identities.length === 0 && (
+          <Text className="text-[15px] text-text-secondary dark:text-dark-muted my-3">
+            Add an identity from the Identity tab to start.
           </Text>
-        </Pressable>
-
-        {/* Stop */}
-        <Pressable
-          onPress={handleStop}
-          accessibilityRole="button"
-          accessibilityLabel="Save and end focus session"
-          className="w-16 h-16 rounded-full bg-accent items-center justify-center active:scale-[0.97]"
-        >
-          <Text className="text-text-inverse text-lg font-mono">■</Text>
-        </Pressable>
-
-        {/* Cancel */}
-        <Pressable
-          onPress={handleCancel}
-          accessibilityRole="button"
-          accessibilityLabel="Discard focus session"
-          className="w-11 h-11 rounded-full border border-border items-center justify-center active:scale-[0.97]"
-        >
-          <Text className="text-text-secondary text-sm font-sans">✕</Text>
-        </Pressable>
+        )}
+        <View className="border-t border-border dark:border-dark-rule mt-6 pt-4">
+          <View className="flex-row justify-between">
+            <Text className="text-[13px] text-text-secondary dark:text-dark-muted">
+              Today’s saved effort
+            </Text>
+            <Text className="text-[15px] font-semibold text-text-primary dark:text-dark-ink">
+              {formatMinutes(todaySaved)}
+            </Text>
+          </View>
+          <Text className="text-[13px] text-text-secondary dark:text-dark-muted mt-3">
+            {isActive
+              ? "This session is added when you finish."
+              : `Daily goal · ${sessionGoal} min`}
+          </Text>
+        </View>
+        {isActive && (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Discard session"
+            onPress={handleCancel}
+            className="min-h-[44px] justify-center mt-4"
+          >
+            <Text className="text-[13px] text-text-secondary dark:text-dark-muted">
+              Discard session
+            </Text>
+          </Pressable>
+        )}
+      </ScrollView>
+      <View
+        className="absolute left-6 right-6 flex-row "
+        style={{ gap: 12, bottom: insets.bottom + (isActive ? 12 : 78) }}
+      >
+        {isActive && (
+          <Action
+            title={isPaused ? "Resume" : "Pause"}
+            secondary
+            onPress={handleStart}
+          />
+        )}
+        {isActive && <Action title="Finish" onPress={handleStop} />}
+        {!isActive && (
+          <Action
+            title="Start focus"
+            onPress={handleStartWithIdentity}
+            disabled={!identityToStart}
+          />
+        )}
       </View>
-
-
     </View>
   );
 }

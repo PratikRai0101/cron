@@ -1,5 +1,5 @@
-import { View } from 'react-native';
-import type { StyleProp, ViewStyle } from 'react-native';
+import { View } from "react-native";
+import type { StyleProp, ViewStyle } from "react-native";
 
 interface CardProps {
   children: React.ReactNode;
@@ -8,12 +8,22 @@ interface CardProps {
   style?: StyleProp<ViewStyle>;
 }
 
-export function Card({ children, className = '', elevated = false, style }: CardProps) {
-  const baseClass = 'rounded-monolith border border-border-subtle';
-  const bgClass = elevated ? 'bg-surface-elevated' : 'bg-surface';
+export function Card({
+  children,
+  className = "",
+  elevated = false,
+  style,
+}: CardProps) {
+  const baseClass = "border-b border-border dark:border-dark-rule";
+  const bgClass = elevated
+    ? "bg-surface dark:bg-dark-surface"
+    : "bg-transparent";
 
   return (
-    <View className={`${baseClass} ${bgClass} ${className}`} style={[{ padding: 16 }, style]}>
+    <View
+      className={`${baseClass} ${bgClass} ${className}`}
+      style={[{ padding: 16 }, style]}
+    >
       {children}
     </View>
   );
