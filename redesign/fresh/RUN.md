@@ -22,7 +22,7 @@ Open Device Hub, select Monolith Strata QA and start it, then press `i` in the E
 
 To see the motion: press and hold an action; switch tabs; select an identity to change the total/goal bar; complete a task; run Focus for at least one minute and finish to deposit a layer. iOS Settings → Accessibility → Motion → Reduce Motion switches to movement-free feedback.
 
-All work is on feat/strata-redesign, committed locally and not pushed.
+All work is on feat/strata-redesign, pushed to `origin`; `master` fast-forwards to the same commit.
 
 ## Expo Go
 
