@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="redesign/fresh/assets/strata-icon.svg" width="96" alt="Monolith — three mineral strata forming one block" />
+  <img src="redesign/fresh/shots/full-r3/09-icon.png" width="96" alt="Monolith — three mineral strata forming one block" />
 
   <h1>Monolith</h1>
 
