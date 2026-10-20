@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Monolith — onboarding, redesigned</title>
+<link rel="stylesheet" href="file:///Users/pratikrai/.config/opencode/skills/app-designer/assets/device.css">
+<style>
+  @font-face { font-family: "Instrument Serif"; src: url("file:///Users/pratikrai/Development/cron/apps/mobile/assets/fonts/InstrumentSerif-Regular.ttf"); font-weight: 400; font-style: normal; }
+
+  /* Strata tokens — apps/mobile/src/theme/config.js */
+  :root {
+    --ground: #F1F4F3; --raised: #E5ECEE; --ink: #182C3B; --ink-2: #4B606B; --ink-3: #526874;
+    --rule: #CCD7DC; --accent: #24577E; --on-accent: #FFFFFF;
+    --unit-1: #7D9CAB; --unit-2: #ACC0C9; --unit-3: #B6C8D0;
+    --core-front: #ACC0C9; --core-deep: #B6C8D0;
+    --bevel-hi: rgba(255,255,255,.24); --bevel-lo: rgba(24,44,59,.20);
+    --label: #182C3B;
+  }
+  .screen[data-theme="dark"] {
+    --ground: #142029; --raised: #233541; --ink: #EDF3F4; --ink-2: #B6C8D0; --ink-3: #A0B5C0;
+    --rule: #394D5B; --accent: #99C2DF; --on-accent: #142029;
+    --unit-1: #516E7E; --unit-2: #466070; --unit-3: #394D5B;
+    --core-front: #466070; --core-deep: #394D5B;
+    --bevel-hi: rgba(237,243,244,.16); --bevel-lo: rgba(8,14,19,.50);
+    --label: #EDF3F4;
+  }
+
+  .screen { background: var(--ground); color: var(--ink); font-family: var(--sf); container-type: size; }
+  .body { position: absolute; inset: 0; padding: 0 24px; display: flex; flex-direction: column; }
+
+  /* a nav row, iOS style: a back chevron on the later steps, the name centred */
+  .nav { position: relative; height: 44px; margin-top: calc(var(--safe-top) + 4px); display: flex; align-items: center; justify-content: center; flex: none; }
+  .nav-title { font-size: 13px; font-weight: 700; letter-spacing: -0.2px; color: var(--ink); }
+  .back { position: absolute; left: -12px; top: 0; width: 44px; height: 44px; background: none; border: 0; padding: 0; display: flex; align-items: center; justify-content: center; }
+  .back svg { display: block; }
+
+  h1 { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: 34px; line-height: 1.06; letter-spacing: -0.6px; color: var(--ink); margin: 26px 0 0; flex: none; }
+  .sub { font-size: 15px; line-height: 1.35; color: var(--ink-2); margin: 10px 0 0; flex: none; }
+  .foot { margin-top: auto; margin-bottom: 34px; flex: none; }
+  .cta {
+    height: 54px; width: 100%;
+    border: 0; border-radius: 27px; background: var(--accent); color: var(--on-accent);
+    font-family: var(--sf); font-size: 17px; font-weight: 600; letter-spacing: -0.3px;
+  }
+  .link { display: block; width: 100%; background: none; border: 0; padding: 10px 0 12px;
+    font-family: var(--sf); font-size: 13px; color: var(--ink-3); text-align: center; }
+
+  /* ── the core column ───────────────────────────────────────────── */
+  .column { position: relative; margin-top: 26px; flex: none; }
+  .column svg { display: block; width: 100%; height: auto; }
+  .lbl { fill: currentColor; color: var(--label); }
+  .lbl-on { color: var(--on-accent); }
+  .lbl.on { color: var(--on-accent); }
+  .lbl-name { font-family: "Instrument Serif", Georgia, serif; font-size: 28px; letter-spacing: -0.2px; }
+  .lbl-desc { font-family: "SF Pro", -apple-system, sans-serif; font-size: 13px; }
+  .lbl-slot { fill: currentColor; font-family: "SF Pro", -apple-system, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1.6px; color: var(--accent); }
+  .today-label { position: absolute; top: -20px; left: 0; right: 0; text-align: center;
+    font-family: "SF Pro", -apple-system, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1.6px; color: var(--accent); }
+
+  /* ── the goal ──────────────────────────────────────────────────── */
+  .readout { display: flex; align-items: baseline; gap: 6px; margin-top: 28px; flex: none; }
+  /* A live, changing figure: SF Pro, lining and tabular, so the box never bobs.
+     The words keep the serif. (The app's own rule: serif for static totals, SF for live ones.) */
+  .readout .n { font-family: "SF Pro", -apple-system, sans-serif; font-size: 76px; line-height: .92; font-weight: 600; letter-spacing: -2.4px; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .readout .u { font-family: "Instrument Serif", Georgia, serif; font-size: 26px; line-height: 1; color: var(--ink-2); letter-spacing: -0.2px; }
+  .ruler { position: relative; height: 62px; margin-top: 26px; flex: none; }
+  .ruler .track { position: absolute; top: 13px; left: 14px; right: 14px; height: 2px; background: var(--rule); }
+  .ruler .fill { position: absolute; top: 13px; left: 14px; height: 2px; background: var(--accent); width: calc((var(--goal) / 120) * (100% - 28px)); }
+  .ruler .tick { position: absolute; top: 3px; width: 1px; height: 8px; background: var(--ink-3); opacity: .55; left: calc(14px + (var(--v) / 120) * (100% - 28px)); }
+  .ruler .tick.on { background: var(--accent); opacity: 1; height: 11px; top: 0; }
+  .ruler .val { position: absolute; top: 31px; font-size: 11px; line-height: 1; color: var(--ink-3); transform: translateX(-50%); left: calc(14px + (var(--v) / 120) * (100% - 28px)); }
+  .ruler .val.on { color: var(--accent); font-weight: 600; }
+  .ruler .thumb { position: absolute; top: 3px; width: 22px; height: 22px; margin-left: -11px; border-radius: 50%; background: var(--accent); left: calc(14px + (var(--goal) / 120) * (100% - 28px)); }
+  .slab { position: relative; margin-top: 40px; flex: none; }
+  .slab svg { display: block; width: 100%; height: auto; }
+  .caption { font-size: 13px; line-height: 1.35; color: var(--ink-3); margin: 14px 0 0; flex: none; }
+
+  /* Small phone: the artwork takes the hit, never the words. */
+  @container (max-height: 760px) {
+    .screen .slab { margin-top: 30px; }
+    .screen .caption { margin-top: 10px; }
+    .screen .readout { margin-top: 12px; }
+    .screen .ruler { margin-top: 12px; }
+    .screen .column { margin-top: 14px; }
+    .screen .strip { margin-top: 30px; }
+    .screen h1 { margin-top: 18px; }
+    .screen.story .body { padding: 28px 20px; }
+    .screen.story .frame .mini { --mini: .2; }
+    .screen.story .notes { margin-top: 18px; padding-top: 12px; }
+    .screen.story .notes p { font-size: 12px; line-height: 1.4; margin: 4px 0 8px; }
+  }
+
+  /* ── the result ────────────────────────────────────────────────── */
+  .summary { font-family: "Instrument Serif", Georgia, serif; font-size: 34px; line-height: 1.1; letter-spacing: -0.6px; color: var(--ink); margin: 26px 0 0; flex: none; }
+  .strip { position: relative; margin-top: 40px; flex: none; }
+  .strip svg { display: block; width: 100%; height: auto; }
+
+  /* ── storyboard ────────────────────────────────────────────────── */
+  .story { background: var(--ground); color: var(--ink); }
+  .story .body { padding: 40px 24px; }
+  .story .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.6px; color: var(--ink-3); }
+  .story h1 { font-size: 34px; line-height: 1.06; margin: 14px 0 0; }
+  .story .intro { font-size: 15px; line-height: 1.4; color: var(--ink-2); margin: 12px 0 0; }
+  .frames { display: flex; gap: 10px; margin-top: 26px; }
+  .frame { flex: 1; }
+  .frame .mini { --mini: .26; }
+  .frame .mini-screen { background: var(--ground); }
+  .frame b { display: block; font-size: 13px; font-weight: 600; margin-top: 10px; color: var(--ink); }
+  .frame span { display: block; font-size: 11px; color: var(--ink-3); margin-top: 3px; }
+  .notes { margin-top: 26px; border-top: 1px solid var(--rule); padding-top: 16px; }
+  .notes b { font-size: 13px; font-weight: 600; }
+  .notes p { font-size: 13px; line-height: 1.45; color: var(--ink-2); margin: 6px 0 12px; }
+  .notes p:last-child { margin-bottom: 0; }
+  .mini-body { padding: 34px 24px 26px; display: flex; flex-direction: column; height: 100%; }
+  .mini-brand { font-size: 9px; font-weight: 700; color: var(--ink); }
+  .mini-num { font-family: "Instrument Serif", Georgia, serif; font-size: 44px; line-height: .9; color: var(--ink); margin-top: 22px; }
+  .mini-unit { font-size: 11px; color: var(--ink-3); margin-top: 6px; }
+  .mini-ruler { position: relative; margin-top: 22px; height: 3px; background: var(--rule); border-radius: 2px; }
+  .mini-ruler i { position: absolute; top: -6px; width: 15px; height: 15px; margin-left: -7.5px; border-radius: 50%; background: var(--accent); }
+  .mini-slab { margin-top: 26px; }
+  .mini-slab svg { display: block; width: 100%; height: auto; }
+  .mini-caption { margin-top: 12px; height: 7px; border-radius: 4px; background: var(--rule); width: 62%; }
+  .mini-cta { margin-top: auto; height: 34px; border-radius: 17px; background: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ 01 · the area ══════════════ -->
+<section class="screen" data-name="01-area" data-time="9:41">
+  <main class="body">
+    <div class="nav"><span class="nav-title">Monolith</span></div>
+    <h1>What are you<br>working on?</h1>
+    <p class="sub">Pick one identity to start with.</p>
+    <div class="column" id="col1"></div>
+    <div class="foot"><button class="cta">Continue</button></div>
+  </main>
+</section>
+
+<!-- ══════════════ 02 · the goal ══════════════ -->
+<section class="screen" data-name="02-goal" data-time="9:41">
+  <main class="body">
+    <div class="nav">
+      <button class="back" aria-label="Back to the area step">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"/></svg>
+      </button>
+      <span class="nav-title">Monolith</span>
+    </div>
+    <h1>How much a day?</h1>
+    <p class="sub">Minutes of focused work each day.<br>Change it anytime in Settings.</p>
+    <div class="readout"><span class="n">60</span><span class="u">min a day</span></div>
+    <div class="ruler" id="ruler"></div>
+    <div class="slab" id="slab"></div>
+    <p class="caption">Code, one day of work, cut to this depth.</p>
+    <div class="foot"><button class="cta">Continue</button></div>
+  </main>
+</section>
+
+<!-- ══════════════ 03 · the result ══════════════ -->
+<section class="screen" data-name="03-core" data-time="9:41">
+  <main class="body">
+    <div class="nav">
+      <button class="back" aria-label="Back to the goal step">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"/></svg>
+      </button>
+      <span class="nav-title">Monolith</span>
+    </div>
+    <h1 class="summary">Code, 60 minutes a day.</h1>
+    <p class="sub">Every session adds a band to your core.</p>
+    <div class="strip" id="col3"></div>
+    <div class="foot">
+      <button class="link">Change identity or goal</button>
+      <button class="cta">Start your first session</button>
+    </div>
+  </main>
+</section>
+
+<!-- ══════════════ 04 · dark ══════════════ -->
+<section class="screen" data-name="04-area-dark" data-time="21:40" data-theme="dark">
+  <main class="body">
+    <div class="nav"><span class="nav-title">Monolith</span></div>
+    <h1>What are you<br>working on?</h1>
+    <p class="sub">Pick one identity to start with.</p>
+    <div class="column" id="col4"></div>
+    <div class="foot"><button class="cta">Continue</button></div>
+  </main>
+</section>
+
+<!-- ══════════════ 05 · dark goal ══════════════ -->
+<section class="screen" data-name="05-goal-dark" data-time="21:40" data-theme="dark">
+  <main class="body">
+    <div class="nav">
+      <button class="back" aria-label="Back to the area step">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"/></svg>
+      </button>
+      <span class="nav-title">Monolith</span>
+    </div>
+    <h1>How much a day?</h1>
+    <p class="sub">Minutes of focused work each day.<br>Change it anytime in Settings.</p>
+    <div class="readout"><span class="n">60</span><span class="u">min a day</span></div>
+    <div class="ruler" id="ruler5"></div>
+    <div class="slab" id="slab5"></div>
+    <p class="caption">Code, one day of work, cut to this depth.</p>
+    <div class="foot"><button class="cta">Continue</button></div>
+  </main>
+</section>
+
+<!-- ══════════════ 06 · the signature ══════════════ -->
+<section class="screen story" data-name="06-storyboard" data-chrome="none">
+  <main class="body">
+    <span class="eyebrow">SETTING A GOAL</span>
+    <h1>One day,<br>cut to your goal.</h1>
+    <p class="intro">The goal is not a number on a slider. It is how deep one day of your work is.</p>
+    <div class="frames">
+      <div class="frame" data-goal="30">
+        <div class="mini" style="--mini:.26"><div class="mini-screen">
+          <div class="mini-body">
+            <span class="mini-brand">Monolith</span>
+            <span class="mini-num">30</span><span class="mini-unit">min a day</span>
+            <div class="mini-ruler"><i></i></div>
+            <div class="mini-slab"></div>
+            <div class="mini-caption"></div>
+            <div class="mini-cta"></div>
+          </div>
+        </div></div>
+        <b>30 min</b><span>0 ms</span>
+      </div>
+      <div class="frame" data-goal="60">
+        <div class="mini" style="--mini:.26"><div class="mini-screen">
+          <div class="mini-body">
+            <span class="mini-brand">Monolith</span>
+            <span class="mini-num">60</span><span class="mini-unit">min a day</span>
+            <div class="mini-ruler"><i></i></div>
+            <div class="mini-slab"></div>
+            <div class="mini-caption"></div>
+            <div class="mini-cta"></div>
+          </div>
+        </div></div>
+        <b>60 min</b><span>180 ms</span>
+      </div>
+      <div class="frame" data-goal="90">
+        <div class="mini" style="--mini:.26"><div class="mini-screen">
+          <div class="mini-body">
+            <span class="mini-brand">Monolith</span>
+            <span class="mini-num">90</span><span class="mini-unit">min a day</span>
+            <div class="mini-ruler"><i></i></div>
+            <div class="mini-slab"></div>
+            <div class="mini-caption"></div>
+            <div class="mini-cta"></div>
+          </div>
+        </div></div>
+        <b>90 min</b><span>420 ms</span>
+      </div>
+    </div>
+    <div class="notes">
+      <b>How it moves</b>
+      <p>The day's band follows the goal. A critically damped spring, 230 stiffness / 25 damping, no bounce, interruptible mid-drag.</p>
+      <b>Haptics</b>
+      <p>Selection tick when the ruler snaps to a step. One light impact when the band settles. Nothing on every frame.</p>
+      <b>Reduced motion</b>
+      <p>The band re-cuts in place over 120 ms with no spring and no impact. The number updates immediately.</p>
+      <b>The same motion, later</b>
+      <p>Finishing a session drops a band onto the core in the app. The onboarding teaches that spring first.</p>
+    </div>
+  </main>
+</section>
+
+<script>
+/* ── drawing helpers ─────────────────────────────────────────────── */
+const poly = (pts) => "M" + pts.map((p) => p.join(",")).join("L") + "Z";
+
+/* A core column: a geological section, boundaries lifted from
+   apps/mobile/src/lib/strata.ts and stood upright. */
+const CX = [0, 70, 141, 212, 283, 354];
+const CJ = [0, -6, -3, -15, -11, -23];
+const OFF = 26; // keeps the first boundary inside the viewBox
+const edge = (y) => CX.map((x, j) => [x, y + CJ[j] + OFF]);
+const sect = (y) => CX.map((x, j) => [x, y + CJ[j]]);
+const line = (pts) => "M" + pts.map((p) => p.join(",")).join("L");
+
+/* Every fracture gets a 2pt bevel: a light edge above, a shadow below.
+   That is what makes the column read as cut rock and not as a colour field. */
+function bevel(top, bottom) {
+  return `<path d="${line(top)}" transform="translate(0,-0.6)" fill="none" stroke="var(--bevel-hi)" stroke-width="1"/>` +
+         `<path d="${line(bottom)}" transform="translate(0,0.6)" fill="none" stroke="var(--bevel-lo)" stroke-width="1"/>`;
+}
+
+function columnSvg(units, opts = {}) {
+  const rail = opts.rail || 58;
+  const ys = [0];
+  units.forEach((u) => ys.push(ys[ys.length - 1] + u.h));
+  let s = "";
+  units.forEach((u, i) => {
+    const d = poly([...edge(ys[i]), ...edge(ys[i + 1]).reverse()]);
+    s += `<path d="${d}" style="fill:${u.fill}${u.stroke ? `;stroke:${u.stroke};stroke-width:1.5` : ""}"/>`;
+  });
+  units.forEach((u, i) => {
+    s += bevel(edge(ys[i]), edge(ys[i + 1]));
+  });
+  if (opts.labels) {
+    units.forEach((u, i) => {
+      if (!u.name) return;
+      const y = OFF + ys[i] + rail; // one rail: every name sits the same distance below its band
+      const cls = `lbl${u.on ? " on" : ""}`;
+      s += `<text class="${cls} lbl-name" x="22" y="${y}">${u.name}</text>`;
+      if (opts.desc) s += `<text class="${cls} lbl-desc" x="22" y="${y + 21}">${u.desc}</text>`;
+    });
+  }
+  const alt = opts.alt || "A core column. The chosen layer is dyed blue.";
+  return { svg: `<svg viewBox="0 0 354 ${ys[ys.length - 1] + OFF}" role="img" aria-label="${alt}">${s}</svg>`, total: ys[ys.length - 1] + OFF };
+}
+
+/* One day of work, cut to the goal, on the uncut core. */
+/* The whole column is 120 minutes deep: at a 60-minute goal the band is half
+   of it, so the picture and the number cannot disagree. */
+function slabSvg(goal, crop) {
+  const vh = crop || 280;
+  const top = 26, depth = vh - top;
+  const h = Math.round((goal / 120) * depth);
+  const bandBottom = top + h, mid = top + depth * 0.72, bottom = vh - 14;
+  let s = `<path d="${poly([...sect(top), ...sect(bandBottom).reverse()])}" style="fill:var(--accent)"/>`;
+  if (bandBottom < mid) s += `<path d="${poly([...sect(bandBottom), ...sect(mid).reverse()])}" style="fill:var(--core-front)"/>`;
+  if (mid < bottom) s += `<path d="${poly([...sect(mid), ...sect(bottom).reverse()])}" style="fill:var(--core-deep)"/>`;
+  s += bevel(sect(top), sect(bandBottom));
+  if (bandBottom < mid) s += bevel(sect(bandBottom), sect(mid));
+  if (mid < bottom) s += bevel(sect(mid), sect(bottom));
+  if (h > 30) {
+    const y = top + Math.min(h / 2 + 8, h - 20);
+    s += `<text class="lbl lbl-name lbl-on" x="22" y="${y}">Code</text>`;
+  }
+  return `<svg viewBox="0 0 354 ${vh}" role="img" aria-label="A day of Code, cut to ${goal} minutes deep on a core 120 minutes deep.">${s}</svg>`;
+}
+
+
+/* ── screen 1 and 4: the core column ─────────────────────────────── */
+const AREAS = [
+  { name: "Code", desc: "Programming, development, engineering" },
+  { name: "Write", desc: "Writing, blogging, documentation" },
+  { name: "Design", desc: "UI/UX, graphic design, creative" },
+  { name: "Exercise", desc: "Fitness, sports, movement" },
+];
+const FILLS = ["var(--accent)", "var(--unit-1)", "var(--unit-2)", "var(--unit-3)"];
+
+function drawAreas(host, heights, compact) {
+  const units = AREAS.map((a, i) => ({ ...a, h: heights[i], fill: FILLS[i], on: i === 0 }));
+  const layerH = heights[1];
+  const rail = Math.min(Math.round(layerH / 2) + 8, layerH - 35); // one rail: optically centred, never overflowing
+  const desc = !compact && layerH >= 56;              // the descriptions go when a layer cannot hold them
+  host.innerHTML = columnSvg(units, { desc, labels: true, rail,
+    alt: "A core column of four layers: Code, Write, Design and Exercise. Code is dyed blue." }).svg;
+}
+/* The column takes the room it is given: the artwork scales, the type does not.
+   If there is not even room for a name in every layer, the descriptions go first. */
+function fitAreas(host, heights) {
+  const screen = host.closest(".screen");
+  const foot = screen.querySelector(".foot");
+  let last = "";
+  const apply = () => {
+    const avail = screen.clientHeight - host.offsetTop - foot.offsetHeight - 34 - 24 - OFF;
+    const sum = heights.reduce((a, b) => a + b, 0);
+    if (sum <= avail) {
+      if (last !== "full") { last = "full"; drawAreas(host, heights, false); }
+      return;
+    }
+    const per = avail / heights.length;
+    const scaled = heights.map((h) => Math.max(44, Math.round(h * (avail / sum))));
+    const compact = scaled[1] < 85;
+    const key = scaled.join() + (compact ? "c" : "f");
+    if (key !== last) { last = key; drawAreas(host, scaled, compact); }
+  };
+  drawAreas(host, heights, false);
+  new ResizeObserver(apply).observe(screen);
+  document.fonts.ready.then(apply);
+}
+fitAreas(document.getElementById("col1"), [116, 116, 116, 116]);
+fitAreas(document.getElementById("col4"), [116, 116, 116, 116]);
+
+/* ── screen 3: the core with today's slot ────────────────────────── */
+function drawStrip(host, heights, rail) {
+  const units = [
+    { h: heights[0], fill: "var(--accent)", name: "Code", on: true },
+    { h: heights[1], fill: "var(--unit-1)", name: "Write" },
+    { h: heights[2], fill: "var(--unit-2)", name: "Design" },
+    { h: heights[3], fill: "var(--unit-3)", name: "Exercise" },
+  ];
+  host.innerHTML = columnSvg(units, { labels: true, rail,
+    alt: "A core column of four layers: Code, Write, Design and Exercise. Code is dyed blue." }).svg;
+  const label = document.createElement("div");
+  label.className = "today-label";
+  label.textContent = "TODAY";
+  host.appendChild(label);
+}
+{
+  const host = document.getElementById("col3");
+  const heights = [116, 116, 116, 116];
+  const screen = host.closest(".screen");
+  const foot = screen.querySelector(".foot");
+  let last = "";
+  const apply = () => {
+    const avail = screen.clientHeight - host.offsetTop - foot.offsetHeight - 34 - 34 - OFF;
+    const sum = heights.reduce((a, b) => a + b, 0);
+    const scaled = heights.map((h) => Math.min(h, Math.max(44, Math.round(h * (avail / sum)))));
+    const rail = Math.min(Math.round(scaled[0] / 2) + 8, scaled[0] - 35);
+    const key = scaled.join() + rail;
+    if (key !== last) { last = key; drawStrip(host, scaled, rail); }
+  };
+  drawStrip(host, heights, Math.round(heights[0] / 2) + 8);
+  new ResizeObserver(apply).observe(screen);
+  document.fonts.ready.then(apply);
+}
+
+/* ── the ruler ────────────────────────────────────────────────────── */
+function buildRuler(host, goal) {
+  const stops = [0, 15, 30, 45, 60, 75, 90, 105, 120];
+  let s = `<div class="track"></div><div class="fill"></div>`;
+  stops.forEach((v) => {
+    s += `<div class="tick${v === goal ? " on" : ""}" style="--v:${v}"></div>`;
+    if (v > 0) s += `<div class="val${v === goal ? " on" : ""}" style="--v:${v}">${v}</div>`;
+  });
+  s += `<div class="thumb" style="--v:${goal}"></div>`;
+  host.innerHTML = s;
+  host.style.setProperty("--goal", goal);
+}
+buildRuler(document.getElementById("ruler"), 60);
+buildRuler(document.getElementById("ruler5"), 60);
+/* The section is cropped to the room it is given, so the band and the core
+   always fit above the caption and the button. */
+function fitSlab(host, goal) {
+  const screen = host.closest(".screen");
+  const foot = screen.querySelector(".foot");
+  const caption = screen.querySelector(".caption");
+  let last = "";
+  const apply = () => {
+    const width = host.clientWidth || 354;
+    const avail = screen.clientHeight - host.offsetTop - (caption ? caption.offsetHeight + 14 : 0) - foot.offsetHeight - 34 - 12;
+    const crop = Math.max(150, Math.min(280, Math.round((avail * 354) / width)));
+    if (crop !== last) {
+      last = crop;
+      host.innerHTML = slabSvg(goal, crop);
+      const label = document.createElement("div");
+      label.className = "today-label";
+      label.textContent = "TODAY";
+      host.appendChild(label);
+    }
+  };
+  new ResizeObserver(apply).observe(screen);
+  document.fonts.ready.then(apply);
+  apply();
+}
+fitSlab(document.getElementById("slab"), 60);
+fitSlab(document.getElementById("slab5"), 60);
+document.querySelectorAll(".frame[data-goal]").forEach((f) => {
+  const goal = Number(f.dataset.goal);
+  f.querySelector(".mini-slab").innerHTML = slabSvg(goal, 280);
+  f.querySelector(".mini-ruler i").style.left = `${14 + (goal / 120) * 326}px`;
+});
+</script>
+<script src="file:///Users/pratikrai/.config/opencode/skills/app-designer/assets/device.js"></script>
+</body>
+</html>

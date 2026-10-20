@@ -1,46 +1,109 @@
-import { Specimen } from "@/components/strata/Specimen";
-import { View, Text, Pressable } from "react-native";
+import React, { useCallback, useMemo, useState } from "react";
+import { Text, View } from "react-native";
 import { router } from "expo-router";
-import { useAppStore, useIdentityStore } from "@/stores";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useColors, useTheme } from "@/theme/ThemeContext";
+import { useIdentityStore } from "@/stores";
+import { CoreColumn } from "@/components/strata/CoreColumn";
+import { Action } from "@/components/strata/Action";
+import { layerRamp, type CoreBand } from "@/lib/coreColumn";
+import { AREA_PRESETS } from "@/lib/presets";
 
-export default function OnboardingScreen() {
-  const setOnboarded = useAppStore((s) => s.setOnboarded);
+const AREAS = AREA_PRESETS;
+
+/**
+ * The first decision: what are you working on? The four identities are four
+ * layers of rock and the one you pick is dyed with the accent.
+ */
+export default function AreaScreen() {
+  const c = useColors();
+  const { dark } = useTheme();
+  const insets = useSafeAreaInsets();
   const seedFromPresets = useIdentityStore((s) => s.seedFromPresets);
+  const [selected, setSelected] = useState(AREAS[0].key);
+  const [room, setRoom] = useState(0);
+
+  const bands = useMemo<CoreBand[]>(() => {
+    const ramp = layerRamp(c, dark);
+    let used = 0;
+    return AREAS.map((area) => {
+      const on = area.key === selected;
+      const fill = on ? c.primary : ramp[used++ % ramp.length];
+      return {
+        key: area.key,
+        title: area.name,
+        subtitle: area.description,
+        fill,
+        accent: on,
+      };
+    });
+  }, [c, dark, selected]);
+
+  const handleContinue = useCallback(() => {
+    const area = AREAS.find((a) => a.key === selected);
+    if (!area) return;
+    seedFromPresets([
+      { id: area.key, name: area.name, color: area.color, totalMinutes: 0 },
+    ]);
+    router.push("/onboarding/set-goal");
+  }, [selected, seedFromPresets]);
+
   return (
-    <View className="flex-1 bg-background dark:bg-dark-ground items-center justify-center px-5">
-      <View className="w-full mb-8">
-        <Specimen height={140} empty />
-      </View>
-      <Text className="text-h1 text-text-primary dark:text-dark-ink  text-center">
-        Track what matters.
-      </Text>
-      <Text className="text-body text-text-secondary dark:text-dark-muted  text-center mt-3 max-w-[280px]">
-        A competence tracker for people who do deep work.
-      </Text>
-      <Pressable
-        onPress={() => router.replace("/onboarding/set-goal")}
-        className="mt-10 bg-accent dark:bg-dark-accent px-8 py-3 rounded-monolith active:scale-[0.97]"
-      >
-        <Text className="text-text-inverse dark:text-dark-on-accent  font-semibold text-body">
-          Get Started
-        </Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          seedFromPresets([
-            { id: "1", name: "Focus", color: "#ffffff", totalMinutes: 0 },
-          ]);
-          setOnboarded(true);
-          router.replace("/(tabs)/grid");
+    <View style={{ flex: 1, backgroundColor: c.background }}>
+      <View
+        style={{
+          flex: 1,
+          paddingHorizontal: 24,
+          paddingTop: insets.top + 4,
         }}
-        accessibilityRole="button"
-        accessibilityLabel="Skip setup"
-        className="mt-4 px-6 py-3"
       >
-        <Text className="text-body-sm text-text-secondary dark:text-dark-muted">
-          Skip setup
+        <Text
+          style={{
+            fontSize: 13,
+            fontWeight: "700",
+            letterSpacing: -0.2,
+            color: c.text,
+          }}
+        >
+          Monolith
         </Text>
-      </Pressable>
+        <Text
+          style={{
+            fontFamily: "InstrumentSerif",
+            fontSize: 34,
+            lineHeight: 36,
+            letterSpacing: -0.6,
+            color: c.text,
+            marginTop: 26,
+          }}
+        >
+          What are you{"\n"}working on?
+        </Text>
+        <Text
+          style={{
+            fontSize: 15,
+            lineHeight: 20,
+            color: c.secondaryText,
+            marginTop: 10,
+          }}
+        >
+          Pick one identity to start with.
+        </Text>
+        <View
+          style={{ flex: 1, justifyContent: "flex-start" }}
+          onLayout={(event) => setRoom(event.nativeEvent.layout.height)}
+        >
+          <CoreColumn
+            bands={bands}
+            availableHeight={room}
+            onSelect={setSelected}
+            selectedKeys={[selected]}
+          />
+        </View>
+      </View>
+      <View style={{ paddingHorizontal: 24, paddingBottom: 34 }}>
+        <Action title="Continue" onPress={handleContinue} />
+      </View>
     </View>
   );
 }

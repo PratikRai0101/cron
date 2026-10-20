@@ -115,7 +115,7 @@ export default function GridScreen() {
             </Text>
             <InspectableSpecimen height={110} empty />
             <Text className="text-[15px] text-text-secondary dark:text-dark-muted mt-6 mb-6">
-              Choose an identity, then start your first session.
+              Start your first session.
             </Text>
           </>
         ) : (

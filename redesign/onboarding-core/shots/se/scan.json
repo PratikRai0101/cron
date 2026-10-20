@@ -1,0 +1,149 @@
+[
+  {
+    "name": "01-area",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 3,
+        "Instrument Serif": 5
+      },
+      "sizes": [
+        34,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "700"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        216
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "02-goal",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 14,
+        "Instrument Serif": 3
+      },
+      "sizes": [
+        76,
+        34,
+        28,
+        26,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "600",
+        "700"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        216
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "03-core",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 5,
+        "Instrument Serif": 5
+      },
+      "sizes": [
+        34,
+        28,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "600",
+        "700"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        216
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "04-area-dark",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 3,
+        "Instrument Serif": 5
+      },
+      "sizes": [
+        34,
+        28,
+        17,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "700"
+      ],
+      "leftEdges": 2,
+      "accentHues": [
+        216
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "05-goal-dark",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 14,
+        "Instrument Serif": 3
+      },
+      "sizes": [
+        76,
+        34,
+        28,
+        26,
+        17,
+        15,
+        13,
+        11
+      ],
+      "weights": [
+        "400",
+        "600",
+        "700"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        216
+      ],
+      "cards": 0
+    }
+  }
+]
