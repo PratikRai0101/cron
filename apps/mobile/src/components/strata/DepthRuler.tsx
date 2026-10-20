@@ -68,6 +68,8 @@ export function DepthRuler({ value, onChange, max = 120, step = 15 }: Props) {
   const onLayout = (event: LayoutChangeEvent) =>
     setWidth(event.nativeEvent.layout.width);
 
+  // Until the ruler has been measured there is nothing honest to place.
+  if (!width) return <View onLayout={onLayout} style={{ height: 62 }} />;
   return (
     <View
       onLayout={onLayout}
