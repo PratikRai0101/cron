@@ -91,7 +91,9 @@ export default function AreaScreen() {
         </Text>
         <View
           style={{ flex: 1, justifyContent: "flex-start" }}
-          onLayout={(event) => setRoom(event.nativeEvent.layout.height)}
+          onLayout={(event) =>
+            setRoom(event.nativeEvent.layout.height - 16)
+          }
         >
           <CoreColumn
             bands={bands}
