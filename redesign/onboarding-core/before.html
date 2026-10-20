@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Monolith — current onboarding (before)</title>
+<link rel="stylesheet" href="file:///Users/pratikrai/.config/opencode/skills/app-designer/assets/device.css">
+<style>
+  /* Reconstructed from apps/mobile/src/app/onboarding/*.tsx + src/theme/config.js */
+  :root {
+    --ground: #F1F4F3;
+    --ink: #182C3B; --ink-2: #4B606B; --ink-3: #526874;
+    --rule: #CCD7DC; --accent: #24577E; --on-accent: #FFFFFF;
+    --rock-side: #7D9CAB;
+  }
+  .screen { background: var(--ground); color: var(--ink); }
+  .body {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 0 20px;
+  }
+  .specimen { width: 100%; height: 140px; display: block; }
+  .specimen-wrap { width: 100%; margin-bottom: 32px; }
+  h1 {
+    font-family: var(--sf); font-size: 28px; line-height: 1.2; font-weight: 700;
+    text-align: center; margin: 0; color: var(--ink);
+  }
+  .sub {
+    font-size: 15px; line-height: 1.5; font-weight: 400; text-align: center;
+    margin: 12px 0 0; max-width: 280px; color: var(--ink-2);
+  }
+  .btn {
+    margin-top: 40px; background: var(--accent); color: var(--on-accent);
+    padding: 12px 32px; border-radius: 16px; font-size: 15px; font-weight: 600;
+    font-family: var(--sf);
+  }
+  .skip { margin-top: 16px; padding: 12px 24px; font-size: 13px; color: var(--ink-2); font-family: var(--sf); }
+  .skip.small { font-size: 11px; color: var(--ink-3); padding: 12px; }
+  /* step dots */
+  .dots {
+    position: absolute; top: 64px; left: 0; right: 0;
+    display: flex; justify-content: center; gap: 6px;
+  }
+  .dots i { width: 8px; height: 8px; border-radius: 999px; background: var(--rule); }
+  .dots i.on { background: var(--accent); }
+  /* goal stepper */
+  .stepper { display: flex; align-items: center; justify-content: center; gap: 32px; margin-top: 40px; }
+  .step-btn {
+    width: 48px; height: 48px; border-radius: 999px;
+    border: 1px solid var(--rule); display: flex; align-items: center; justify-content: center;
+    font-size: 20px; color: var(--ink);
+  }
+  .goal-value { text-align: center; }
+  .goal-value b { font-size: 76px; line-height: 1; font-weight: 700; letter-spacing: -2px; display: block; }
+  .goal-value span { font-size: 11px; font-weight: 500; letter-spacing: .6px; text-transform: uppercase; color: var(--ink-2); display: block; margin-top: 4px; }
+  /* identity rows */
+  .rows { margin-top: 32px; width: 100%; display: flex; flex-direction: column; gap: 12px; }
+  .row {
+    display: flex; align-items: center; padding: 16px;
+    border: 1px solid var(--rule); border-radius: 16px;
+  }
+  .row.sel { border-color: var(--accent); background: #DCE6EB; }
+  .check { width: 20px; height: 20px; border: 2px solid var(--ink-3); border-radius: 4px; margin-right: 12px; }
+  .row.sel .check { border-color: var(--accent); background: var(--accent); }
+  .row b { font-size: 15px; font-weight: 400; display: block; }
+  .row small { font-size: 11px; font-weight: 500; color: var(--ink-2); display: block; margin-top: 2px; }
+  .btn.cont { margin-top: 32px; align-self: center; }
+  .skip.bottom { align-self: center; margin-top: 16px; }
+</style>
+</head>
+<body>
+
+<section class="screen" data-name="01-splash" data-time="9:41">
+  <div class="body">
+    <div class="specimen-wrap">
+      <svg class="specimen" viewBox="0 -44 354 188" role="img" aria-label="Empty specimen outline">
+        <g fill="none" stroke="var(--rock-side)" stroke-width="1" opacity=".6">
+          <path d="M70,60L124,55L173,58L224,48L287,51L339,41L339,111L287,121L224,118L173,128L124,125L70,130Z"/>
+          <path d="M18,32L70,60L70,130L18,102Z"/>
+          <path d="M18,32L284,17L339,41L339,41L287,51L224,48L173,58L124,55L70,60Z"/>
+        </g>
+      </svg>
+    </div>
+    <h1>Track what matters.</h1>
+    <p class="sub">A competence tracker for people who do deep work.</p>
+    <div class="btn">Get Started</div>
+    <div class="skip">Skip setup</div>
+  </div>
+</section>
+
+<section class="screen" data-name="02-set-goal" data-time="9:41">
+  <div class="dots"><i class="on"></i><i></i><i></i><i></i></div>
+  <div class="body">
+    <h1>Set your daily goal</h1>
+    <p class="sub">How many focused minutes per day?</p>
+    <div class="stepper">
+      <div class="step-btn">−</div>
+      <div class="goal-value"><b>60</b><span>min/day</span></div>
+      <div class="step-btn">+</div>
+    </div>
+    <div class="btn cont">Continue</div>
+    <div class="skip bottom small">Skip</div>
+  </div>
+</section>
+
+<section class="screen" data-name="03-pick-identities" data-time="9:41">
+  <div class="dots"><i></i><i></i><i class="on"></i><i></i></div>
+  <div class="body">
+    <h1>Pick your identities</h1>
+    <p class="sub">Choose one area to start. The Free plan supports one active identity.</p>
+    <div class="rows">
+      <div class="row sel">
+        <div class="check"></div>
+        <div><b>Code</b><small>Programming, development, engineering</small></div>
+      </div>
+      <div class="row">
+        <div class="check"></div>
+        <div><b>Write</b><small>Writing, blogging, documentation</small></div>
+      </div>
+      <div class="row">
+        <div class="check"></div>
+        <div><b>Design</b><small>UI/UX, graphic design, creative</small></div>
+      </div>
+      <div class="row">
+        <div class="check"></div>
+        <div><b>Exercise</b><small>Fitness, sports, movement</small></div>
+      </div>
+    </div>
+    <div class="btn cont">Continue</div>
+    <div class="skip bottom small">Skip</div>
+  </div>
+</section>
+
+<section class="screen" data-name="04-widget-setup" data-time="9:41">
+  <div class="body">
+    <h1>Widgets are coming later</h1>
+    <p class="sub">For now, your grid and daily progress are available in the app.</p>
+    <div class="btn">Continue</div>
+  </div>
+</section>
+
+<section class="screen" data-name="05-done" data-time="9:41">
+  <div class="dots"><i></i><i></i><i></i><i class="on"></i></div>
+  <div class="body">
+    <h1>You&rsquo;re all set</h1>
+    <p class="sub">Start tracking your deep work, building momentum, and leveling up your skills.</p>
+    <div class="btn">Start Tracking</div>
+  </div>
+</section>
+
+<script src="file:///Users/pratikrai/.config/opencode/skills/app-designer/assets/device.js"></script>
+</body>
+</html>
