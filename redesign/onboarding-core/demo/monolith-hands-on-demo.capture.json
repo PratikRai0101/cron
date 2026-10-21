@@ -1,0 +1,140 @@
+{
+  "capture": "Fresh native iOS Simulator recording; one continuous take, normal speed",
+  "device": "iPhone 17 Pro, iOS 26.5 Simulator (402x874 pt @3x = 1206x2622 px)",
+  "sourceCapture": "hands-on-take2.mp4 (native simulator framebuffer)",
+  "sourceSha256": "9efb4af592ebd7b0860ffb749540a6aba2ce7ac3b5e9738a2304b2b973150801",
+  "editing": "Resize and H.264 compression only. No cuts, holds, retiming or scene stitching.",
+  "deviceFrame": "Drawn titanium band + black glass around the capture. The app pixels are copied through untouched; only the 55 pt screen corners are rounded.",
+  "exports": {
+    "monolith-hands-on-demo.mp4": {
+      "width": 720,
+      "height": 1566,
+      "frames": 1016,
+      "fps": 30,
+      "durationSeconds": 33.866667,
+      "bytes": 1030935
+    },
+    "monolith-hands-on-demo-framed.mp4": {
+      "width": 780,
+      "height": 1626,
+      "frames": 1016,
+      "fps": 30,
+      "durationSeconds": 33.866667,
+      "bytes": 1080751
+    }
+  },
+  "verification": {
+    "frameCountIdentical": true,
+    "durationIdentical": true,
+    "appRegionMeanAbsDiff": 0.273,
+    "appRegionMaxAbsDiff": 0.651,
+    "framesExceedingDiff3": 0,
+    "framedStillInteriorMaxAbsDiff": 0.0,
+    "framedStillInteriorMeanAbsDiff": 0.0,
+    "note": "Remaining video difference is H.264 re-encoding noise. Framed stills are byte-identical inside the frame."
+  },
+  "touchEvents": [
+    {
+      "kind": "tap",
+      "tMs": 1838.7646484375,
+      "x": 201,
+      "y": 375,
+      "referenceWidth": 402,
+      "referenceHeight": 874
+    },
+    {
+      "kind": "tap",
+      "tMs": 4147.0126953125,
+      "x": 201,
+      "y": 524,
+      "referenceWidth": 402,
+      "referenceHeight": 874
+    },
+    {
+      "kind": "tap",
+      "tMs": 6560.975341796875,
+      "x": 356,
+      "y": 162,
+      "referenceWidth": 402,
+      "referenceHeight": 874
+    },
+    {
+      "kind": "swipe",
+      "tMs": 8366.574951171875,
+      "x": 200,
+      "y": 610,
+      "x2": 200,
+      "y2": 440,
+      "referenceWidth": 402,
+      "referenceHeight": 874,
+      "durationMs": 1658
+    },
+    {
+      "kind": "tap",
+      "tMs": 11676.30126953125,
+      "x": 350,
+      "y": 539,
+      "referenceWidth": 402,
+      "referenceHeight": 874
+    },
+    {
+      "kind": "tap",
+      "tMs": 14750.852294921875,
+      "x": 201,
+      "y": 238,
+      "referenceWidth": 402,
+      "referenceHeight": 874
+    },
+    {
+      "kind": "tap",
+      "tMs": 19201.359130859375,
+      "x": 201,
+      "y": 421,
+      "referenceWidth": 402,
+      "referenceHeight": 874
+    },
+    {
+      "kind": "swipe",
+      "tMs": 21049.130615234375,
+      "x": 200,
+      "y": 450,
+      "x2": 200,
+      "y2": 300,
+      "referenceWidth": 402,
+      "referenceHeight": 874,
+      "durationMs": 1532
+    },
+    {
+      "kind": "tap",
+      "tMs": 24973.45458984375,
+      "x": 297,
+      "y": 571,
+      "referenceWidth": 402,
+      "referenceHeight": 874
+    },
+    {
+      "kind": "tap",
+      "tMs": 27814.4267578125,
+      "x": 198,
+      "y": 617,
+      "referenceWidth": 402,
+      "referenceHeight": 874
+    },
+    {
+      "kind": "tap",
+      "tMs": 29747.364990234375,
+      "x": 109,
+      "y": 802,
+      "referenceWidth": 402,
+      "referenceHeight": 874
+    },
+    {
+      "kind": "tap",
+      "tMs": 31016.779052734375,
+      "x": 109,
+      "y": 802,
+      "referenceWidth": 402,
+      "referenceHeight": 874
+    }
+  ]
+}

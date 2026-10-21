@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Monolith — onboarding, redesigned</title>
+<link rel="stylesheet" href="file:///Users/pratikrai/.config/opencode/skills/app-designer/assets/device.css">
+<style>
+  @font-face { font-family: "Instrument Serif"; src: url("file:///Users/pratikrai/Development/cron/apps/mobile/assets/fonts/InstrumentSerif-Regular.ttf"); font-weight: 400; font-style: normal; }
+
+  /* Strata tokens — apps/mobile/src/theme/config.js */
+  :root {
+    --ground: #F1F4F3; --raised: #E5ECEE; --ink: #182C3B; --ink-2: #4B606B; --ink-3: #526874;
+    --rule: #CCD7DC; --accent: #24577E; --on-accent: #FFFFFF;
+    --unit-1: #7D9CAB; --unit-2: #ACC0C9; --unit-3: #B6C8D0;
+    --core-front: #ACC0C9; --core-deep: #B6C8D0;
+    --bevel-hi: rgba(255,255,255,.24); --bevel-lo: rgba(24,44,59,.20);
+    --label: #182C3B;
+  }
+  .screen[data-theme="dark"] {
+    --ground: #142029; --raised: #233541; --ink: #EDF3F4; --ink-2: #B6C8D0; --ink-3: #A0B5C0;
+    --rule: #394D5B; --accent: #99C2DF; --on-accent: #142029;
+    --unit-1: #516E7E; --unit-2: #466070; --unit-3: #394D5B;
+    --core-front: #466070; --core-deep: #394D5B;
+    --bevel-hi: rgba(237,243,244,.16); --bevel-lo: rgba(8,14,19,.50);
+    --label: #EDF3F4;
+  }
+
+  .screen { background: var(--ground); color: var(--ink); font-family: var(--sf); container-type: size; }
+  .body { position: absolute; inset: 0; padding: 0 24px; display: flex; flex-direction: column; }
+
+  /* a nav row, iOS style: a back chevron on the later steps, the name centred */
+  .nav { position: relative; height: 44px; margin-top: calc(var(--safe-top) + 4px); display: flex; align-items: center; justify-content: center; flex: none; }
+  .nav-title { font-size: 13px; font-weight: 700; letter-spacing: -0.2px; color: var(--ink); }
+  .back { position: absolute; left: -12px; top: 0; width: 44px; height: 44px; background: none; border: 0; padding: 0; display: flex; align-items: center; justify-content: center; }
+  .back svg { display: block; }
+
+  h1 { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; font-size: 34px; line-height: 1.06; letter-spacing: -0.6px; color: var(--ink); margin: 26px 0 0; flex: none; }
+  .sub { font-size: 15px; line-height: 1.35; color: var(--ink-2); margin: 10px 0 0; flex: none; }
+  .foot { margin-top: auto; margin-bottom: 34px; flex: none; }
+  .cta {
+    height: 54px; width: 100%;
+    border: 0; border-radius: 27px; background: var(--accent); color: var(--on-accent);
+    font-family: var(--sf); font-size: 17px; font-weight: 600; letter-spacing: -0.3px;
+  }
+  .link { display: block; width: 100%; background: none; border: 0; padding: 10px 0 12px;
+    font-family: var(--sf); font-size: 13px; color: var(--ink-3); text-align: center; }
+
+  /* ── the core column ───────────────────────────────────────────── */
+  .column { position: relative; margin-top: 26px; flex: none; }
+  .column svg { display: block; width: 100%; height: auto; }
+  .lbl { fill: currentColor; color: var(--label); }
+  .lbl.on { color: var(--on-accent); }
+  .lbl-name { font-family: "Instrument Serif", Georgia, serif; font-size: 28px; letter-spacing: -0.2px; }
+  .lbl-desc { font-family: "SF Pro", -apple-system, sans-serif; font-size: 13px; }
+  .lbl-slot { fill: currentColor; font-family: "SF Pro", -apple-system, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1.6px; color: var(--accent); }
+
+  /* ── the goal ──────────────────────────────────────────────────── */
+  .readout { display: flex; align-items: baseline; gap: 12px; margin-top: 28px; flex: none; }
+  .readout .n { font-family: "Instrument Serif", Georgia, serif; font-size: 76px; line-height: .92; letter-spacing: -2px; color: var(--ink); }
+  /* Instrument Serif sets old-style figures, so the label sits on the figure's x-height */
+  .readout .u { font-size: 17px; color: var(--ink-2); letter-spacing: -0.2px; transform: translateY(-27px); }
+  .ruler { position: relative; height: 62px; margin-top: 26px; flex: none; }
+  .ruler .track { position: absolute; top: 13px; left: 14px; right: 14px; height: 2px; background: var(--rule); }
+  .ruler .fill { position: absolute; top: 13px; left: 14px; height: 2px; background: var(--accent); width: calc((var(--goal) / 120) * (100% - 28px)); }
+  .ruler .tick { position: absolute; top: 3px; width: 1px; height: 8px; background: var(--ink-3); opacity: .55; left: calc(14px + (var(--v) / 120) * (100% - 28px)); }
+  .ruler .tick.on { background: var(--accent); opacity: 1; height: 11px; top: 0; }
+  .ruler .val { position: absolute; top: 31px; font-size: 11px; line-height: 1; color: var(--ink-3); transform: translateX(-50%); left: calc(14px + (var(--v) / 120) * (100% - 28px)); }
+  .ruler .val.on { color: var(--accent); font-weight: 600; }
+  .ruler .thumb { position: absolute; top: 3px; width: 22px; height: 22px; margin-left: -11px; border-radius: 50%; background: var(--accent); left: calc(14px + (var(--goal) / 120) * (100% - 28px)); }
+  .slab { margin-top: 26px; flex: none; }
+  .slab svg { display: block; width: 100%; height: auto; }
+  .caption { font-size: 13px; line-height: 1.35; color: var(--ink-3); margin: 14px 0 0; flex: none; }
+
+  /* Small phone: the artwork takes the hit, never the words. */
+  @container (max-height: 760px) {
+    .screen .caption { display: none; }
+    .screen .slab { margin-top: 18px; }
+    .screen .slab svg { width: 62%; margin-left: auto; margin-right: auto; }
+    .screen .readout { margin-top: 20px; }
+    .screen .ruler { margin-top: 18px; }
+    .screen .column, .screen .strip { margin-top: 18px; }
+    .screen h1 { margin-top: 18px; }
+    .screen.story .body { padding: 28px 20px; }
+    .screen.story .frame .mini { --mini: .2; }
+    .screen.story .notes { margin-top: 18px; padding-top: 12px; }
+    .screen.story .notes p { font-size: 12px; line-height: 1.4; margin: 4px 0 8px; }
+  }
+
+  /* ── the result ────────────────────────────────────────────────── */
+  .summary { font-family: "Instrument Serif", Georgia, serif; font-size: 34px; line-height: 1.1; letter-spacing: -0.6px; color: var(--ink); margin: 26px 0 0; flex: none; }
+  .strip { position: relative; margin-top: 26px; flex: none; }
+  .strip svg { display: block; width: 100%; height: auto; }
+
+  /* ── storyboard ────────────────────────────────────────────────── */
+  .story { background: var(--ground); color: var(--ink); }
+  .story .body { padding: 40px 24px; }
+  .story .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.6px; color: var(--ink-3); }
+  .story h1 { font-size: 34px; line-height: 1.06; margin: 14px 0 0; }
+  .story .intro { font-size: 15px; line-height: 1.4; color: var(--ink-2); margin: 12px 0 0; }
+  .frames { display: flex; gap: 10px; margin-top: 26px; }
+  .frame { flex: 1; }
+  .frame .mini { --mini: .26; }
+  .frame .mini-screen { background: var(--ground); }
+  .frame b { display: block; font-size: 13px; font-weight: 600; margin-top: 10px; color: var(--ink); }
+  .frame span { display: block; font-size: 11px; color: var(--ink-3); margin-top: 3px; }
+  .notes { margin-top: 26px; border-top: 1px solid var(--rule); padding-top: 16px; }
+  .notes b { font-size: 13px; font-weight: 600; }
+  .notes p { font-size: 13px; line-height: 1.45; color: var(--ink-2); margin: 6px 0 12px; }
+  .notes p:last-child { margin-bottom: 0; }
+  .mini-body { padding: 34px 24px 26px; display: flex; flex-direction: column; height: 100%; }
+  .mini-brand { font-size: 9px; font-weight: 700; color: var(--ink); }
+  .mini-num { font-family: "Instrument Serif", Georgia, serif; font-size: 44px; line-height: .9; color: var(--ink); margin-top: 22px; }
+  .mini-unit { font-size: 11px; color: var(--ink-3); margin-top: 6px; }
+  .mini-ruler { position: relative; margin-top: 22px; height: 3px; background: var(--rule); border-radius: 2px; }
+  .mini-ruler i { position: absolute; top: -6px; width: 15px; height: 15px; margin-left: -7.5px; border-radius: 50%; background: var(--accent); }
+  .mini-slab { margin-top: 26px; }
+  .mini-slab svg { display: block; width: 100%; height: auto; }
+  .mini-caption { margin-top: 12px; height: 7px; border-radius: 4px; background: var(--rule); width: 62%; }
+  .mini-cta { margin-top: auto; height: 34px; border-radius: 17px; background: var(--accent); }
+
+  /* ── the current app, for comparison ──────────────────────────── */
+  .old-body { align-items: center; justify-content: center; }
+  .old-specimen { width: 100%; height: 140px; display: block; margin-bottom: 32px; }
+  .old-h1 { font-family: var(--sf); font-size: 28px; line-height: 1.2; font-weight: 700; text-align: center; letter-spacing: 0; margin: 0; }
+  .old-sub { text-align: center; max-width: 280px; margin: 12px 0 0; }
+  .old-btn { margin-top: 40px; background: var(--accent); color: var(--on-accent); padding: 12px 32px; border-radius: 16px; font-size: 15px; font-weight: 600; }
+  .old-skip { margin-top: 16px; padding: 12px 24px; font-size: 13px; color: var(--ink-2); }
+  .old-skip.small { font-size: 11px; color: var(--ink-3); }
+  .old-dots { position: absolute; top: 64px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; }
+  .old-dots i { width: 8px; height: 8px; border-radius: 999px; background: var(--rule); }
+  .old-dots i.on { background: var(--accent); }
+  .old-rows { margin-top: 32px; width: 100%; display: flex; flex-direction: column; gap: 12px; }
+  .old-row { display: flex; align-items: center; padding: 16px; border: 1px solid var(--rule); border-radius: 16px; }
+  .old-row.sel { border-color: var(--accent); background: #DCE6EB; }
+  .old-check { width: 20px; height: 20px; border: 2px solid var(--ink-3); border-radius: 4px; margin-right: 12px; }
+  .old-row.sel .old-check { border-color: var(--accent); background: var(--accent); }
+  .old-row b { font-size: 15px; font-weight: 400; display: block; }
+  .old-row small { font-size: 11px; font-weight: 500; color: var(--ink-2); display: block; margin-top: 2px; }
+
+  /* ── the verdict panel ────────────────────────────────────────── */
+  .panel { background: var(--ground); color: var(--ink); }
+  .panel .body { padding: 40px 24px; justify-content: flex-start; }
+  .panel .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 1.6px; color: var(--ink-3); }
+  .panel-title { font-family: "Instrument Serif", Georgia, serif; font-size: 30px; line-height: 1.1; margin: 14px 0 0; }
+  .panel-lede { font-size: 14px; line-height: 1.45; color: var(--ink-2); margin: 14px 0 0; }
+  .panel-list { list-style: none; padding: 0; margin: 22px 0 0; }
+  .panel-list li { font-size: 13px; line-height: 1.45; color: var(--ink-2); padding: 9px 0; border-top: 1px solid var(--rule); display: flex; gap: 10px; }
+  .panel-list .tag { color: var(--accent); font-weight: 600; font-size: 11px; letter-spacing: 1.4px; flex: none; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ 01 · the current app ══════════════ -->
+<section class="screen old" data-name="01-before-splash" data-time="9:41">
+  <main class="body old-body">
+    <div class="old-specimen">
+      <svg viewBox="0 -44 354 188" role="img" aria-label="An empty specimen outline">
+        <g fill="none" stroke="#7D9CAB" stroke-width="1" opacity=".6">
+          <path d="M70,60L124,55L173,58L224,48L287,51L339,41L339,111L287,121L224,118L173,128L124,125L70,130Z"/>
+          <path d="M18,32L70,60L70,130L18,102Z"/>
+          <path d="M18,32L284,17L339,41L339,41L287,51L224,48L173,58L124,55L70,60Z"/>
+        </g>
+      </svg>
+    </div>
+    <h1 class="old-h1">Track what matters.</h1>
+    <p class="old-sub">A competence tracker for people who do deep work.</p>
+    <div class="old-btn">Get Started</div>
+    <div class="old-skip">Skip setup</div>
+  </main>
+</section>
+
+<section class="screen old" data-name="02-before-identities" data-time="9:41">
+  <main class="body old-body">
+    <div class="old-dots"><i></i><i></i><i class="on"></i><i></i></div>
+    <h1 class="old-h1">Pick your identities</h1>
+    <p class="old-sub">Choose one area to start. The Free plan supports one active identity.</p>
+    <div class="old-rows">
+      <div class="old-row sel"><div class="old-check"></div><div><b>Code</b><small>Programming, development, engineering</small></div></div>
+      <div class="old-row"><div class="old-check"></div><div><b>Write</b><small>Writing, blogging, documentation</small></div></div>
+      <div class="old-row"><div class="old-check"></div><div><b>Design</b><small>UI/UX, graphic design, creative</small></div></div>
+      <div class="old-row"><div class="old-check"></div><div><b>Exercise</b><small>Fitness, sports, movement</small></div></div>
+    </div>
+    <div class="old-btn">Continue</div>
+    <div class="old-skip small">Skip</div>
+  </main>
+</section>
+
+<!-- ══════════════ 03 · the area ══════════════ -->
+<section class="screen" data-name="03-area" data-time="9:41">
+  <main class="body">
+    <div class="nav"><span class="nav-title">Monolith</span></div>
+    <h1>What are you<br>working on?</h1>
+    <p class="sub">Pick one identity to start with.</p>
+    <div class="column" id="col1"></div>
+    <div class="foot"><button class="cta">Continue</button></div>
+  </main>
+</section>
+
+<!-- ══════════════ 02 · the goal ══════════════ -->
+<section class="screen" data-name="04-goal" data-time="9:41">
+  <main class="body">
+    <div class="nav">
+      <button class="back" aria-label="Back to the area step">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"/></svg>
+      </button>
+      <span class="nav-title">Monolith</span>
+    </div>
+    <h1>How much a day?</h1>
+    <p class="sub">Minutes of focused work. Change it any time in Settings.</p>
+    <div class="readout"><span class="n">60</span><span class="u">min a day</span></div>
+    <div class="ruler" id="ruler"></div>
+    <div class="slab" id="slab"></div>
+    <p class="caption">One day of work, cut to this depth.</p>
+    <div class="foot"><button class="cta">Continue</button></div>
+  </main>
+</section>
+
+<!-- ══════════════ 03 · the result ══════════════ -->
+<section class="screen" data-name="05-core" data-time="9:41">
+  <main class="body">
+    <div class="nav">
+      <button class="back" aria-label="Back to the goal step">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"/></svg>
+      </button>
+      <span class="nav-title">Monolith</span>
+    </div>
+    <h1 class="summary">Code, 60 minutes a day.</h1>
+    <p class="sub">Every session you finish adds a band to your core.</p>
+    <div class="strip" id="col3"></div>
+    <div class="foot">
+      <button class="link">Change identity or goal</button>
+      <button class="cta">Start your first session</button>
+    </div>
+  </main>
+</section>
+
+<!-- ══════════════ 04 · dark ══════════════ -->
+<section class="screen" data-name="06-area-dark" data-time="21:40" data-theme="dark">
+  <main class="body">
+    <div class="nav"><span class="nav-title">Monolith</span></div>
+    <h1>What are you<br>working on?</h1>
+    <p class="sub">Pick one identity to start with.</p>
+    <div class="column" id="col4"></div>
+    <div class="foot"><button class="cta">Continue</button></div>
+  </main>
+</section>
+
+<!-- ══════════════ 05 · dark goal ══════════════ -->
+<section class="screen" data-name="07-goal-dark" data-time="21:40" data-theme="dark">
+  <main class="body">
+    <div class="nav">
+      <button class="back" aria-label="Back to the area step">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"/></svg>
+      </button>
+      <span class="nav-title">Monolith</span>
+    </div>
+    <h1>How much a day?</h1>
+    <p class="sub">Minutes of focused work. Change it any time in Settings.</p>
+    <div class="readout"><span class="n">60</span><span class="u">min a day</span></div>
+    <div class="ruler" id="ruler5"></div>
+    <div class="slab" id="slab5"></div>
+    <p class="caption">One day of work, cut to this depth.</p>
+    <div class="foot"><button class="cta">Continue</button></div>
+  </main>
+</section>
+
+<!-- ══════════════ 06 · what changed ══════════════ -->
+<section class="screen panel" data-name="06-what-changed" data-chrome="none">
+  <main class="body">
+    <span class="eyebrow">BEFORE / AFTER</span>
+    <h1 class="panel-title">The same app,<br>five screens that did nothing.</h1>
+    <p class="panel-lede">The old first run asked for nothing, showed nothing and taught nothing. The new one asks two questions and answers them with the app&#39;s own rock.</p>
+    <ul class="panel-list">
+      <li><span class="tag">CUT</span><span>The splash screen. It announced the app instead of starting it.</span></li>
+      <li><span class="tag">CUT</span><span>"Widgets are coming later." A screen that exists to admit a feature does not exist.</span></li>
+      <li><span class="tag">CUT</span><span>The four-dot stepper. Three screens now, and a back chevron to move between them.</span></li>
+      <li><span class="tag">CUT</span><span>Two different "Skip" buttons, and a skip that seeded an identity called "Focus".</span></li>
+      <li><span class="tag">KEPT</span><span>The four areas and their descriptions, the 60-minute default, the 15-minute steps, one identity on the free plan.</span></li>
+      <li><span class="tag">MADE</span><span>The core column: four identities as four layers of rock, the chosen one dyed.</span></li>
+      <li><span class="tag">MADE</span><span>The goal as a depth. One day of work is a band cut to your goal, and the band grows as you drag.</span></li>
+      <li><span class="tag">MADE</span><span>A closing screen that shows your core with today&#39;s slot waiting, and one button: start.</span></li>
+    </ul>
+  </main>
+</section>
+
+<script>
+/* ── drawing helpers ─────────────────────────────────────────────── */
+const poly = (pts) => "M" + pts.map((p) => p.join(",")).join("L") + "Z";
+
+/* A core column: a geological section, boundaries lifted from
+   apps/mobile/src/lib/strata.ts and stood upright. */
+const CX = [0, 70, 141, 212, 283, 354];
+const CJ = [0, -6, -3, -15, -11, -23];
+const OFF = 26; // keeps the first boundary inside the viewBox
+const edge = (y) => CX.map((x, j) => [x, y + CJ[j] + OFF]);
+const sect = (y) => CX.map((x, j) => [x, y + CJ[j]]);
+const line = (pts) => "M" + pts.map((p) => p.join(",")).join("L");
+
+/* Every fracture gets a 2pt bevel: a light edge above, a shadow below.
+   That is what makes the column read as cut rock and not as a colour field. */
+function bevel(top, bottom) {
+  return `<path d="${line(top)}" transform="translate(0,-0.6)" fill="none" stroke="var(--bevel-hi)" stroke-width="1"/>` +
+         `<path d="${line(bottom)}" transform="translate(0,0.6)" fill="none" stroke="var(--bevel-lo)" stroke-width="1"/>`;
+}
+
+function columnSvg(units, opts = {}) {
+  const rail = opts.rail || 58;
+  const ys = [0];
+  units.forEach((u) => ys.push(ys[ys.length - 1] + u.h));
+  let s = "";
+  units.forEach((u, i) => {
+    const d = poly([...edge(ys[i]), ...edge(ys[i + 1]).reverse()]);
+    s += `<path d="${d}" style="fill:${u.fill}${u.stroke ? `;stroke:${u.stroke};stroke-width:1.5` : ""}"/>`;
+  });
+  units.forEach((u, i) => {
+    s += bevel(edge(ys[i]), edge(ys[i + 1]));
+  });
+  if (opts.labels) {
+    units.forEach((u, i) => {
+      if (!u.name) return;
+      const y = OFF + ys[i] + rail; // one rail: every name sits the same distance below its band
+      const cls = `lbl${u.on ? " on" : ""}`;
+      s += `<text class="${cls} lbl-name" x="22" y="${y}">${u.name}</text>`;
+      if (opts.desc) s += `<text class="${cls} lbl-desc" x="22" y="${y + 21}">${u.desc}</text>`;
+    });
+  }
+  const alt = opts.alt || "A core column. The chosen layer is dyed blue.";
+  return { svg: `<svg viewBox="0 0 354 ${ys[ys.length - 1] + OFF}" role="img" aria-label="${alt}">${s}</svg>`, total: ys[ys.length - 1] + OFF };
+}
+
+/* One day of work, cut to the goal, on the uncut core. */
+function slabSvg(goal) {
+  const h = Math.round(goal * 1.0);
+  const top = 26, bandBottom = top + h, mid = 185, bottom = 290;
+  let s = `<path d="${poly([...sect(top), ...sect(bandBottom).reverse()])}" style="fill:var(--accent)"/>`;
+  s += `<path d="${poly([...sect(bandBottom), ...sect(mid).reverse()])}" style="fill:var(--core-front)"/>`;
+  s += `<path d="${poly([...sect(mid), ...sect(bottom).reverse()])}" style="fill:var(--core-deep)"/>`;
+  s += bevel(sect(top), sect(bandBottom));
+  s += bevel(sect(bandBottom), sect(mid));
+  s += bevel(sect(mid), sect(bottom));
+  return `<svg viewBox="0 0 354 300" role="img" aria-label="One day of work, cut to ${goal} minutes deep, on the uncut core.">${s}</svg>`;
+}
+
+/* ── screen 1 and 4: the core column ─────────────────────────────── */
+const AREAS = [
+  { name: "Code", desc: "Programming, development, engineering" },
+  { name: "Write", desc: "Writing, blogging, documentation" },
+  { name: "Design", desc: "UI/UX, graphic design, creative" },
+  { name: "Exercise", desc: "Fitness, sports, movement" },
+];
+const FILLS = ["var(--accent)", "var(--unit-1)", "var(--unit-2)", "var(--unit-3)"];
+
+function drawAreas(host, heights, compact) {
+  const units = AREAS.map((a, i) => ({ ...a, h: heights[i], fill: FILLS[i], on: i === 0 }));
+  const layerH = heights[1];
+  const rail = Math.round(layerH / 2) + 8;           // one rail: every name optically centred in its layer
+  const desc = !compact && layerH >= 85;              // the descriptions go when a layer cannot hold them
+  host.innerHTML = columnSvg(units, { desc, labels: true, rail,
+    alt: "A core column of four layers: Code, Write, Design and Exercise. Code is dyed blue." }).svg;
+}
+/* The column takes the room it is given: the artwork scales, the type does not.
+   If there is not even room for a name in every layer, the descriptions go first. */
+function fitAreas(host, heights) {
+  const screen = host.closest(".screen");
+  const foot = screen.querySelector(".foot");
+  let last = "";
+  const apply = () => {
+    const avail = screen.clientHeight - host.offsetTop - foot.offsetHeight - 34 - 24 - OFF;
+    const sum = heights.reduce((a, b) => a + b, 0);
+    if (sum <= avail) {
+      if (last !== "full") { last = "full"; drawAreas(host, heights, false); }
+      return;
+    }
+    const per = avail / heights.length;
+    const scaled = heights.map((h) => Math.max(44, Math.round(h * (avail / sum))));
+    const compact = scaled[1] < 85;
+    const key = scaled.join() + (compact ? "c" : "f");
+    if (key !== last) { last = key; drawAreas(host, scaled, compact); }
+  };
+  drawAreas(host, heights, false);
+  new ResizeObserver(apply).observe(screen);
+  document.fonts.ready.then(apply);
+}
+fitAreas(document.getElementById("col1"), [116, 116, 116, 116]);
+fitAreas(document.getElementById("col4"), [116, 116, 116, 116]);
+
+/* ── screen 3: the core with today's slot ────────────────────────── */
+function drawStrip(host, heights, rail) {
+  const slotH = heights[0];
+  const units = [
+    { h: slotH, fill: "var(--ground)", stroke: "var(--rule)" },
+    { h: heights[1], fill: "var(--accent)", name: "Code", on: true },
+    { h: heights[2], fill: "var(--unit-1)", name: "Write" },
+    { h: heights[3], fill: "var(--unit-2)", name: "Design" },
+    { h: heights[4], fill: "var(--unit-3)", name: "Exercise" },
+  ];
+  let s = columnSvg(units, { labels: true, rail,
+    alt: "A core column with an empty slot marked today, then Code dyed blue, then Write, Design and Exercise." }).svg;
+  const mid = OFF + slotH / 2 - 4;
+  s = s.replace("</svg>", `<text class="lbl-slot" x="177" y="${mid}" text-anchor="middle">TODAY</text></svg>`);
+  host.innerHTML = s;
+}
+{
+  const host = document.getElementById("col3");
+  const heights = [40, 104, 104, 104, 104];
+  const screen = host.closest(".screen");
+  const foot = screen.querySelector(".foot");
+  let last = "";
+  const apply = () => {
+    const avail = screen.clientHeight - host.offsetTop - foot.offsetHeight - 34 - 24 - OFF;
+    const sum = heights.reduce((a, b) => a + b, 0);
+    const scaled = heights.map((h, i) => Math.max(i === 0 ? 28 : 44, Math.round(h * (avail / sum))));
+    const rail = Math.round(scaled[1] / 2) + 8;
+    const key = scaled.join() + rail;
+    if (key !== last) { last = key; drawStrip(host, scaled, rail); }
+  };
+  drawStrip(host, heights, Math.round(heights[1] / 2) + 8);
+  new ResizeObserver(apply).observe(screen);
+  document.fonts.ready.then(apply);
+}
+
+/* ── the ruler ────────────────────────────────────────────────────── */
+function buildRuler(host, goal) {
+  const stops = [0, 15, 30, 45, 60, 75, 90, 105, 120];
+  let s = `<div class="track"></div><div class="fill"></div>`;
+  stops.forEach((v) => {
+    s += `<div class="tick${v === goal ? " on" : ""}" style="--v:${v}"></div>`;
+    if (v > 0) s += `<div class="val${v === goal ? " on" : ""}" style="--v:${v}">${v}</div>`;
+  });
+  s += `<div class="thumb" style="--v:${goal}"></div>`;
+  host.innerHTML = s;
+  host.style.setProperty("--goal", goal);
+}
+buildRuler(document.getElementById("ruler"), 60);
+buildRuler(document.getElementById("ruler5"), 60);
+document.getElementById("slab").innerHTML = slabSvg(60);
+document.getElementById("slab5").innerHTML = slabSvg(60);
+document.querySelectorAll(".frame[data-goal]").forEach((f) => {
+  const goal = Number(f.dataset.goal);
+  f.querySelector(".mini-slab").innerHTML = slabSvg(goal);
+  f.querySelector(".mini-ruler i").style.left = `${14 + (goal / 120) * 326}px`;
+});
+</script>
+<script src="file:///Users/pratikrai/.config/opencode/skills/app-designer/assets/device.js"></script>
+</body>
+</html>

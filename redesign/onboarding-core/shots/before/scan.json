@@ -1,0 +1,131 @@
+[
+  {
+    "name": "01-splash",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 4
+      },
+      "sizes": [
+        28,
+        15,
+        13
+      ],
+      "weights": [
+        "400",
+        "600",
+        "700"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        216
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "02-set-goal",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 8
+      },
+      "sizes": [
+        76,
+        28,
+        20,
+        15,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "700"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        216
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "03-pick-identities",
+    "fails": [],
+    "warns": [
+      "Only 3 text sizes across 12 text elements. Hierarchy is flat."
+    ],
+    "facts": {
+      "fonts": {
+        "SF Pro": 12
+      },
+      "sizes": [
+        28,
+        15,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600",
+        "700"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        216
+      ],
+      "cards": 4
+    }
+  },
+  {
+    "name": "04-widget-setup",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 3
+      },
+      "sizes": [
+        28,
+        15
+      ],
+      "weights": [
+        "400",
+        "600",
+        "700"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        216
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "05-done",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 3
+      },
+      "sizes": [
+        28,
+        15
+      ],
+      "weights": [
+        "400",
+        "600",
+        "700"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        216
+      ],
+      "cards": 0
+    }
+  }
+]

@@ -87,7 +87,6 @@ export function Specimen({
       width="100%"
       height={height}
       viewBox="0 -44 354 188"
-      accessible={!onSelectLayer}
       accessibilityRole={onSelectLayer ? undefined : "image"}
       accessibilityLabel={label}
     >
