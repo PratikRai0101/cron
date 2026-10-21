@@ -51,11 +51,11 @@ This makes `git log` readable by any agent for instant context on what happened.
 
 ### 3. Reference Screens
 
-**Location**: `apps/mobile/reference-screens/`
+**Location**: `redesign/fresh/mockup.html`
 
-HTML pixel-perfect mocks of every screen. When switching agents:
+Pixel-perfect mocks of every screen. When switching agents:
 1. Agent reads `AGENTS.md` for context
-2. Agent opens `reference-screens/XX-screen-name.html` for visual target
+2. Agent opens `redesign/fresh/mockup.html` for visual target
 3. Agent implements in React Native to match exactly
 
 No ambiguity about "what should this look like?"
@@ -65,22 +65,17 @@ No ambiguity about "what should this look like?"
 **Location**: `monolith-design/`
 
 Complete planning documents that don't change during implementation:
-- `DESIGN_SYSTEM.md` — Visual system (immutable during dev)
+- `redesign/fresh/DIRECTION.md` — Approved visual system (immutable during dev)
 - `PRD.md` — Product requirements (immutable unless pivoting)
 - `GAMIFICATION.md` — Progression mechanics
 - `SAAS_PLAN.md` — Pricing & monetization
 - `SOCIAL_FEATURES.md` — Social module specs
 
-### 5. Open Design Configuration
+### 5. Approved Mockups
 
-**Location**: `open-design/`
+**Location**: `redesign/fresh/mockup.html`
 
-If you need to generate new screens or variations:
-- `design-systems/monolith/DESIGN.md` — Your custom design system
-- `skills/monolith-mobile/SKILL.md` — Screen generation skill
-- `prompts/screen-prompts.md` — Ready-to-use prompts
-
-Any agent can use these to generate consistent designs in Open Design.
+When you need to generate new screens or variations, match these mockups exactly so the result stays consistent with the shipped design.
 
 ---
 
@@ -135,7 +130,7 @@ Paste: "Read monolith-design/AGENTS.md first. This is a living document with all
 1. git clone git@github.com:PratikRai0101/cron.git
 2. Read monolith-design/AGENTS.md
 3. Read the relevant files in apps/mobile/src/
-4. Open reference-screens/ to see visual targets
+4. Open `redesign/fresh/mockup.html` to see visual targets
 5. Start coding
 ```
 
@@ -144,9 +139,8 @@ Paste: "Read monolith-design/AGENTS.md first. This is a living document with all
 The new agent should read in this order:
 1. `monolith-design/AGENTS.md` (2 min) — Full project context
 2. `apps/mobile/src/types/models.ts` (30 sec) — Data structures
-3. `apps/mobile/src/lib/constants.ts` (30 sec) — App constants
-4. `apps/mobile/src/lib/colors.ts` (30 sec) — Color tokens
-5. Relevant reference screen HTML (1 min) — Visual target
+3. `apps/mobile/src/theme/config.js` (30 sec) — Color tokens
+4. `redesign/fresh/mockup.html` (1 min) — Visual target
 6. Existing code in the area they're working on (2 min)
 
 **Total context load time: ~7 minutes**
@@ -173,23 +167,21 @@ Priority 1 (Must Read):
 ├── monolith-design/AGENTS.md              ← START HERE
 
 Priority 2 (Should Read):
-├── monolith-design/DESIGN_SYSTEM.md       ← Visual system
+├── redesign/fresh/DIRECTION.md            ← Visual system
 ├── monolith-design/PRD.md                 ← Product requirements
 ├── apps/mobile/src/types/models.ts        ← Data structures
 
 Priority 3 (Read as Needed):
-├── apps/mobile/src/lib/constants.ts       ← App constants
-├── apps/mobile/src/lib/colors.ts          ← Color tokens
+├── apps/mobile/src/theme/config.js        ← Color tokens
 ├── apps/mobile/src/stores/*.ts            ← State management
-├── apps/mobile/reference-screens/*.html   ← Visual targets
+├── redesign/fresh/mockup.html             ← Visual targets
 ├── monolith-design/GAMIFICATION.md        ← Game mechanics
 ├── monolith-design/SAAS_PLAN.md           ← Pricing
 ├── supabase/migrations/001_initial_schema.sql  ← DB schema
 
 Priority 4 (Reference):
 ├── monolith-design/SOCIAL_FEATURES.md     ← Social specs
-├── monolith-design/CLAUDE_DESIGN_PROMPT.md ← Prompts
-├── open-design/prompts/screen-prompts.md  ← Open Design prompts
+├── redesign/fresh/mockup.html              ← Visual targets
 ```
 
 ---
@@ -200,7 +192,7 @@ Priority 4 (Reference):
 **Strengths**: Excellent at refactoring, architecture, complex logic
 **Weaknesses**: May get creative with design tokens (watch for color drift)
 
-**Tip**: Explicitly tell Claude "Follow DESIGN_SYSTEM.md exactly. Do not change colors or fonts."
+**Tip**: Explicitly tell Claude "Follow redesign/fresh/DIRECTION.md exactly. Do not change colors or fonts."
 
 ### Switching TO Gemini CLI
 **Strengths**: Creative variations, media generation, exploratory design
@@ -233,7 +225,7 @@ Priority 4 (Reference):
 ### If You're a Different User (Team Member)
 1. Clone the repo
 2. Read `AGENTS.md` completely
-3. Read `DESIGN_SYSTEM.md` for visual context
+3. Read `redesign/fresh/DIRECTION.md` for visual context
 4. Open reference screens in browser to see the app
 5. Run `npm run mobile` to see the current state
 6. Start coding
@@ -253,7 +245,7 @@ Priority 4 (Reference):
 ❌ **Don't start coding without reading AGENTS.md first**  
 You'll duplicate work or contradict existing decisions.
 
-❌ **Don't change the design system without updating DESIGN_SYSTEM.md**  
+❌ **Don't change the design system without updating `redesign/fresh/DIRECTION.md`**  
 Visual consistency will break.
 
 ❌ **Don't commit without updating AGENTS.md**  

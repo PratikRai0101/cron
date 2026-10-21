@@ -17,14 +17,13 @@
 ## What's Been Done ✅
 
 ### Documentation (Complete)
-- [x] `DESIGN_SYSTEM.md` — Full visual system (colors, typography, spacing, components, motion)
+- [x] `redesign/fresh/DIRECTION.md` — Approved visual system (Strata: colors, typography, spacing, components, motion)
 - [x] `PRD.md` — Product requirements, screen specs, data model, edge cases
 - [x] `GAMIFICATION.md` — Progression system, momentum rings, anti-burnout mechanics
 - [x] `SAAS_PLAN.md` — Freemium pricing tiers, RevenueCat integration, unit economics
 - [x] `SOCIAL_FEATURES.md` — Crews, Wrapped, ambient social proof
-- [x] `CLAUDE_DESIGN_PROMPT.md` — Reusable screen/component design prompts
 - [x] `PROJECT_STRUCTURE.md` — Turborepo monorepo layout
-- [x] `SCREENS_AND_WIDGETS.html` — Interactive HTML prototype of all screens
+- [x] `redesign/fresh/mockup.html` — High-fidelity mockup of every screen
 
 ### Project Scaffold (Complete)
 - [x] Turborepo root configuration (`package.json`, `turbo.json`, `.gitignore`)
@@ -150,39 +149,35 @@ Implement these screens in `apps/mobile/src/` using NativeWind:
 ```
 monolith/
 ├── apps/
-│   ├── mobile/              # React Native + Expo
-│   │   ├── src/
-│   │   │   ├── app/         # Expo Router screens
-│   │   │   │   ├── (tabs)/  # Bottom tabs: grid, focus, identity, profile
-│   │   │   │   ├── modals/  # Modal screens: log-task, focus-mode, settings
-│   │   │   │   └── onboarding/
-│   │   │   ├── components/  # UI components by domain
-│   │   │   ├── hooks/       # Custom React hooks
-│   │   │   ├── stores/      # Zustand stores (one per domain)
-│   │   │   ├── lib/         # Utilities, configs, clients
-│   │   │   ├── utils/       # Pure utility functions
-│   │   │   ├── types/       # TypeScript types
-│   │   │   └── widgets/     # Widget bridge logic
-│   │   ├── assets/
-│   │   ├── reference-screens/  # HTML reference mocks
-│   │   └── [config files]
-│   └── desktop/             # Tauri desktop app
+│   └── mobile/              # React Native + Expo app
+│       ├── src/
+│       │   ├── app/         # Expo Router screens
+│       │   │   ├── (tabs)/  # Bottom tabs: grid, focus, identity, profile
+│       │   │   ├── modals/  # day, layer, log-task, retro-log, add-identity, settings
+│       │   │   └── onboarding/  # area, set-goal, done
+│       │   ├── components/  # strata, identity, tasks, ui
+│       │   ├── hooks/       # useActivity, useIdentities, useMotion
+│       │   ├── stores/      # Zustand stores (one per domain)
+│       │   ├── lib/         # Strata geometry, activity records, presets, supabase client
+│       │   ├── theme/       # Strata tokens and ThemeContext
+│       │   ├── types/       # TypeScript types
+│       │   └── __tests__/   # Jest suites
+│       ├── assets/          # Fonts and app icons
+│       └── [config files]
 ├── packages/
 │   └── shared/              # Shared types & utilities
 ├── supabase/
 │   └── migrations/          # Database schema
-├── open-design/             # Open Design configuration
-│   ├── design-systems/monolith/
-│   ├── skills/monolith-mobile/
-│   └── prompts/
-├── widgets/                 # Native widget source (iOS/Android)
+├── redesign/                # Design directions, critique and review evidence
+│   ├── fresh/               # Approved Strata direction (the app's design)
+│   └── onboarding-core/     # Approved Core Column onboarding + demo videos
 └── monolith-design/         # Planning documents
 ```
 
 ### Navigation
 - Bottom tabs: `Grid`, `Focus`, `Identity`, `Profile`
-- Modal stack: `LogTask`, `FocusMode`, `Settings`, `CrewDashboard`, `WrappedPreview`
-- Onboarding stack: `Welcome`, `SetGoal`, `PickIdentities`, `WidgetSetup`, `Done`
+- Modal stack: `Day`, `Layer`, `LogTask`, `RetroLog`, `AddIdentity`, `Settings`
+- Onboarding stack: `Area`, `SetGoal`, `Done`
 
 ### State Stores (Zustand)
 | Store | Responsibility |
@@ -192,7 +187,8 @@ monolith/
 | `focusStore` | Active session, timer state, elapsed time |
 | `identityStore` | Identities, filters, mastery stats |
 | `userStore` | Profile, subscription tier, level/XP |
-| `crewStore` | Crew memberships, challenges, progress |
+| `logStore` | Manual activity logs and their identities |
+| `activityUndoStore` | The last record change, so an edit can be undone |
 
 ### Database Schema (Supabase)
 Key tables: `profiles`, `identities`, `tasks`, `focus_sessions`, `daily_logs`, `crews`, `crew_memberships`, `crew_challenges`, `wrapped_reports`
@@ -289,9 +285,6 @@ npm run mobile
 # or
 cd apps/mobile && npx expo start
 
-# Start desktop app (Tauri)
-npm run desktop
-
 # Type check
 npm run type-check
 
@@ -305,7 +298,7 @@ npm run lint
 
 When generating code for this project:
 
-1. **Always reference `DESIGN_SYSTEM.md`** for colors, typography, spacing, and motion values.
+1. **Always reference `redesign/fresh/DIRECTION.md`** for colors, typography, spacing, and motion values.
 2. **Follow the Monolith philosophy**: The UI should feel precise, utilitarian, and almost austere. Acid lime is the only "fun" element.
 3. **Never add engagement theater**: No confetti, no "Good morning!" popups, no daily login bonuses. The reward is the grid filling up.
 4. **Prioritize offline-first**: Assume the user has no network. Make it work locally, sync when possible.
@@ -331,15 +324,13 @@ When generating code for this project:
 
 | File | What's In It |
 |---|---|
-| `monolith-design/DESIGN_SYSTEM.md` | Complete visual system |
+| `redesign/fresh/DIRECTION.md` | Approved visual system (Strata) |
 | `monolith-design/PRD.md` | All screen specs and data model |
-| `monolith-design/CLAUDE_DESIGN_PROMPT.md` | Reusable prompts per screen |
-| `apps/mobile/reference-screens/` | HTML pixel-perfect mocks |
+| `redesign/fresh/mockup.html` | High-fidelity mockup of every screen |
 | `apps/mobile/src/types/models.ts` | TypeScript interfaces |
-| `apps/mobile/src/lib/constants.ts` | App constants |
-| `apps/mobile/src/lib/colors.ts` | Typed color tokens |
+| `apps/mobile/src/theme/config.js` | Strata colour tokens |
+| `apps/mobile/src/lib/strata.ts` | Strata geometry |
 | `supabase/migrations/001_initial_schema.sql` | Database schema |
-| `open-design/prompts/screen-prompts.md` | Open Design prompts |
 
 ---
 
@@ -355,13 +346,11 @@ When generating code for this project:
 
 - The project uses **Turborepo** with npm workspaces. Run `npm install` from root.
 - Supabase is managed via CLI. Migrations are in `supabase/migrations/`.
-- Open Design daemon runs separately. See `open-design/` for config.
-- The `reference-screens/` HTML files are pixel-perfect targets. Match them exactly when implementing in React Native.
-- If you need to generate a new screen design, use the prompts in `open-design/prompts/screen-prompts.md` with the Open Design daemon.
-- When in doubt, check the interactive prototype: `monolith-design/SCREENS_AND_WIDGETS.html`
+- The `redesign/fresh/mockup.html` screens are pixel-perfect targets. Match them exactly when implementing in React Native.
+- When in doubt, check the approved mockups: `redesign/fresh/mockup.html`
 
 ## Design exploration — 2026-10-04
-User requested fresh directions and mockups only. New exploration is in `redesign/fresh/` (Strata, Studio, Workshop). Previous Loom files are preserved. No mobile source changed. Latest comparison: `redesign/fresh/shots/r3/sheet.png`; brief and stage limits: `redesign/fresh/DIRECTION.md`. Direction remains provisional pending user feedback; do not treat the existing Loom or these explorations as implementation requirements.
+User requested fresh directions and mockups only. New exploration is in `redesign/fresh/` (Strata, Studio, Workshop). The rejected Loom direction was removed. No mobile source changed. Latest comparison: `redesign/fresh/shots/r3/sheet.png`; brief and stage limits: `redesign/fresh/DIRECTION.md`. Direction remains provisional pending user feedback; do not treat the existing Loom or these explorations as implementation requirements.
 
 ## Strata mockups — 2026-10-04
 User approved A (Strata), mockups only. Full set: `redesign/fresh/mockup.html`; latest sheets `redesign/fresh/shots/full-r3/sheet.png` and `full-r3-se/sheet.png`; comparison `redesign/fresh/shots/before-after/sheet.png`. Same critic across rounds, final all13 scores4, scan0FAIL. Brief/tokens/content/keep coverage in DIRECTION.md and round history in CRITIQUE.md. No mobile source changed; no implementation authorized in this session. Prior Loom preserved.

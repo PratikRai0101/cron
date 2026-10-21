@@ -91,7 +91,7 @@ export function CoreSection({ minutes, label, availableHeight }: Props) {
   const onLayout = (event: LayoutChangeEvent) =>
     setWidth(event.nativeEvent.layout.width);
   // Nothing to draw until the section has been measured.
-  if (!width) return null;
+  if (!width) return <View onLayout={onLayout} style={{ width: "100%" }} />;
 
   return (
     <View

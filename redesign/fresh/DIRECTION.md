@@ -5,8 +5,8 @@ User-confirmed: fresh visual directions first, mockups only. No application code
 Inferred from the existing product: a competence tracker for people practising Code, Write, Design and Train. Core action: inspect today’s effort and start focused work. Working feel: tangible, deliberate, rewarding. Feel and audience remain provisional until the user supplies preferences. Existing name, bar mark, contribution history and product capabilities retained. Imagery: custom SVG and material colours; no paid image generation.
 
 ## Current app
-Source: apps/mobile/src/app/(tabs)/grid.tsx and existing redesign/before.html. Prior Loom work is preserved in redesign/.
-The live app still uses a dark, mono-heavy grid with a centred goal ring, boxed insights, filters and an add-task FAB. Its scan and reconstructed before images remain in redesign/shots/before; those are reference reconstructions, not newly captured live screenshots. Fresh concepts differ from both this look and the Loom direction.
+Source: apps/mobile/src/app/(tabs)/grid.tsx and the original app's screens, reconstructed in `before-source.html`. The rejected Loom direction was removed once Strata was approved.
+The live app still uses a dark, mono-heavy grid with a centred goal ring, boxed insights, filters and an add-task FAB. Its scan and reconstructed before images live in `shots/before/`; those are reference reconstructions, not newly captured live screenshots. Fresh concepts differ from both this look and the Loom direction.
 
 Keep: contribution grid and day detail/retro log; focus count-up timer with pause/finish/discard; task creation/edit/completion/deletion; identity filter and management; daily goal; weekly comparison; profile/level/statistics; settings and onboarding. The full core loop is now represented; secondary form states remain production requirements.
 Lose: competing ring and grid, boxed insight presentation, monospace as the app’s blanket identity.
@@ -78,7 +78,7 @@ Trigger: Finish and save an18min session. Frame0 saved minutes held at47; frame1
 Home preserves grid, goal, identity filtering, task list, completion controls and Add task. Detail preserves retro logging and session access. Focus preserves count-up/pause/finish/discard. Identities preserves add/manage/archive/restore entry points and actual totals. Profile preserves level, session totals, records, weekly goal count and settings access. Dark/empty/signature/icon complete the visual set. Not designed: add/edit-task form, identity editor, archive confirmation, settings/auth/export forms, multi-step onboarding and widgets. These remain required production features and are not proposed removals.
 
 ## Current-app audit evidence
-Reconstructed current UI matches the dark developer-dashboard face in slop.md: mono, ring/grid competition, tiny metadata. Original DOM scan FAILs: text below11pt on home/focus/profile; contrast4.18:1 for small text and2.53:1 profile goal copy; touching35m/+ labels on home. The before-image wrapper does not re-test the original DOM. Source scan: ../shots/before/scan.json. Comparison: shots/before-after/sheet.png.
+Reconstructed current UI matches the dark developer-dashboard face in slop.md: mono, ring/grid competition, tiny metadata. Original DOM scan FAILs: text below11pt on home/focus/profile; contrast4.18:1 for small text and2.53:1 profile goal copy; touching35m/+ labels on home. The before-image wrapper does not re-test the original DOM. Source scan: shots/before/scan.json. Comparison: shots/before-after/sheet.png.
 
 ## Keep checklist
 - [x] Contribution grid, daily goal and weekly comparison: Home; day/retro log access: History.
