@@ -18,6 +18,23 @@
 > [!IMPORTANT]
 > **Monolith is pre-release.** The local-first mobile MVP is built and verified on iOS (Expo Go and a development build), with Android export checks passing. Cloud sync, widgets, notifications, billing, social features, and the desktop app are **not built yet**, and nothing is on the App Store.
 
+## See it in use
+
+<p align="center">
+  <a href="redesign/onboarding-core/demo/monolith-hands-on-demo.mp4">
+    <img src="redesign/onboarding-core/demo/monolith-hands-on-demo.gif" width="260" alt="Monolith in use: inspect a layer, create a task, and start, pause and resume focus" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="redesign/onboarding-core/demo/monolith-hands-on-demo.mp4"><strong>Watch the 34-second demo</strong></a><br />
+  <sub>Native iOS · One continuous take · Normal speed · MP4 under 1 MB</sub>
+</p>
+
+Inspect a recorded layer, create a task with a time estimate, then start, pause and resume focused work. The blue markers show actual taps and swipes—not a sequence of mockups. Recorded on the iOS Simulator using local demo data.
+
+[Recording notes and website embed](redesign/onboarding-core/demo/README.md).
+
 ## Why Monolith?
 
 Most productivity apps are engagement machines: streaks that shame you, confetti for opening the app, dashboards that measure tapping rather than work. Monolith tracks **competence**, not usage.
