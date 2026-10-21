@@ -148,7 +148,6 @@ monolith/
 ├── supabase/migrations/         # Schema, RLS policies, auth profile trigger
 ├── monolith-design/             # PRD, design system, gamification, business docs
 ├── redesign/                    # Strata direction, critique, and review evidence
-└── open-design/                 # Open Design integration (design system + prompts)
 ```
 
 ## Getting started
@@ -204,11 +203,11 @@ npm test
 |---|---|
 | [monolith-design/AGENTS.md](monolith-design/AGENTS.md) | Living status doc — what's done, in progress, and next |
 | [monolith-design/PRD.md](monolith-design/PRD.md) | Requirements (FR-1…FR-44), screens, data model, edge cases |
-| [monolith-design/DESIGN_SYSTEM.md](monolith-design/DESIGN_SYSTEM.md) | Color, typography, spacing, shape, motion |
+| [redesign/fresh/DIRECTION.md](redesign/fresh/DIRECTION.md) | Approved visual system: color, typography, spacing, shape, motion |
+| [redesign/onboarding-core/demo/README.md](redesign/onboarding-core/demo/README.md) | Demo videos: the 34-second hands-on cut and the full six-minute walkthrough |
 | [monolith-design/GAMIFICATION.md](monolith-design/GAMIFICATION.md) | Progression, momentum, anti-burnout mechanics |
 | [monolith-design/SAAS_PLAN.md](monolith-design/SAAS_PLAN.md) | Free/Pro tiers, RevenueCat, unit economics |
 | [monolith-design/SOCIAL_FEATURES.md](monolith-design/SOCIAL_FEATURES.md) | Crews, Wrapped, ambient social proof |
-| [redesign/fresh/DIRECTION.md](redesign/fresh/DIRECTION.md) | The approved Strata direction and its tokens |
 | [redesign/fresh/BUILD.md](redesign/fresh/BUILD.md) | Implementation and validation evidence, and limits |
 | [redesign/fresh/RUN.md](redesign/fresh/RUN.md) | How to run and verify the Strata build |
 
