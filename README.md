@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="redesign/fresh/shots/full-r3/09-icon.png" width="96" alt="Monolith — three mineral strata forming one block" />
+  <img src="apps/mobile/assets/images/icon.png" width="96" alt="Monolith — three mineral strata forming one block" />
 
   <h1>Monolith</h1>
 
@@ -21,13 +21,13 @@
 ## See it in use
 
 <p align="center">
-  <a href="redesign/onboarding-core/demo/monolith-hands-on-demo-framed.mp4">
-    <img src="redesign/onboarding-core/demo/monolith-hands-on-demo-framed.gif" width="260" alt="Monolith in an iPhone 17 Pro frame: inspect a layer, create a task, and start, pause and resume focus" />
+  <a href="docs/demo/monolith-hands-on-demo-framed.mp4">
+    <img src="docs/demo/monolith-hands-on-demo-framed.gif" width="260" alt="Monolith in an iPhone 17 Pro frame: inspect a layer, create a task, and start, pause and resume focus" />
   </a>
 </p>
 
 <p align="center">
-  <a href="redesign/onboarding-core/demo/monolith-hands-on-demo-framed.mp4"><strong>Watch the 34-second demo</strong></a><br />
+  <a href="docs/demo/monolith-hands-on-demo-framed.mp4"><strong>Watch the 34-second demo</strong></a><br />
   <sub>Native iOS · One continuous take · Normal speed · MP4 under 1 MB</sub>
 </p>
 
@@ -35,7 +35,7 @@ Inspect a recorded layer, create a task with a time estimate, then start, pause 
 
 Every screenshot and frame below is a real iPhone 17 Pro capture from the iOS 26.5 Simulator. The device frame is drawn around the capture; the app pixels inside it are untouched.
 
-[Recording notes and website embed](redesign/onboarding-core/demo/README.md).
+[Recording notes and website embed](docs/demo/README.md).
 
 ## Why Monolith?
 
@@ -49,7 +49,7 @@ Most productivity apps are engagement machines: streaks that shame you, confetti
 ## Screens
 
 <p align="center">
-  <img src="redesign/fresh/native-shots/framed/04-home.png" width="300" alt="Grid screen showing today's minutes, the strata block, the contribution grid, identity filters and today's tasks" />
+  <img src="docs/assets/screenshots/04-home.png" width="300" alt="Grid screen showing today's minutes, the strata block, the contribution grid, identity filters and today's tasks" />
   <br />
   <sub><strong>Grid</strong> — minutes today against your goal, the living strata of recent sessions, 26 weeks of history, identity filters, and today's tasks.</sub>
 </p>
@@ -57,31 +57,31 @@ Most productivity apps are engagement machines: streaks that shame you, confetti
 <table>
   <tr>
     <td width="50%">
-      <img src="redesign/fresh/native-shots/framed/02-paused.png" alt="Focus screen with a paused timer and an unsaved layer preview" />
+      <img src="docs/assets/screenshots/02-paused.png" alt="Focus screen with a paused timer and an unsaved layer preview" />
       <br /><sub><strong>Focus</strong> — a count-up timer drafts an unsaved layer into the stone; pause, resume, or finish.</sub>
     </td>
     <td width="50%">
-      <img src="redesign/fresh/native-shots/framed/03-recorded.png" alt="Recorded screen confirming a new layer was saved" />
+      <img src="docs/assets/screenshots/03-recorded.png" alt="Recorded screen confirming a new layer was saved" />
       <br /><sub><strong>Recorded</strong> — finishing saves exactly once; the new layer settles into the stack.</sub>
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <img src="redesign/fresh/native-shots/framed/05-history.png" alt="Day history with sessions and a Log time action" />
+      <img src="docs/assets/screenshots/05-history.png" alt="Day history with sessions and a Log time action" />
       <br /><sub><strong>History</strong> — any day, its layers and sessions; inspect and correct records with Undo.</sub>
     </td>
     <td width="50%">
-      <img src="redesign/fresh/native-shots/framed/07-profile.png" alt="Profile with totals, level, weekly progress and where time goes" />
+      <img src="docs/assets/screenshots/07-profile.png" alt="Profile with totals, level, weekly progress and where time goes" />
       <br /><sub><strong>Profile</strong> — totals, level, best day, and where your time goes.</sub>
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <img src="redesign/fresh/native-shots/framed/06-identities.png" alt="Identities screen listing Code, Writing and Movement with 30-day activity" />
+      <img src="docs/assets/screenshots/06-identities.png" alt="Identities screen listing Code, Writing and Movement with 30-day activity" />
       <br /><sub><strong>Identities</strong> — per-identity totals and 30-day activity; Free holds one active identity.</sub>
     </td>
     <td width="50%">
-      <img src="redesign/fresh/native-shots/framed/08-dark.png" alt="Grid screen in dark appearance" />
+      <img src="docs/assets/screenshots/08-dark.png" alt="Grid screen in dark appearance" />
       <br /><sub><strong>Dark appearance</strong> — System, Light, and Dark, with the Strata palette adapting.</sub>
     </td>
   </tr>
@@ -99,10 +99,10 @@ The full local-first loop is implemented and verified end to end on iOS:
 - **Identities** — add, edit, archive, restore; Free-tier identity limit enforced during onboarding and later
 - **Profile & History** — locally computed totals, level, sessions, days worked, best day, time-share; day detail with previous/next
 - **Settings** — appearance, daily goal stepper, local JSON export, confirmed delete-all-local-data
-- **Onboarding** — goal, identity seeding, widget step, and a guest path
+- **Onboarding** — choose an area, set a daily goal, inspect your core and start focusing; no account required
 - **Motion** — press springs, sliding tab indicator, layer drop-in, persisted state hydration; Reduce Motion swaps geometry for fades
 - **Backend (optional)** — Supabase schema, RLS, and an auth-profile trigger migration; email sign-up/sign-in UI
-- **Quality gates** — TypeScript and ESLint clean; 32 Jest tests across 4 suites; production iOS/Android Hermes and web exports pass
+- **Quality gates** — TypeScript and ESLint; Jest regression tests; production iOS/Android Hermes and web export checks
 
 **Not built yet:**
 
@@ -127,7 +127,7 @@ The full local-first loop is implemented and verified end to end on iOS:
 | Motion | React Native Reanimated 4 · Worklets · expo-haptics |
 | Graphics | react-native-svg — strata, contribution grid, rings |
 | Backend | Supabase (Postgres + Auth) — optional; 2 migrations |
-| Tests | Jest + jest-expo (32 tests) · ESLint · tsc |
+| Tests | Jest + jest-expo · ESLint · tsc |
 | Monorepo | Turborepo + npm workspaces |
 
 ## Project structure
@@ -138,7 +138,7 @@ monolith/
 │   └── mobile/                  # Expo SDK 57 app (iOS 16.4+ · Android · web for QA)
 │       └── src/
 │           ├── app/             # Screens: (tabs), modals, onboarding
-│           ├── components/      # contribution-grid, strata, tasks, focus, insights, ui
+│           ├── components/      # strata, identity, tasks, ui
 │           ├── stores/          # Zustand: app, task, focus, identity, user, log, activityUndo
 │           ├── hooks/           # useActivity, useIdentities, useMotion
 │           ├── lib/             # strata geometry, activity records, supabase client
@@ -146,8 +146,9 @@ monolith/
 ├── packages/
 │   └── shared/                  # Date, grid, and XP utilities
 ├── supabase/migrations/         # Schema, RLS policies, auth profile trigger
-├── monolith-design/             # PRD, design system, gamification, business docs
-├── redesign/                    # Strata direction, critique, and review evidence
+├── monolith-design/             # PRD, gamification, business and social roadmap
+├── docs/                        # Current design/run guides and published README media
+└── AGENTS.md                    # Contributor context and implementation invariants
 ```
 
 ## Getting started
@@ -201,15 +202,16 @@ npm test
 
 | Document | What it covers |
 |---|---|
-| [monolith-design/AGENTS.md](monolith-design/AGENTS.md) | Living status doc — what's done, in progress, and next |
+| [AGENTS.md](AGENTS.md) | Contributor context, architecture and implementation invariants |
 | [monolith-design/PRD.md](monolith-design/PRD.md) | Requirements (FR-1…FR-44), screens, data model, edge cases |
-| [redesign/fresh/DIRECTION.md](redesign/fresh/DIRECTION.md) | Approved visual system: color, typography, spacing, shape, motion |
-| [redesign/onboarding-core/demo/README.md](redesign/onboarding-core/demo/README.md) | Demo videos: the 34-second hands-on cut and the full six-minute walkthrough |
+| [docs/DESIGN.md](docs/DESIGN.md) | Approved Strata system: color, typography, layout, motion and onboarding |
+| [docs/demo/README.md](docs/demo/README.md) | Published demos and website embed |
 | [monolith-design/GAMIFICATION.md](monolith-design/GAMIFICATION.md) | Progression, momentum, anti-burnout mechanics |
 | [monolith-design/SAAS_PLAN.md](monolith-design/SAAS_PLAN.md) | Free/Pro tiers, RevenueCat, unit economics |
 | [monolith-design/SOCIAL_FEATURES.md](monolith-design/SOCIAL_FEATURES.md) | Crews, Wrapped, ambient social proof |
-| [redesign/fresh/BUILD.md](redesign/fresh/BUILD.md) | Implementation and validation evidence, and limits |
-| [redesign/fresh/RUN.md](redesign/fresh/RUN.md) | How to run and verify the Strata build |
+| [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | How to run and verify the app, plus known validation limits |
+
+The canonical branch is `main`. Completed design explorations and intermediate HTML/screenshot artifacts are kept in Git history, not the working tree. Planning documents describe future requirements too; the built/not-built lists above reflect the current app.
 
 ## License
 
