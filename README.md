@@ -21,17 +21,19 @@
 ## See it in use
 
 <p align="center">
-  <a href="redesign/onboarding-core/demo/monolith-hands-on-demo.mp4">
-    <img src="redesign/onboarding-core/demo/monolith-hands-on-demo.gif" width="260" alt="Monolith in use: inspect a layer, create a task, and start, pause and resume focus" />
+  <a href="redesign/onboarding-core/demo/monolith-hands-on-demo-framed.mp4">
+    <img src="redesign/onboarding-core/demo/monolith-hands-on-demo-framed.gif" width="260" alt="Monolith in an iPhone 17 Pro frame: inspect a layer, create a task, and start, pause and resume focus" />
   </a>
 </p>
 
 <p align="center">
-  <a href="redesign/onboarding-core/demo/monolith-hands-on-demo.mp4"><strong>Watch the 34-second demo</strong></a><br />
+  <a href="redesign/onboarding-core/demo/monolith-hands-on-demo-framed.mp4"><strong>Watch the 34-second demo</strong></a><br />
   <sub>Native iOS · One continuous take · Normal speed · MP4 under 1 MB</sub>
 </p>
 
 Inspect a recorded layer, create a task with a time estimate, then start, pause and resume focused work. The blue markers show actual taps and swipes—not a sequence of mockups. Recorded on the iOS Simulator using local demo data.
+
+Every screenshot and frame below is a real iPhone 17 Pro capture from the iOS 26.5 Simulator. The device frame is drawn around the capture; the app pixels inside it are untouched.
 
 [Recording notes and website embed](redesign/onboarding-core/demo/README.md).
 
@@ -47,7 +49,7 @@ Most productivity apps are engagement machines: streaks that shame you, confetti
 ## Screens
 
 <p align="center">
-  <img src="redesign/fresh/native-shots/04-home.png" width="300" alt="Grid screen showing today's minutes, the strata block, the contribution grid, identity filters and today's tasks" />
+  <img src="redesign/fresh/native-shots/framed/04-home.png" width="300" alt="Grid screen showing today's minutes, the strata block, the contribution grid, identity filters and today's tasks" />
   <br />
   <sub><strong>Grid</strong> — minutes today against your goal, the living strata of recent sessions, 26 weeks of history, identity filters, and today's tasks.</sub>
 </p>
@@ -55,31 +57,31 @@ Most productivity apps are engagement machines: streaks that shame you, confetti
 <table>
   <tr>
     <td width="50%">
-      <img src="redesign/fresh/native-shots/02-paused.png" alt="Focus screen with a paused timer and an unsaved layer preview" />
+      <img src="redesign/fresh/native-shots/framed/02-paused.png" alt="Focus screen with a paused timer and an unsaved layer preview" />
       <br /><sub><strong>Focus</strong> — a count-up timer drafts an unsaved layer into the stone; pause, resume, or finish.</sub>
     </td>
     <td width="50%">
-      <img src="redesign/fresh/native-shots/03-recorded.png" alt="Recorded screen confirming a new layer was saved" />
+      <img src="redesign/fresh/native-shots/framed/03-recorded.png" alt="Recorded screen confirming a new layer was saved" />
       <br /><sub><strong>Recorded</strong> — finishing saves exactly once; the new layer settles into the stack.</sub>
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <img src="redesign/fresh/native-shots/05-history.png" alt="Day history with sessions and a Log time action" />
+      <img src="redesign/fresh/native-shots/framed/05-history.png" alt="Day history with sessions and a Log time action" />
       <br /><sub><strong>History</strong> — any day, its layers and sessions; inspect and correct records with Undo.</sub>
     </td>
     <td width="50%">
-      <img src="redesign/fresh/native-shots/07-profile.png" alt="Profile with totals, level, weekly progress and where time goes" />
+      <img src="redesign/fresh/native-shots/framed/07-profile.png" alt="Profile with totals, level, weekly progress and where time goes" />
       <br /><sub><strong>Profile</strong> — totals, level, best day, and where your time goes.</sub>
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <img src="redesign/fresh/native-shots/06-identities.png" alt="Identities screen listing Code, Writing and Movement with 30-day activity" />
+      <img src="redesign/fresh/native-shots/framed/06-identities.png" alt="Identities screen listing Code, Writing and Movement with 30-day activity" />
       <br /><sub><strong>Identities</strong> — per-identity totals and 30-day activity; Free holds one active identity.</sub>
     </td>
     <td width="50%">
-      <img src="redesign/fresh/native-shots/08-dark.png" alt="Grid screen in dark appearance" />
+      <img src="redesign/fresh/native-shots/framed/08-dark.png" alt="Grid screen in dark appearance" />
       <br /><sub><strong>Dark appearance</strong> — System, Light, and Dark, with the Strata palette adapting.</sub>
     </td>
   </tr>
